@@ -22,10 +22,10 @@ export default async function PairPage({ searchParams }: Props) {
   const { code } = await searchParams;
   const scanned = typeof code === "string" ? parseCode(code) : null;
   return (
-    <div className="mx-auto w-full max-w-md px-4 py-8 sm:py-12">
-      <h1 className="text-3xl font-semibold tracking-tight">Pair this device</h1>
+    <div className="page max-w-[480px] py-10 sm:py-14">
+      <h1 className="page-title">Pair this device</h1>
       <PairPanel scanned={scanned} />
-      <p className="mt-10 text-[12px] leading-5 text-text-3">
+      <p className="mt-10 text-badge leading-5 text-text-2">
         Pairing words come from the EFF Short Wordlist #1 by the Electronic Frontier Foundation,
         used under CC BY 3.0 US.
       </p>
