@@ -1,0 +1,16 @@
+{
+  "repo": "Akshaz7/capsules-harmonyos",
+  "sha": "452777e8ee51cf716101d15ce0202437a7497f2a",
+  "files": {
+    "entry/src/main/ets/core/CapsuleProgram.ets": "c84235c2d6cf7c59db06517af0e20b571aa25345a1eeb9cc0d9277cfab4bd77d",
+    "entry/src/main/ets/core/CapsuleRouter.ets": "b9b3dd33ec74d6d344c49c40462cb5f43901c629a4a150a6c579caa88a2460ae",
+    "entry/src/main/ets/core/CapsuleTypes.ets": "02e00385b08946d12e3b2fdb2f12dc9347af16fbfd3479d89876c1d789dcb3dc",
+    "entry/src/main/ets/core/CapsuleValidator.ets": "a685ef452792ac803cd8caf4c2ae27eb25c4e82afe04a0b314d560bd40718b13",
+    "entry/src/main/ets/core/Expr.ets": "2e3270e1d9b106c21d270c28beb23cb30e67689280d6a883e49e294218d6d730",
+    "entry/src/test/CapsuleRouter.test.ets": "7f28d5fbbbf9b48db921ff46228a12188afc9862c125d700e5ab8eeb4ba038bb",
+    "entry/src/test/CapsuleV1.test.ets": "897f709f76fc8d23a5d75a30e120bcd4163a20fd1549dd97d5ee4b3c0a7cf07c",
+    "entry/src/test/CapsuleValidator.test.ets": "e044b3da435110ca73082dfbc4148fcab94c2481c1a0f47f6f7b99e074fc6274",
+    "entry/src/test/Expr.test.ets": "4206143499e3c0f8d18348601a888ebaa464e74549ad26dba2e75dcff2d575fa"
+  },
+  "note": "Vendored read-only copies of the marketplace-relevant ArkTS sources at this commit."
+}
