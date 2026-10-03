@@ -36,5 +36,21 @@ export function siteUrl(): string {
   return envValue('NEXT_PUBLIC_SITE_URL') ?? 'http://localhost:3000';
 }
 
+/**
+ * The database name from a MongoDB connection string: '' when the URI has no database path,
+ * or null when the URI cannot be parsed (the driver will report the real problem).
+ * A path-less URI makes the driver silently use MongoDB's default `test` database, which is
+ * how the 108 template capsules ended up invisible in a different database on 2026-10-03.
+ */
+export function databaseNameFromUri(uri: string): string | null {
+  try {
+    return decodeURIComponent(new URL(uri).pathname)
+      .replace(/^\/+/, '')
+      .replace(/\/+$/, '');
+  } catch {
+    return null;
+  }
+}
+
 /** A short label for the validator revision stored on every published capsule. */
 export const VALIDATOR_REVISION = envValue('VALIDATOR_REVISION') ?? 'web-0.1.0';
