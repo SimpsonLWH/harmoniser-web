@@ -400,7 +400,7 @@ describe("bad requests on the routes", () => {
 
   it("counts claim attempts per client address across users", async () => {
     const attempt = (ip: string) => claim(newToken(), "not-the-code", { ip: `10.9.9.9, ${ip}` });
-    for (let i = 0; i < 60; i++) {
+    for (let i = 0; i < 300; i++) {
       expect((await attempt("203.0.113.7")).status).toBe(404);
     }
     expect((await attempt("203.0.113.7")).status).toBe(429);

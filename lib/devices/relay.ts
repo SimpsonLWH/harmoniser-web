@@ -28,9 +28,11 @@ export interface RelayConfig {
 export const DEFAULT_CONFIG: RelayConfig = {
   codeTtlMs: 10 * 60 * 1000,
   rateWindowMs: 5 * 60 * 1000,
+  // Guessing a code is held back by the per-token limit. The per-address limits are a
+  // backstop only, and generous: a whole venue shares one NAT address.
   claimsPerOwner: 10,
-  claimsPerIp: 60,
-  registrationsPerIp: 60,
+  claimsPerIp: 300,
+  registrationsPerIp: 300,
 };
 
 export interface RelayOptions {
