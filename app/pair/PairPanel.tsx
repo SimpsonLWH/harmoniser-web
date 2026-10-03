@@ -34,6 +34,8 @@ export function PairPanel({ scanned }: { scanned: string | null }) {
   const [message, setMessage] = useState<{ ok: boolean; text: string } | null>(null);
   const [devices, setDevices] = useState<DeviceSummary[]>([]);
   const [selected, setSelected] = useState<string | null>(null);
+  // The scanned code was refused (used or expired): offer the field for typing the current one.
+  const [scanFailed, setScanFailed] = useState(false);
 
   const refresh = useCallback(async () => {
     if (token === "") {
@@ -66,6 +68,9 @@ export function PairPanel({ scanned }: { scanned: string | null }) {
     setBusy(false);
     if (!answer.ok) {
       setMessage({ ok: false, text: `Not paired. ${failureText(answer.failure)}` });
+      if (code === scanned && (answer.failure.code === "code_not_found" || answer.failure.code === "invalid_code")) {
+        setScanFailed(true);
+      }
       return;
     }
     setMessage({ ok: true, text: "Paired. The code on the device goes away within a few seconds." });
@@ -84,7 +89,7 @@ export function PairPanel({ scanned }: { scanned: string | null }) {
 
   return (
     <>
-      {scanned !== null && !paired && (
+      {scanned !== null && !paired && !scanFailed && (
         <section className={CARD}>
           <p className="text-[14px] text-text-2">The device shows these three words:</p>
           <p className="mt-2 break-words font-mono text-[24px] font-semibold tracking-tight">{scanned}</p>
@@ -98,7 +103,7 @@ export function PairPanel({ scanned }: { scanned: string | null }) {
         </section>
       )}
 
-      {scanned === null && (
+      {(scanned === null || (scanFailed && !paired)) && (
         <form
           className={CARD}
           onSubmit={(event) => {
@@ -107,7 +112,9 @@ export function PairPanel({ scanned }: { scanned: string | null }) {
           }}
         >
           <label htmlFor="pair-code" className="text-[14px] text-text-2">
-            Type the three words the device shows
+            {scanFailed
+              ? "That code is no longer valid. Type the three words the device shows now"
+              : "Type the three words the device shows"}
           </label>
           <input
             id="pair-code"
