@@ -76,3 +76,12 @@ export function ChevronLeftIcon({ size }: { size?: number }) {
     </Glyph>
   );
 }
+
+export function PhoneIcon({ size }: { size?: number }) {
+  return (
+    <Glyph size={size}>
+      <rect x="6.5" y="2.8" width="11" height="18.4" rx="3" />
+      <path d="M10.5 17.6h3" />
+    </Glyph>
+  );
+}
