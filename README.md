@@ -31,7 +31,8 @@ in the ESLint dev toolchain and are tracked, not shipped.
 | `/capsules` | Marketplace catalogue: search, tag chips, paged cards |
 | `/capsules/[id]` | Capsule detail: permissions, widget suitability, JSON, install, report, owner delete |
 | `/publish` | Paste/upload a capsule, validate it, choose the public metadata, publish |
-| `/device` | Device-pairing preview (TV/watch/ESP32 relay — not live yet) |
+| `/device` | Virtual device: a browser tab that pairs and shows a timer or counter like the ESP32 companion |
+| `/pair` | Pairing page behind a device's QR code (`?code=three-word-phrase`) |
 | `/privacy`, `/terms` | GDPR + Polish-law pages, no company named, contact via the issue tracker |
 
 ## Local development
@@ -135,9 +136,11 @@ indexes. The examples are synthetic: descriptions start with “Example”, ever
   nonces via middleware is the next hardening step.
 - The browser token lives in `localStorage` and is therefore XSS-exposed by nature; keep scripts
   minimal. Losing it means losing self-service delete — the UI says so.
-- No accounts, no Huawei identity, no device relay in v0. The identity phase is feature-flagged
-  (`HUAWEI_AUTH_ENABLED`, `TEST_LOGIN_ENABLED`) and the relay (`/api/devices/**`) is a separate
-  workstream owned by Keanu; `models/DeviceSession.ts` reserves the pairing-session shape.
+- No accounts and no Huawei identity in v0. The identity phase is feature-flagged
+  (`HUAWEI_AUTH_ENABLED`, `TEST_LOGIN_ENABLED`).
+- The device relay (`/api/devices/**`, `/pair`, `/device`) is Keanu's workstream and is documented
+  in `docs/device-relay.md`, including what has and has not been verified. Its MongoDB store has
+  not yet run against a real database. `models/DeviceSession.ts` is an unused placeholder.
 - Legal pages are hackathon-draft text written for GDPR + Polish law with no company named; review
   them with a qualified adviser before any commercial store release.
 

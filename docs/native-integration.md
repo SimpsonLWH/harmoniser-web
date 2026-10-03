@@ -44,9 +44,8 @@ import itself must never depend on the marketplace being reachable.
 
 Keep this as a note in the native gatekeeper, next to the permissions: a capsule sent to another
 device still passes that device's own permission checks, and the phone's grants never travel. The
-relay endpoints (`/api/devices/**`) are Keanu's workstream; this repo only reserves
-`models/DeviceSession.ts` (a short-lived word-phrase pairing session keyed by hashes) and the shared
-DB/env contract.
+relay endpoints (`/api/devices/**`) are Keanu's workstream; the contract the app calls is in
+`docs/device-relay.md` (user side: `X-Harmoniser-Token`, the same token as install/report).
 
 Relay constraints to keep in mind: Vercel cannot reach a device on a venue LAN, so the device must
 poll outbound; sessions must expire (10 minutes is the placeholder); sends need an acknowledgement

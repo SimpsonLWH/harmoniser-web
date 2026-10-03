@@ -9,8 +9,10 @@ records what the agents did, what was verified, and what remains a human decisio
 | --- | --- | --- |
 | 2026-10-03 | OpenAI Codex (GPT-5.x, desktop app) | Repo setup, validator port, API, UI, tests, docs |
 | 2026-10-03 | Instinct brief (“Build the capsule marketplace”, written 2026-10-03 20:12 CEST) | Source requirements for the marketplace: API contract, collections, ownership model, parity and UI rules |
+| 2026-10-03 | Claude Code (Claude Opus, CLI agent) | Device relay: `/api/devices/**`, `/pair`, `/device`, `lib/devices/`, `models/RelayDevice.ts`, tests, `docs/device-relay.md` |
 
-No other model, MCP server or skill was used to generate code in this repository.
+The device relay work also used the Chrome DevTools MCP server to try `/pair` and `/device` in a
+browser. No other model, MCP server or skill was used to generate code in this repository.
 
 ## What was generated
 
@@ -45,3 +47,14 @@ No other model, MCP server or skill was used to generate code in this repository
 - No accounts, Huawei identity or device relay are implemented; they are documented as later phases.
 - Moderation (reports, hiding) is a demo heuristic, not fraud-resistant.
 - The CSP still allows Next's inline bootstrap.
+
+## Device relay (2026-10-03, Claude Code)
+
+- Generated: the relay core in `lib/devices/` (pairing codes, device tokens, capsule rules ported
+  from the ESP32 firmware, in-memory and MongoDB stores), the route files, the `/pair` and `/device`
+  pages and their tests. The firmware's test vectors were copied into `tests/devices/vectors/`.
+- Verified by the agent: lint, typecheck, the vitest suite, one production build, the firmware's
+  `test_relay.sh` against `next dev` on the in-memory store, and a manual pass through `/device` and
+  `/pair` in desktop Chrome.
+- Not verified, and to be treated as such until a human confirms: the MongoDB store against a real
+  database, a real board against these routes, and the pages on a real phone.
