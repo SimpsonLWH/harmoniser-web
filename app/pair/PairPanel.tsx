@@ -11,7 +11,7 @@ import {
   sendCapsule,
   unpairDevice,
 } from "@/lib/client/devices";
-import { useDeviceToken } from "@/lib/client/token";
+import { useInstallId } from "@/lib/client/token";
 import type { Action, Capsule } from "@/lib/devices/capsule";
 import { formatClock } from "@/lib/devices/machine";
 import type { DeviceSummary, StateAnswer } from "@/lib/devices/relay";
@@ -28,7 +28,8 @@ function deviceName(device: { id: string; kind: string }): string {
 }
 
 export function PairPanel({ scanned }: { scanned: string | null }) {
-  const token = useDeviceToken();
+  // The relay's user side is keyed by the install ID, not the publishing owner token.
+  const token = useInstallId();
   const [typed, setTyped] = useState("");
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState<{ ok: boolean; text: string } | null>(null);

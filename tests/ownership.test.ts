@@ -1,6 +1,13 @@
 import { describe, expect, it } from "vitest";
 
-import { hashPrincipal, hashToken, isValidTokenShape, newToken, tokenMatches } from "@/lib/ownership";
+import {
+  hashPrincipal,
+  hashToken,
+  isValidTokenShape,
+  mutationKey,
+  newToken,
+  tokenMatches,
+} from "@/lib/ownership";
 
 describe("anonymous device tokens", () => {
   it("generates tokens of at least 32 bytes of entropy, base64url shaped", () => {
@@ -30,6 +37,18 @@ describe("anonymous device tokens", () => {
   it("keeps the principal hash separate from the owner hash", () => {
     const token = newToken();
     expect(hashPrincipal(token)).not.toBe(hashToken(token));
+  });
+
+  it("deduplicates install/report mutations per principal, operation and capsule", () => {
+    const capsuleId = "65f1c0d0b1a2c3d4e5f6a7b8";
+    const one = hashPrincipal(newToken());
+    const two = hashPrincipal(newToken());
+    expect(mutationKey("install", capsuleId, one)).toBe(mutationKey("install", capsuleId, one));
+    expect(mutationKey("install", capsuleId, one)).not.toBe(mutationKey("install", capsuleId, two));
+    expect(mutationKey("install", capsuleId, one)).not.toBe(mutationKey("report", capsuleId, one));
+    expect(mutationKey("install", capsuleId, one)).not.toBe(
+      mutationKey("install", "65f1c0d0b1a2c3d4e5f6a7b9", one),
+    );
   });
 
   it("rejects malformed tokens", () => {

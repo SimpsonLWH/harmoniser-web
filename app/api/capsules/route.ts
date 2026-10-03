@@ -4,10 +4,11 @@ import { guardIp, guardOrigin, guardToken } from '@/lib/api-guards';
 import { canonicalJson, contentHash, utf8Bytes } from '@/lib/canonical';
 import { connectDb, isDuplicateKeyError } from '@/lib/db';
 import { readCorsHeaders, mutationCorsHeaders } from '@/lib/cors';
-import { toSummary } from '@/lib/dto';
+import { toSummary, toSummaryWithCapsule } from '@/lib/dto';
 import { VALIDATOR_REVISION } from '@/lib/env';
 import { errorResponse, handleApiError, noStore, readJsonBody } from '@/lib/http';
 import { encodeCursor, parseCursor } from '@/lib/cursor';
+import { buildListFilter, pageOf, parseInclude, parseLimit } from '@/lib/list-query';
 import { hashToken } from '@/lib/ownership';
 import { consumePublishLimit } from '@/lib/rate-limit';
 import {
@@ -25,9 +26,6 @@ export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
 const ENVELOPE_KEYS = ['capsule', 'name', 'description', 'tags'];
-const MAX_LIMIT = 50;
-const DEFAULT_LIMIT = 20;
-
 export async function OPTIONS(request: Request): Promise<NextResponse> {
   return new NextResponse(null, { status: 204, headers: mutationCorsHeaders(request) });
 }
@@ -45,40 +43,28 @@ export async function GET(request: Request): Promise<NextResponse> {
     if (tag.length > 0 && !/^[a-z0-9][a-z0-9-]{0,23}$/.test(tag)) {
       return errorResponse(400, 'invalid_query', 'tag must be a lowercase word.', undefined, readCorsHeaders());
     }
-    const limitRaw = url.searchParams.get('limit');
-    let limit = DEFAULT_LIMIT;
-    if (limitRaw !== null) {
-      const parsed = Number.parseInt(limitRaw, 10);
-      if (!Number.isInteger(parsed) || parsed < 1 || parsed > MAX_LIMIT) {
-        return errorResponse(400, 'invalid_query', `limit must be between 1 and ${MAX_LIMIT}.`, undefined, readCorsHeaders());
-      }
-      limit = parsed;
+    const limitResult = parseLimit(url.searchParams.get('limit'));
+    if (!limitResult.ok) {
+      return errorResponse(400, 'invalid_query', limitResult.message, undefined, readCorsHeaders());
+    }
+    const limit = limitResult.limit;
+    const includeResult = parseInclude(url.searchParams.get('include'));
+    if (!includeResult.ok) {
+      return errorResponse(400, 'invalid_query', includeResult.message, undefined, readCorsHeaders());
     }
     const cursor = parseCursor(url.searchParams.get('cursor'));
     if (!cursor.ok) {
       return errorResponse(400, 'invalid_query', cursor.message, undefined, readCorsHeaders());
     }
 
-    const filter: Record<string, unknown> = { status: 'visible' };
-    if (tag.length > 0) {
-      filter.tags = tag;
-    }
-    if (cursor.id !== null) {
-      filter._id = { $lt: cursor.id };
-    }
-    if (q.length > 0) {
-      // $text is the only search we accept: no caller regex, no query operators from input.
-      filter.$text = { $search: q };
-    }
-
+    const filter = buildListFilter({ q, tag, cursorId: cursor.id });
     const docs = await Capsule.find(filter).sort({ _id: -1 }).limit(limit + 1).lean();
-    const hasMore = docs.length > limit;
-    const page = hasMore ? docs.slice(0, limit) : docs;
-    const last = page[page.length - 1];
+    const page = pageOf(docs, limit);
+    const mapper = includeResult.includeCapsule ? toSummaryWithCapsule : toSummary;
     return NextResponse.json(
       {
-        capsules: page.map(toSummary),
-        nextCursor: hasMore && last !== undefined ? encodeCursor(last._id) : null,
+        capsules: page.items.map(mapper),
+        nextCursor: page.nextCursorId !== null ? encodeCursor(page.nextCursorId) : null,
       },
       { status: 200, headers: noStore(readCorsHeaders()) },
     );

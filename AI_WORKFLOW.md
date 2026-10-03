@@ -8,6 +8,7 @@ records what the agents did, what was verified, and what remains a human decisio
 | When | Agent / model | Role |
 | --- | --- | --- |
 | 2026-10-03 | OpenAI Codex (GPT-5.x, desktop app) | Repo setup, validator port, API, UI, tests, docs |
+| 2026-10-03 | OpenAI Codex (GPT-5.x, desktop app) | Follow-up patch: ownerToken/installId split, `include=capsule`, strict `limit` parsing, built-in and privacy copy, read-only production/DB checks |
 | 2026-10-03 | Instinct brief (“Build the capsule marketplace”, written 2026-10-03 20:12 CEST) | Source requirements for the marketplace: API contract, collections, ownership model, parity and UI rules |
 | 2026-10-03 | Claude Code (Claude Opus, CLI agent) | Device relay: `/api/devices/**`, `/pair`, `/device`, `lib/devices/`, `models/RelayDevice.ts`, tests, `docs/device-relay.md` |
 
@@ -48,7 +49,8 @@ browser. No other model, MCP server or skill was used to generate code in this r
 
 ## Limits of the generated work
 
-- No accounts, Huawei identity or device relay are implemented; they are documented as later phases.
+- No accounts or Huawei identity are implemented; they are documented as later phases. The device
+  relay is implemented — see the section below and `docs/device-relay.md`.
 - Moderation (reports, hiding) is a demo heuristic, not fraud-resistant.
 - The CSP still allows Next's inline bootstrap.
 
@@ -62,3 +64,26 @@ browser. No other model, MCP server or skill was used to generate code in this r
   `/pair` in desktop Chrome.
 - Not verified, and to be treated as such until a human confirms: the MongoDB store against a real
   database, a real board against these routes, and the pages on a real phone.
+
+## Two credentials, inline payloads and privacy copy (2026-10-03, OpenAI Codex)
+
+- Generated: the browser's ownerToken/installId split in `lib/client/token.ts` (with a migration
+  that copies a legacy single token into both, so existing capsule ownership and relay pairings
+  survive), the call-site changes on `/publish`, the capsule detail page and `/pair`, strict
+  `limit`/`include=capsule` parsing in `lib/list-query.ts`, `CapsuleSummaryWithCapsuleDto` in
+  `lib/dto.ts`, README/native-integration/device-relay/privacy/terms copy, and tests
+  (`tests/client-tokens.test.ts`, `tests/list-query.test.ts`, `tests/dto.test.ts`,
+  `tests/pair-url.test.ts`).
+- Verified by the agent: lint, typecheck, `npm test` (461 passed, 37 skipped — the MongoDB half of
+  the relay conformance suite), `npm run build`, `npm run parity`, and a read-only production
+  check of the catalogue's default shape, cursor walk, `robots.txt`/`sitemap.xml` and
+  `nextCursor`.
+- Read-only data checks against production Atlas on 2026-10-03 (no writes): database `harmoniser`;
+  116 documents = 113 visible (108 `template` built-ins + 5 examples) and 3 deleted; 0 duplicate
+  `contentHash` groups; the 108 built-ins are owned by one owner-hash group that does not match the
+  current `SEED_OWNER_TOKEN`; the legacy `test` database still holds 108 copies and was left
+  untouched.
+- Not verified: the new `include=capsule` and strict-limit behaviour against the deployed API (the
+  branch is not deployed), and any real phone/board usage. The privacy and terms pages remain
+  hackathon drafts; the controller identity, private privacy contact and Atlas password rotation
+  are Lewis's review items.
