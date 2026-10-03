@@ -120,6 +120,15 @@ The port currently matches **`Akshaz7/capsules-harmonyos@452777e8ee51cf716101d15
 indexes. The examples are synthetic: descriptions start with “Example”, every capsule carries the
 `example` tag, and nothing implies real installs or real users.
 
+## MongoDB indexes
+
+`npm run indexes` reconciles every index the models declare (including the relay's unique
+partial index on the live pairing code and its TTL cleanup index) and drops stray ones. Run it once
+against a new database, after any model change, and after the first deploy: `autoIndex` is on, but
+on Vercel every instance would otherwise build indexes on its own first request, and a request that
+arrives while a unique index is still building can slip past it. `npm run indexes -- --dry` prints
+what the collections hold today without writing.
+
 ## Deployment (Vercel `fra1` + Atlas Frankfurt)
 
 1. Create the Vercel project from this repo and set the Node.js version to 22.x.
