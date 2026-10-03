@@ -58,7 +58,7 @@ The same `hw` again gives the same `id` with a new token, code and `pair_url`; t
 code stop working, the device is unpaired, and its capsule, pending action and last state are
 dropped. `version` and `action_seq` keep counting.
 
-`400 invalid_registration`, `413`, `429 rate_limited` (60 registrations per client address per
+`400 invalid_registration`, `413`, `429 rate_limited` (300 registrations per client address per
 5 minutes), `503 rate_limit_unavailable` if the platform gave no client address.
 
 ### `GET /api/devices/{id}/capsule`
@@ -149,10 +149,10 @@ Unknown fields are dropped. The device gets the cleaned capsule, not the bytes t
 
 | What | Limit |
 | --- | --- |
-| Claim attempts | 10 per user token and 60 per client address, per 5 minutes; right or wrong, each counts. |
-| Registrations | 60 per client address per 5 minutes. |
+| Claim attempts | 10 per user token and 300 per client address, per 5 minutes; right or wrong, each counts. The per-token limit is what holds guessing back; the per-address one is a generous backstop, because a whole venue shares one NAT address. |
+| Registrations | 300 per client address per 5 minutes. |
 | Request body | 1024 bytes, 8 levels of nesting. |
-| Unpaired devices | Deleted by MongoDB a day after their last request (TTL on `purgeAt`); they register again if they come back. Paired devices are kept. |
+| Unpaired devices | Deleted by MongoDB 24 hours after their last request (TTL index on `purgeAt`), so abandoned `/device` tabs do not pile up; one that comes back gets a 401 and registers again. Paired devices have no `purgeAt` and are never deleted this way. |
 
 Counters are `RateBucket` documents keyed by an HMAC of route, subject and window, as in
 `lib/rate-limit.ts`: no address and no token hash is stored in a key. Writes fail closed (`503`)
@@ -183,6 +183,33 @@ RELAY_USER_HEADER="X-Harmoniser-Token: $(openssl rand -base64 32 | tr '+/' '-_' 
 For a board on the same network, leave `NEXT_PUBLIC_SITE_URL` empty (so `pair_url` uses the
 laptop's address as the board reached it) and start with `npm run dev -- -H 0.0.0.0`.
 
+## Testing the MongoDB store
+
+`npm test` needs no database: the conformance suite runs on the in-memory store and skips its
+MongoDB half. To run that half, start a throwaway MongoDB on this machine and point
+`MONGO_TEST_URI` at it. The suite empties the relay's collections, so it refuses any address that
+is not `127.0.0.1` or `localhost`; never give it an Atlas URI.
+
+```sh
+# a throwaway mongod on 127.0.0.1:27018, without adding anything to this repo
+mkdir /tmp/relay-mongo && cd /tmp/relay-mongo && npm init -y && npm i mongodb-memory-server
+node -e 'require("mongodb-memory-server").MongoMemoryServer
+  .create({instance:{ip:"127.0.0.1",port:27018}}).then(()=>console.log("ready"))' &
+# or: podman run --rm -d -p 127.0.0.1:27018:27017 docker.io/library/mongo:7
+
+MONGO_TEST_URI=mongodb://127.0.0.1:27018/relaytest npx vitest run tests/devices/store-conformance.test.ts
+
+# the routes on that database, checked by the firmware's script
+MONGODB_URI=mongodb://127.0.0.1:27018/relaydev APP_HMAC_SECRET=any-local-value NEXT_PUBLIC_SITE_URL= npm run dev
+RELAY_USER_HEADER="X-Harmoniser-Token: $(openssl rand -base64 32 | tr '+/' '-_' | tr -d '=')" \
+  ../esp32-companion/test_relay.sh http://localhost:3000
+```
+
+It covers: register and re-register, code uniqueness and the retry on a clash, one winner among
+concurrent claims, expiry and the fresh code on poll, version and `action_seq` under concurrent
+writes, state reports, owner scoping, unpair, rate buckets, the indexes `syncIndexes()` creates, and
+that a paired device never has a `purgeAt`.
+
 ## What is verified
 
 As of 2026-10-03.
@@ -193,6 +220,6 @@ As of 2026-10-03.
 | Route files | Tested through the real `route.ts` exports on the in-memory store: both credentials, origin guard, error envelope, body limits, `pair_url` base. |
 | Firmware's `test_relay.sh` | Passes against `next dev` with the in-memory store (106 checks, 0 failed). |
 | `/pair` and `/device` | Tried by hand in one desktop Chrome: register, QR and phrase shown, pair, counter and timer sent, `+` on the device and `+1` from the remote arrive on the other side. |
-| **MongoDB store** | **Not run against a real MongoDB.** `lib/devices/mongo-store.ts` is type-checked, and its updates are cast against the schema in tests, but no query has been executed: the repo has no test database and Atlas was not touched. Run `test_relay.sh` against a preview deployment before relying on it. |
+| MongoDB store | `tests/devices/store-conformance.test.ts` runs the same cases against the in-memory store and the MongoDB store: 54 of 54 pass on a local MongoDB 8.2.6 (see below). `test_relay.sh` also passes against `next dev` on that database (106 checks, 0 failed). Not tried on Atlas: the TTL monitor actually deleting a document was not waited for (the index definition and the field values are asserted instead). |
 | A real board | Not tried against this implementation. |
 | A phone camera on the QR code, real phones | Not tried. |
