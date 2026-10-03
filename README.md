@@ -1,36 +1,145 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# harmoniser-web
 
-## Getting Started
+The web side of **Harmoniser**: the app landing page, the privacy/terms pages an app-store release
+needs, and the anonymous capsule marketplace (public API + catalogue) for the HarmonyOS app in
+[`Akshaz7/capsules-harmonyos`](https://github.com/Akshaz7/capsules-harmonyos).
 
-First, run the development server:
+The marketplace is a HackYeah 2026 prototype. Capsules are untrusted JSON, never code: the app
+validates every capsule against its own schema and asks the user to allow each permission before
+anything runs.
 
-```bash
+## Stack and versions
+
+| Part | Version |
+| --- | --- |
+| Next.js (App Router, no `src/`, Turbopack) | 16.3.8 — the patched release from the September 2026 security bulletin |
+| React / React DOM | 19.2.8 |
+| TypeScript | strict, latest 5.x |
+| Tailwind CSS | 4.x |
+| Mongoose / MongoDB Atlas | 9.10.4 |
+| Vitest | 5.x |
+| Node.js | 22 LTS (`engines: >=22`, Vercel project Node 22.x) |
+
+`npm audit --omit=dev` reports 0 production vulnerabilities; the five high-severity advisories are
+in the ESLint dev toolchain and are tracked, not shipped.
+
+## Routes
+
+| Page | What it is |
+| --- | --- |
+| `/` | Landing page for the app (advertisement page for store listings) |
+| `/capsules` | Marketplace catalogue: search, tag chips, paged cards |
+| `/capsules/[id]` | Capsule detail: permissions, widget suitability, JSON, install, report, owner delete |
+| `/publish` | Paste/upload a capsule, validate it, choose the public metadata, publish |
+| `/device` | Device-pairing preview (TV/watch/ESP32 relay — not live yet) |
+| `/privacy`, `/terms` | GDPR + Polish-law pages, no company named, contact via the issue tracker |
+
+## Local development
+
+```sh
+nvm use 22            # or any Node >= 22
+npm install
+cp .env.example .env.local   # fill in MONGODB_URI and APP_HMAC_SECRET
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+
+npm run lint
+npm run typecheck
+npm test
+npm run build
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+MongoDB is only needed for the API routes and the seed script; the landing and legal pages build and
+run without it.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Environment
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Variable | Required | Purpose |
+| --- | --- | --- |
+| `MONGODB_URI` | API + seed | Atlas connection string (Frankfurt, least-privilege user) |
+| `APP_HMAC_SECRET` | API + seed | HMAC key for owner-token hashes and rate-limit IP buckets |
+| `ALLOWED_ORIGINS` | API | Exact browser origins allowed to mutate (comma-separated); native clients send no Origin |
+| `NEXT_PUBLIC_SITE_URL` | recommended | Public base URL for metadata, sitemap and robots |
+| `VALIDATOR_REVISION` | optional | Label stored on each published capsule (`web-0.1.0` by default) |
+| `SEED_OWNER_TOKEN` | seed only | Owner token for the example capsules; generated and printed once if unset |
 
-## Learn More
+## API
 
-To learn more about Next.js, take a look at the following resources:
+All mutating routes require the anonymous device token in the `X-Harmoniser-Token` header
+(32–256 base64url characters). The server stores only `HMAC-SHA-256(secret, token)`; the token is
+never returned in any response. It is both the publisher credential and the install ID.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+| Route | Method | Notes |
+| --- | --- | --- |
+| `/api/capsules` | `GET` | `q` (≤100 chars, `$text` search), `tag` (exact, lowercase), `limit` 1–50 (default 20), opaque `cursor`. Visible capsules only, deterministic `_id` order, `no-store` |
+| `/api/capsules` | `POST` | `{capsule, name?, description?, tags?}`; envelope ≤12 KiB, capsule ≤8 KiB UTF-8 canonical; full recursive validation; 201 with `{id, contentHash}`; duplicates → 409 with the existing public id |
+| `/api/capsules/[id]` | `GET` | 404 for hidden/deleted/unknown ids; `ETag: "<contentHash>"`; `If-None-Match` → 304 |
+| `/api/capsules/[id]` | `DELETE` | Owner token required, constant-time hash comparison; soft-deletes and removes the public payload |
+| `/api/capsules/[id]/install` | `POST` | Best-effort install intent, deduplicated per principal for 24 h; never runs anything |
+| `/api/capsules/[id]/report` | `POST` | Fixed reason codes only; deduplicated; the third accepted report hides the capsule immediately |
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Errors always use `{"error":{"code","message","details?"}}` with 400 (invalid), 401 (no token),
+403 (forged token/origin), 404, 409 (duplicate), 413 (too large), 415 (content type),
+429 (rate limit, with `Retry-After`), 503 (database unavailable). Reads are open CORS; browser
+mutations are restricted to `ALLOWED_ORIGINS` and the request's own host; native clients (no
+`Origin`) are gated by the token and rate limit instead. Every Mongoose route runs on the Node
+runtime with one cached connection per instance and `regions: ["fra1"]`.
 
-## Deploy on Vercel
+Rate limiting uses `RateBucket` documents keyed by `HMAC(secret, route + trusted IP + window)`,
+incremented atomically; writes fail closed with 503 when the platform gives no client address.
+Installs and reports use `MutationReceipt` documents with a 24 h TTL. These are demo-grade
+heuristics, not fraud-resistant moderation.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Validator parity
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+The marketplace must accept exactly what the app accepts. `lib/validator/` is a TypeScript port of
+the app's ArkTS core:
+
+- `lib/validator/validator.ts` ← `CapsuleValidator.ets` (+ `nameTypes` from `CapsuleProgram.ets`)
+- `lib/validator/expr.ts` ← `Expr.ets` (lexer, parser, type checker, templates; capsule execution
+  stays on the device and is intentionally not ported)
+- `lib/validator/router.ts` ← `CapsuleRouter.ets`
+- `lib/validator/types.ts` ← `CapsuleTypes.ets`
+
+The upstream sources are vendored read-only in `vendor/upstream/<sha>/` with hashes in
+`vendor/upstream/PIN.json`, and `npm run parity` re-fetches them at the pinned commit and fails if
+anything changed (it also warns when upstream `main` has moved on). To re-vendor: copy the new
+files, run `node scripts/update-parity-lock.mjs`, re-check the port against the diff, and update the
+tests in `tests/`.
+
+The port currently matches **`Akshaz7/capsules-harmonyos@452777e8ee51cf716101d15ce0202437a7497f2a`**
+(schema v1.1: triggers, `pauseTimer`/`stopTimer`/`resetTimer`, literal-placeholder rejection).
+
+## Seeding
+
+`npm run seed:dry` validates and prints the five clearly-labelled example capsules without writing;
+`npm run seed` upserts them by `contentHash` (insert-only, so re-running is safe) and creates the
+indexes. The examples are synthetic: descriptions start with “Example”, every capsule carries the
+`example` tag, and nothing implies real installs or real users.
+
+## Deployment (Vercel `fra1` + Atlas Frankfurt)
+
+1. Create the Vercel project from this repo and set the Node.js version to 22.x.
+2. Add `MONGODB_URI`, `APP_HMAC_SECRET` (`openssl rand -base64 48`), `ALLOWED_ORIGINS`
+   (the `*.vercel.app` origin plus any custom domain) and `NEXT_PUBLIC_SITE_URL` to Production.
+3. Create the Atlas free cluster in Frankfurt with a least-privilege database user; Atlas must allow
+   Vercel's dynamic addresses (strong generated password, TLS enforced).
+4. Run `npm run seed` locally against the same `MONGODB_URI` to create indexes and examples.
+5. Deploy and smoke-test: catalogue loads, publish → delete round-trip, `/privacy` and `/terms`
+   reachable, `npm run parity` green.
+
+## Security posture and known limits
+
+- Capsule payloads are re-validated on publish; no `eval`, no raw HTML, metadata rendered as text.
+- Tokens are hashed, IPs are hashed, DTOs are allowlists, and logs never include payloads or tokens.
+- CSP currently allows Next's inline bootstrap (`'unsafe-inline'` for scripts); moving to per-request
+  nonces via middleware is the next hardening step.
+- The browser token lives in `localStorage` and is therefore XSS-exposed by nature; keep scripts
+  minimal. Losing it means losing self-service delete — the UI says so.
+- No accounts, no Huawei identity, no device relay in v0. The identity phase is feature-flagged
+  (`HUAWEI_AUTH_ENABLED`, `TEST_LOGIN_ENABLED`) and the relay (`/api/devices/**`) is a separate
+  workstream owned by Keanu; `models/DeviceSession.ts` reserves the pairing-session shape.
+- Legal pages are hackathon-draft text written for GDPR + Polish law with no company named; review
+  them with a qualified adviser before any commercial store release.
+
+See [AI_WORKFLOW.md](./AI_WORKFLOW.md) for the AI-assisted work log and
+[docs/native-integration.md](./docs/native-integration.md) for the app-side integration spec.

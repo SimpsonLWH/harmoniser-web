@@ -1,26 +1,84 @@
 @import "tailwindcss";
 
+/*
+ * Tokens sampled from the Harmoniser build running on the HackYeah emulator (screenshots in
+ * public/shots) and from the app's ArkUI defaults. They are a starting point for matching the
+ * native visual language, not official HarmonyOS values: verify against the device theme before
+ * treating them as authoritative.
+ */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --h-bg: #f1f3f5;
+  --h-surface: #ffffff;
+  --h-surface-2: #e9edf3;
+  --h-text: #182431;
+  --h-text-2: #5e6b7c;
+  --h-text-3: #8a95a5;
+  --h-brand: #0a59f7;
+  --h-brand-soft: #e6efff;
+  --h-warning: #b7791f;
+  --h-warning-soft: #fff4d6;
+  --h-danger: #d9480f;
+  --h-danger-soft: #ffe8e0;
+  --h-border: rgba(24, 36, 49, 0.08);
+  --h-shadow: 0 1px 2px rgba(24, 36, 49, 0.04), 0 8px 24px rgba(24, 36, 49, 0.06);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --h-bg: #000000;
+    --h-surface: #1b1b1b;
+    --h-surface-2: #262626;
+    --h-text: #f1f3f5;
+    --h-text-2: #a6b0bd;
+    --h-text-3: #7d8794;
+    --h-brand: #5c8dff;
+    --h-brand-soft: #17233d;
+    --h-warning: #e8b04b;
+    --h-warning-soft: #33280f;
+    --h-danger: #ff8a65;
+    --h-danger-soft: #3a1a12;
+    --h-border: rgba(241, 243, 245, 0.1);
+    --h-shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 24px rgba(0, 0, 0, 0.35);
   }
 }
 
+@theme inline {
+  --color-bg: var(--h-bg);
+  --color-surface: var(--h-surface);
+  --color-surface-2: var(--h-surface-2);
+  --color-text: var(--h-text);
+  --color-text-2: var(--h-text-2);
+  --color-text-3: var(--h-text-3);
+  --color-brand: var(--h-brand);
+  --color-brand-soft: var(--h-brand-soft);
+  --color-warning: var(--h-warning);
+  --color-warning-soft: var(--h-warning-soft);
+  --color-danger: var(--h-danger);
+  --color-danger-soft: var(--h-danger-soft);
+  --color-line: var(--h-border);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --radius-card: 20px;
+  --radius-input: 24px;
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--h-bg);
+  color: var(--h-text);
+}
+
+:focus-visible {
+  outline: 2px solid var(--h-brand);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
