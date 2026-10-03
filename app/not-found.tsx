@@ -1,18 +1,21 @@
 import Link from "next/link";
 
+import { CompassIcon } from "@/components/Icons";
+import { StatusBlock } from "@/components/StatusBlock";
+
 export default function NotFound() {
   return (
-    <div className="mx-auto flex w-full max-w-3xl flex-col items-start px-4 py-20 sm:px-6">
-      <h1 className="text-3xl font-semibold tracking-tight">That page isn&apos;t here</h1>
-      <p className="mt-3 text-[15px] leading-7 text-text-2">
-        The capsule may have been removed, or the link is wrong.
-      </p>
-      <Link
-        href="/capsules"
-        className="mt-6 inline-flex min-h-11 items-center rounded-full bg-brand px-5 text-[15px] font-medium text-white"
+    <div className="page py-10 sm:py-16">
+      <StatusBlock
+        icon={<CompassIcon size={26} />}
+        titleAs="h1"
+        title={"That page isn't here"}
+        caption="The capsule may have been removed, or the link is wrong."
       >
-        Back to the marketplace
-      </Link>
+        <Link href="/capsules" className="btn btn-primary">
+          Back to the marketplace
+        </Link>
+      </StatusBlock>
     </div>
   );
 }
