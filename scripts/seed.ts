@@ -2,7 +2,7 @@
  * Seeds a handful of clearly-labelled synthetic capsules so the marketplace is not empty.
  *
  *   npm run seed:dry   print what would change, write nothing
- *   npm run seed       validate, hash and upsert (idempotent by contentHash, insert-only)
+ *   npm run seed       validate, hash and upsert (atomic, idempotent by contentHash)
  *
  * Every fixture is validated with the same ported validator the API uses. Nothing here claims
  * real usage: descriptions start with "Example" and every item carries the "example" tag.
@@ -11,7 +11,7 @@
 import mongoose from 'mongoose';
 
 import { canonicalJson, contentHash, utf8Bytes } from '../lib/canonical';
-import { connectDb } from '../lib/db';
+import { connectDb, isDuplicateKeyError } from '../lib/db';
 import { hashToken, isValidTokenShape, newToken } from '../lib/ownership';
 import { MAX_CAPSULE_BYTES, normalizeTags } from '../lib/tags';
 import { validateCapsuleObject } from '../lib/validator';
@@ -191,25 +191,41 @@ async function main(): Promise<void> {
       continue;
     }
 
-    const existing = await Capsule.findOne({ contentHash: hash }).select('_id').lean();
-    if (existing !== null) {
+    // Atomic upsert: a concurrent seed (another run or another tool with the same
+    // contentHash) can neither insert a duplicate nor abort the whole script.
+    try {
+      const result = await Capsule.updateOne(
+        { contentHash: hash },
+        {
+          $setOnInsert: {
+            capsule: checked.capsule,
+            name: checked.capsule.name,
+            description: fixture.description,
+            tags: tags.tags,
+            schemaVersion: checked.capsule.schemaVersion === 1 ? 1 : 0,
+            status: 'visible',
+            contentHash: hash,
+            ownerTokenHash,
+            validatorRevision: 'seed-0.1.0',
+          },
+        },
+        { upsert: true },
+      );
+      if (result.upsertedCount === 1) {
+        created += 1;
+        console.log(`add  ${checked.capsule.name}`);
+      } else {
+        skipped += 1;
+        console.log(`skip ${checked.capsule.name} (already present)`);
+      }
+    } catch (error) {
+      if (!isDuplicateKeyError(error)) {
+        throw error;
+      }
+      // A parallel run inserted the same contentHash between the upsert's check and write.
       skipped += 1;
       console.log(`skip ${checked.capsule.name} (already present)`);
-      continue;
     }
-    await Capsule.create({
-      capsule: checked.capsule,
-      name: checked.capsule.name,
-      description: fixture.description,
-      tags: tags.tags,
-      schemaVersion: checked.capsule.schemaVersion === 1 ? 1 : 0,
-      status: 'visible',
-      contentHash: hash,
-      ownerTokenHash,
-      validatorRevision: 'seed-0.1.0',
-    });
-    created += 1;
-    console.log(`add  ${checked.capsule.name}`);
   }
 
   if (dryRun) {

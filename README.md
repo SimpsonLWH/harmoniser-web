@@ -58,7 +58,7 @@ run without it.
 
 | Variable | Required | Purpose |
 | --- | --- | --- |
-| `MONGODB_URI` | API + seed | Atlas connection string (Frankfurt, least-privilege user) |
+| `MONGODB_URI` | API + seed | Atlas connection string (Frankfurt, least-privilege user); must include the database name (`/harmoniser`) — a path-less URI silently targets MongoDB's default `test` database |
 | `APP_HMAC_SECRET` | API + seed | HMAC key for owner-token hashes and rate-limit IP buckets |
 | `ALLOWED_ORIGINS` | API | Exact browser origins allowed to mutate (comma-separated); native clients send no Origin |
 | `NEXT_PUBLIC_SITE_URL` | recommended | Public base URL for metadata, sitemap and robots |

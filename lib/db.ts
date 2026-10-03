@@ -6,7 +6,7 @@
 
 import mongoose from 'mongoose';
 
-import { requireEnv } from './env';
+import { databaseNameFromUri, requireEnv } from './env';
 
 declare global {
   var __harmoniserMongoose: Promise<typeof mongoose> | undefined;
@@ -15,6 +15,13 @@ declare global {
 export function connectDb(): Promise<typeof mongoose> {
   if (globalThis.__harmoniserMongoose === undefined) {
     const uri = requireEnv('MONGODB_URI');
+    if (databaseNameFromUri(uri) === '') {
+      throw new Error(
+        'MONGODB_URI must include the database name, for example ' +
+          'mongodb+srv://user:password@cluster.example.mongodb.net/harmoniser?retryWrites=true. ' +
+          "Without it MongoDB silently uses the default 'test' database.",
+      );
+    }
     globalThis.__harmoniserMongoose = mongoose
       .connect(uri, {
         maxPoolSize: 5,
