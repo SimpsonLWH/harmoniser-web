@@ -53,14 +53,16 @@ export interface DeviceStore {
   // Notes a request from the device.
   touchDevice(device: DeviceRecord, now: number): Promise<void>;
 
-  // Stores a state report, if the token hash is still the device's.
+  // Stores a state report, if the token hash is still the device's and the device is
+  // paired. An unpaired device's screen is nobody's business: nothing is kept for a later owner.
   saveState(id: string, tokenHash: string, state: DeviceState, now: number): Promise<void>;
 
-  // Atomically gives the unclaimed device with this unexpired code to the owner and
-  // retires the code. Null if there is no such device.
+  // Atomically gives the unclaimed device with this unexpired code to the owner, retires
+  // the code and drops any stored state. Null if there is no such device.
   claimByCode(code: string, owner: string, now: number): Promise<DeviceRecord | null>;
 
   listByOwner(owner: string): Promise<DeviceRecord[]>;
+  countByOwner(owner: string): Promise<number>;
 
   // The next three act only on a device this owner holds, and return null/false otherwise.
   setCapsule(id: string, owner: string, capsule: Capsule): Promise<number | null>; // the new version

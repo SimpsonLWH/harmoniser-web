@@ -59,6 +59,12 @@ function userRoute<A extends unknown[]>(
 
 /** POST /api/devices/register */
 export const register = deviceRoute('register', async (relay, request) => {
+  // The board sends no Origin and /device is same-origin: a page on another site may not
+  // register devices (and so reset someone's device, or use up the limit) from a browser.
+  const blocked = guardOrigin(request);
+  if (blocked !== null) {
+    return blocked;
+  }
   const ip = guardIp(request);
   if (!ip.ok) {
     return ip.response;

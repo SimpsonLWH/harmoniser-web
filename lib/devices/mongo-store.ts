@@ -94,7 +94,7 @@ export const updates = {
   touchClaimed: (now: number) => ({ $set: { lastSeenAt: now } }),
   saveState: (state: DeviceState, now: number) => ({ $set: { state, lastSeenAt: now } }),
   claim: (owner: string, now: number) => ({
-    $set: { ownerHash: owner, claimedAt: now },
+    $set: { ownerHash: owner, claimedAt: now, state: null },
     $unset: { code: '', codeExpiresAt: '', purgeAt: '' },
   }),
   // An action meant for the previous capsule must not hit the new one.
@@ -114,11 +114,20 @@ export function createMongoStore(): DeviceStore {
     },
 
     async registerDevice(registration) {
-      try {
-        const doc = await RelayDevice.findOneAndUpdate({ hw: registration.hw }, updates.register(registration), {
+      const upsert = () =>
+        RelayDevice.findOneAndUpdate({ hw: registration.hw }, updates.register(registration), {
           ...AFTER,
           upsert: true,
         }).lean<RelayDeviceDoc | null>();
+      try {
+        // Two first registrations of one hw at once: both try to insert and one hits the
+        // unique index on hw. Its second attempt finds the document and updates it.
+        const doc = await upsert().catch((error: unknown) => {
+          if (duplicateOf(error, 'hw')) {
+            return upsert();
+          }
+          throw error;
+        });
         if (doc === null) {
           throw new Error('device upsert returned no document');
         }
@@ -157,7 +166,8 @@ export function createMongoStore(): DeviceStore {
     },
 
     async saveState(id, tokenHash, state, now) {
-      await RelayDevice.updateOne({ _id: id, tokenHash }, updates.saveState(state, now));
+      // Only for a paired device: nothing an unpaired device shows is kept for a later owner.
+      await RelayDevice.updateOne({ _id: id, tokenHash, ownerHash: { $ne: null } }, updates.saveState(state, now));
     },
 
     async claimByCode(code, owner, now) {
@@ -172,6 +182,10 @@ export function createMongoStore(): DeviceStore {
     async listByOwner(owner) {
       const docs = await RelayDevice.find({ ownerHash: owner }).sort({ claimedAt: 1 }).lean<RelayDeviceDoc[]>();
       return docs.map(toRecord);
+    },
+
+    async countByOwner(owner) {
+      return RelayDevice.countDocuments({ ownerHash: owner });
     },
 
     async setCapsule(id, owner, capsule) {

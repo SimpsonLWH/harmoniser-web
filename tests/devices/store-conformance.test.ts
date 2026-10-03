@@ -268,11 +268,44 @@ describe.each(backends)("$name", (backend) => {
       it("saves a state report and the time, but not for a token hash that was replaced", async () => {
         const input = registration();
         const a = await store.registerDevice(input);
+        await store.claimByCode(a.code as string, "owner-a", T0);
         const state = { type: "counter", label: "Squats", count: 4, seconds: 0, remaining_seconds: 0, running: false, done: false, motion: false, version: 1 } as const;
         await store.saveState(a.id, input.tokenHash, state, T0 + 700);
         expect(await store.findDevice(a.id)).toMatchObject({ state, lastSeenAt: T0 + 700 });
         await store.saveState(a.id, "f".repeat(64), { ...state, count: 99 }, T0 + 900);
         expect(await store.findDevice(a.id)).toMatchObject({ state, lastSeenAt: T0 + 700 });
+      });
+
+      it("keeps no state for an unpaired device, and a claim and a release both clear it", async () => {
+        const input = registration();
+        const a = await store.registerDevice(input);
+        const state = { type: "counter", label: "Private", count: 4, seconds: 0, remaining_seconds: 0, running: false, done: false, motion: false, version: 1 } as const;
+        await store.saveState(a.id, input.tokenHash, state, T0 + 100);
+        expect(await store.findDevice(a.id)).toMatchObject({ state: null, lastSeenAt: T0 });
+
+        expect((await store.claimByCode(a.code as string, "owner-a", T0))?.state).toBeNull();
+        await store.saveState(a.id, input.tokenHash, state, T0 + 200);
+        expect((await store.findDevice(a.id))?.state).toEqual(state);
+
+        await store.releaseDevice(a.id, "owner-a", T0 + 300);
+        expect((await store.findDevice(a.id))?.state).toBeNull();
+        await store.saveState(a.id, input.tokenHash, state, T0 + 400); // a report that arrives late
+        expect((await store.findDevice(a.id))?.state).toBeNull();
+
+        await store.renewCode(a.id, "next-code-here", T0 + 10 * MINUTE);
+        const next = await store.claimByCode("next-code-here", "owner-b", T0 + 500);
+        expect(next).toMatchObject({ ownerHash: "owner-b", state: null });
+      });
+
+      it("counts an owner's devices", async () => {
+        expect(await store.countByOwner("owner-a")).toBe(0);
+        for (let i = 0; i < 3; i++) {
+          const device = await store.registerDevice(registration());
+          await store.claimByCode(device.code as string, i < 2 ? "owner-a" : "owner-b", T0);
+        }
+        await store.registerDevice(registration()); // unpaired: nobody's
+        expect(await store.countByOwner("owner-a")).toBe(2);
+        expect(await store.countByOwner("owner-b")).toBe(1);
       });
 
       it("touch moves lastSeenAt and nothing else", async () => {
@@ -399,6 +432,37 @@ describe.each(backends)("$name", (backend) => {
         expect(renewed.pair_url).toBe(`${BASE}/pair?code=${renewed.code}`);
         expect((await poll(device.id, device.token)).code).toBe(renewed.code);
         expect((await relay.claim("owner-a", "ip", { code: renewed.code })).id).toBe(device.id);
+      });
+
+      it("caps the devices one owner may pair", async () => {
+        const { relay, register } = relayWith({ config: { devicesPerOwner: 2 } });
+        const [a, b, c] = [await register("a"), await register("b"), await register("c")];
+        await relay.claim("owner-a", "ip", { code: a.code });
+        await relay.claim("owner-a", "ip", { code: b.code });
+        await expect(relay.claim("owner-a", "ip", { code: c.code })).rejects.toMatchObject({ status: 409, code: "too_many_devices" });
+        expect((await relay.claim("owner-b", "ip", { code: c.code })).id).toBe(c.id);
+      });
+
+      it("registers the same new hardware many times at once without an error", async () => {
+        const { register } = relayWith();
+        const answers = await Promise.all(Array.from({ length: 6 }, () => register("same-new-board")));
+        expect(new Set(answers.map((answer) => answer.id)).size).toBe(1);
+      });
+
+      it("does not hand a new owner the previous owner's state", async () => {
+        const { relay, register, poll } = relayWith();
+        const device = await register();
+        const auth = () => relay.authenticateDevice(device.id, bearer(device.token));
+        const shown = { type: "counter", label: "Private", count: 4, version: 1 };
+        await relay.claim("owner-a", "ip", { code: device.code });
+        await relay.report(await auth(), shown);
+        const stale = await auth();
+        await relay.unpair("owner-a", device.id);
+        await relay.report(stale, shown);
+        await relay.report(await auth(), shown);
+        const { code } = await poll(device.id, device.token);
+        await relay.claim("owner-b", "ip", { code });
+        expect(await relay.getState("owner-b", device.id)).toEqual({ last_seen_ms_ago: 0 });
       });
 
       it("lets one of two simultaneous claims through the relay win", async () => {

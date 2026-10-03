@@ -79,6 +79,7 @@ beforeEach(() => {
 });
 
 afterEach(() => {
+  vi.useRealTimers();
   vi.restoreAllMocks();
   vi.unstubAllEnvs();
 });
@@ -184,7 +185,22 @@ describe("the whole flow over the route files", () => {
 });
 
 describe("pair_url", () => {
-  it("is built from NEXT_PUBLIC_SITE_URL when that is set, whatever host the request names", async () => {
+  it.each([
+    "http://localhost:3000",
+    "https://localhost:3000",
+    "http://127.0.0.1:3000",
+    "http://harmoniser.keanuc.net",
+    "not a url",
+  ])("ignores NEXT_PUBLIC_SITE_URL=%s and uses the request's own origin", async (value) => {
+    vi.stubEnv("NEXT_PUBLIC_SITE_URL", value);
+    const device = await registerDevice("b", "wrist", {
+      "x-forwarded-host": "harmoniser-web-git-preview.vercel.app",
+      "x-forwarded-proto": "https",
+    });
+    expect(device.pair_url).toBe(`https://harmoniser-web-git-preview.vercel.app/pair?code=${device.code}`);
+  });
+
+  it("is built from NEXT_PUBLIC_SITE_URL when that is a public https URL, whatever host the request names", async () => {
     vi.stubEnv("NEXT_PUBLIC_SITE_URL", "https://harmoniser.keanuc.net/");
     const device = await registerDevice();
     expect(device.pair_url).toBe(`https://harmoniser.keanuc.net/pair?code=${device.code}`);
@@ -302,6 +318,19 @@ describe("origins", () => {
     const own = await claim(user, device.code, { headers: { origin: ORIGIN } });
     expect(own.status).toBe(200);
     expect(own.headers.get("access-control-allow-origin")).toBe(ORIGIN);
+  });
+
+  it("refuses a registration from a foreign web origin, and takes one from the site itself or with no Origin", async () => {
+    const body = { hw: "web-0123456789abcdef0123456789abcdef", kind: "web", fw: "web-1" };
+    const foreign = await registerRoute.POST(
+      request("POST", "/api/devices/register", { body, headers: { origin: "https://evil.example" } }),
+    );
+    expect(foreign.status).toBe(403);
+    expect(await errorCode(foreign)).toBe("origin_not_allowed");
+    const own = await registerRoute.POST(request("POST", "/api/devices/register", { body, headers: { origin: ORIGIN } }));
+    expect(own.status).toBe(201);
+    const board = await registerRoute.POST(request("POST", "/api/devices/register", { body }));
+    expect(board.status).toBe(201);
   });
 
   it("answers a preflight for PUT from an allowed origin", async () => {
@@ -436,6 +465,33 @@ describe("configuration and failures", () => {
     expect(logged).toEqual([
       "device relay: register failed: MissingEnvError: Missing required environment variable MONGODB_URI",
     ]);
+  });
+
+  it("takes a hardware id out of what it logs, and leaves ordinary words alone", () => {
+    expect(redact('E11000 duplicate key error collection: relaydevices index: hw_1 dup key: { hw: "3f9c2a7be01d4c55" }')).toBe(
+      'E11000 duplicate key error collection: relaydevices index: hw_1 dup key: { hw: "<redacted>" }',
+    );
+    expect(redact("hw web-0123456789abcdef0123456789abcdef and dev_0123456789abcdef")).toBe("hw <redacted> and <redacted>");
+    expect(redact("Missing required environment variable MONGODB_URI")).toBe(
+      "Missing required environment variable MONGODB_URI",
+    );
+    expect(redact("MongoServerSelectionError: connect ECONNREFUSED")).toBe("MongoServerSelectionError: connect ECONNREFUSED");
+  });
+
+  it("answers 409 too_many_devices in the site's envelope at the cap of 20", async () => {
+    vi.useFakeTimers({ toFake: ["Date"] });
+    const user = newToken();
+    for (let i = 0; i < 20; i++) {
+      const device = await registerDevice(`cap-board-${i}`);
+      // A new rate window each time keeps the per-token claim limit (10 per 5 minutes) out of it.
+      vi.setSystemTime(Date.now() + 5 * 60_000);
+      expect((await claim(user, device.code)).status).toBe(200);
+    }
+    const extra = await registerDevice("cap-board-extra");
+    vi.setSystemTime(Date.now() + 5 * 60_000);
+    const response = await claim(user, extra.code);
+    expect(response.status).toBe(409);
+    expect(await errorCode(response)).toBe("too_many_devices");
   });
 
   it("takes pairing codes and tokens out of what it logs", () => {

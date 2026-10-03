@@ -50,6 +50,14 @@ describe("register", () => {
     await expect(relay.register(body, BASE, "ip")).rejects.toThrow(name);
   });
 
+  it.each(["3f9c2a7be01d4c55", "a".repeat(32), "0123456789abcdef".repeat(4), "test-relay-sh", "web-" + "f".repeat(32)])(
+    "takes the hardware id %s",
+    async (hw) => {
+      const { register } = setup();
+      expect((await register(hw)).id).toMatch(/^dev_/);
+    },
+  );
+
   it("gives the same hardware the same id with a new token and code, and ends the old ones", async () => {
     const { relay, register } = setup();
     const first = await register();
@@ -206,6 +214,69 @@ describe("pairing codes", () => {
     expect(await status(relay.claim("install-b", "ip", { code }))).toBe(404);
     expect((await relay.list("install-a")).devices.map((device) => device.id)).toEqual([id]);
     expect((await relay.list("install-b")).devices).toEqual([]);
+  });
+});
+
+describe("devices per owner", () => {
+  it("refuses a claim with 409 too_many_devices at the cap, without using up the code", async () => {
+    const { relay, register } = setup({ config: { devicesPerOwner: 2 } });
+    const [a, b, c] = [await register("a"), await register("b"), await register("c")];
+    await relay.claim("owner-a", "ip", { code: a.code });
+    await relay.claim("owner-a", "ip", { code: b.code });
+    await expect(relay.claim("owner-a", "ip", { code: c.code })).rejects.toMatchObject({
+      status: 409,
+      code: "too_many_devices",
+    });
+    // Unpairing one makes room, and the code still works.
+    await relay.unpair("owner-a", a.id);
+    expect((await relay.claim("owner-a", "ip", { code: c.code })).id).toBe(c.id);
+    expect((await relay.list("owner-a")).devices).toHaveLength(2);
+  });
+
+  it("allows 20 by default, and does not hold up another owner", async () => {
+    const { relay, register } = setup({ config: { claimsPerOwner: 100 } });
+    for (let i = 0; i < 20; i++) {
+      await relay.claim("owner-a", "ip", { code: (await register(`hw-${i}`)).code });
+    }
+    const extra = await register("hw-extra");
+    expect(await status(relay.claim("owner-a", "ip", { code: extra.code }))).toBe(409);
+    expect(await status(relay.claim("owner-b", "ip", { code: extra.code }))).toBe("resolved");
+  });
+});
+
+describe("state and ownership", () => {
+  const shown = { type: "counter", label: "Private label", count: 4, version: 1 };
+
+  it("keeps nothing an unpaired device reports, but notes that it is alive", async () => {
+    const { relay, register, time, store } = setup();
+    const device = await register();
+    time.advance(5000);
+    await relay.report(await relay.authenticateDevice(device.id, `Bearer ${device.token}`), shown);
+    expect(await store.findDevice(device.id)).toMatchObject({ state: null, lastSeenAt: time.now() });
+    await relay.claim("owner-a", "ip", { code: device.code });
+    expect(await relay.getState("owner-a", device.id)).toEqual({ last_seen_ms_ago: 0 });
+  });
+
+  it("still refuses a malformed report from an unpaired device", async () => {
+    const { relay, register } = setup();
+    const device = await register();
+    const record = await relay.authenticateDevice(device.id, `Bearer ${device.token}`);
+    expect(await status(relay.report(record, { type: "idle" }))).toBe(400);
+  });
+
+  it("does not show a new owner what the device reported to the previous one", async () => {
+    const { relay, register } = setup();
+    const device = await register();
+    const auth = () => relay.authenticateDevice(device.id, `Bearer ${device.token}`);
+    await relay.claim("owner-a", "ip", { code: device.code });
+    await relay.report(await auth(), shown);
+    const stale = await auth(); // read while still paired with owner-a
+    await relay.unpair("owner-a", device.id);
+    await relay.report(stale, shown); // arrives after the unpair
+    await relay.report(await auth(), shown); // and one more while unpaired
+    const { code } = await relay.poll(await auth(), BASE);
+    await relay.claim("owner-b", "ip", { code });
+    expect(await relay.getState("owner-b", device.id)).toEqual({ last_seen_ms_ago: 0 });
   });
 });
 

@@ -59,6 +59,11 @@ export const ERR_UNKNOWN_CODE = refusal(
   'code_not_found',
   'No unpaired device has this code. A code works once, for 10 minutes.',
 );
+export const ERR_TOO_MANY_DEVICES = refusal(
+  409,
+  'too_many_devices',
+  'This token already has 20 paired devices. Unpair one first.',
+);
 export const ERR_UNKNOWN_DEVICE = refusal(404, 'not_found', 'No such device.');
 export const ERR_UNAUTHORIZED = refusal(401, 'unauthorized', 'Unknown device or device token.');
 export const ERR_RATE_LIMITED = refusal(429, 'rate_limited', 'Too many attempts. Try again later.');

@@ -66,7 +66,9 @@ export function noContent(headers?: Record<string, string>): NextResponse {
 
 // Anything that looks like a pairing code or a token is taken out before a message is logged.
 const CODE_LIKE = /\b[a-z]{3,5}(?:[- ][a-z]{3,5}){2}\b/gi;
-const TOKEN_LIKE = /[A-Za-z0-9._~+/=-]{24,}/g;
+// Tokens and hashes (32 or more token characters), and shorter ids such as a device's hw
+// (16 or more with a digit among them: hex and base64url, but not an ordinary long word).
+const TOKEN_LIKE = /[A-Za-z0-9._~+/=-]{32,}|(?=[A-Za-z0-9_-]*\d)[A-Za-z0-9_-]{16,}/g;
 
 export function redact(text: string): string {
   return text.replace(TOKEN_LIKE, '<redacted>').replace(CODE_LIKE, '<code>');
@@ -93,15 +95,31 @@ export function failure(
 
 const HOST_PATTERN = /^[a-z0-9.\-[\]:]{1,100}$/;
 
+/** NEXT_PUBLIC_SITE_URL, if it names a public https site: not localhost, not plain http. */
+function publicSiteUrl(): string | null {
+  const configured = envValue('NEXT_PUBLIC_SITE_URL');
+  if (configured === undefined) {
+    return null;
+  }
+  try {
+    const url = new URL(configured);
+    const local = ['localhost', '127.0.0.1', '[::1]', '0.0.0.0'].includes(url.hostname);
+    return url.protocol === 'https:' && !local ? url.origin : null;
+  } catch {
+    return null;
+  }
+}
+
 /**
- * Where /pair lives, for pair_url. NEXT_PUBLIC_SITE_URL when it is set (the deployed site, or
- * a custom domain); otherwise the host the request came in on, which is what a board talking
- * to a laptop on the same network needs.
+ * Where /pair lives, for pair_url. NEXT_PUBLIC_SITE_URL when it is a public https URL (the
+ * deployed site, or a custom domain); otherwise the origin the request came in on, so that
+ * local development, a board talking to a laptop, and a deployment whose variable still says
+ * localhost all hand out a QR code that opens.
  */
 export function pairBaseUrl(request: Request): string {
-  const configured = envValue('NEXT_PUBLIC_SITE_URL');
-  if (configured !== undefined) {
-    return configured.replace(/\/+$/, '');
+  const configured = publicSiteUrl();
+  if (configured !== null) {
+    return configured;
   }
   const url = new URL(request.url);
   const host = requestHost(request);

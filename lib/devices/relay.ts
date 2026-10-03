@@ -7,6 +7,7 @@ import {
   ERR_BAD_KIND,
   ERR_BUSY,
   ERR_RATE_LIMITED,
+  ERR_TOO_MANY_DEVICES,
   ERR_UNAUTHORIZED,
   ERR_UNKNOWN_CODE,
   ERR_UNKNOWN_DEVICE,
@@ -23,6 +24,7 @@ export interface RelayConfig {
   readonly claimsPerOwner: number;
   readonly claimsPerIp: number;
   readonly registrationsPerIp: number;
+  readonly devicesPerOwner: number;
 }
 
 export const DEFAULT_CONFIG: RelayConfig = {
@@ -33,6 +35,8 @@ export const DEFAULT_CONFIG: RelayConfig = {
   claimsPerOwner: 10,
   claimsPerIp: 300,
   registrationsPerIp: 300,
+  // Paired devices are never deleted automatically, so one token may not hoard them.
+  devicesPerOwner: 20,
 };
 
 export interface RelayOptions {
@@ -189,7 +193,13 @@ export function createRelay(store: DeviceStore, options: RelayOptions = {}) {
     },
 
     async report(device: DeviceRecord, body: JsonObject): Promise<void> {
-      await store.saveState(device.id, device.tokenHash, cleanState(body), now());
+      const state = cleanState(body);
+      if (device.ownerHash === null) {
+        // Still a sign of life, but what an unpaired device shows is not kept.
+        await store.touchDevice(device, now());
+        return;
+      }
+      await store.saveState(device.id, device.tokenHash, state, now());
     },
 
     // ---- user side ----
@@ -198,6 +208,11 @@ export function createRelay(store: DeviceStore, options: RelayOptions = {}) {
       await limit("devices-claim-owner", owner, config.claimsPerOwner);
       await limit("devices-claim", ip, config.claimsPerIp);
       const code = requireCode(field(body, "code"));
+      // Checked before the claim, not in the same step: two claims at the very same moment
+      // could end one over the cap. The cap is against hoarding, not an invariant.
+      if ((await store.countByOwner(owner)) >= config.devicesPerOwner) {
+        throw new RelayError(ERR_TOO_MANY_DEVICES);
+      }
       const device = await store.claimByCode(code, owner, now());
       if (device === null) {
         throw new RelayError(ERR_UNKNOWN_CODE);

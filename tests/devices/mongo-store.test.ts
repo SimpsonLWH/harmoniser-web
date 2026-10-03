@@ -82,7 +82,7 @@ describe("updates", () => {
 
   it("a claim sets the owner and removes the code and the purge date in one update", () => {
     expect(updates.claim("owner", NOW)).toEqual({
-      $set: { ownerHash: "owner", claimedAt: NOW },
+      $set: { ownerHash: "owner", claimedAt: NOW, state: null },
       $unset: { code: "", codeExpiresAt: "", purgeAt: "" },
     });
   });

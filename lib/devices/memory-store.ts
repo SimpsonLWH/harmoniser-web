@@ -78,7 +78,7 @@ export function createMemoryStore(): DeviceStore {
 
     async saveState(id, tokenHash, state: DeviceState, now) {
       const device = devices.get(id);
-      if (device !== undefined && device.tokenHash === tokenHash) {
+      if (device !== undefined && device.tokenHash === tokenHash && device.ownerHash !== null) {
         devices.set(id, { ...device, state, lastSeenAt: now });
       }
     },
@@ -94,7 +94,7 @@ export function createMemoryStore(): DeviceStore {
       if (device === undefined) {
         return null;
       }
-      const next = { ...device, ownerHash: owner, claimedAt: now, code: null, codeExpiresAt: null };
+      const next = { ...device, ownerHash: owner, claimedAt: now, code: null, codeExpiresAt: null, state: null };
       devices.set(device.id, next);
       return next;
     },
@@ -103,6 +103,10 @@ export function createMemoryStore(): DeviceStore {
       return [...devices.values()]
         .filter((device) => device.ownerHash === owner)
         .sort((a, b) => (a.claimedAt ?? 0) - (b.claimedAt ?? 0));
+    },
+
+    async countByOwner(owner) {
+      return [...devices.values()].filter((device) => device.ownerHash === owner).length;
     },
 
     async setCapsule(id, owner, capsule: Capsule) {
