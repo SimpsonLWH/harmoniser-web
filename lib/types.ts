@@ -18,8 +18,18 @@ export interface CapsuleDetailDto extends CapsuleSummaryDto {
   capsule: unknown;
 }
 
+/** Only returned when the caller asks for include=capsule; otherwise the summary shape is used. */
+export interface CapsuleSummaryWithCapsuleDto extends CapsuleSummaryDto {
+  capsule: unknown;
+}
+
 export interface CapsuleListDto {
   capsules: CapsuleSummaryDto[];
+  nextCursor: string | null;
+}
+
+export interface CapsuleListWithCapsulesDto {
+  capsules: CapsuleSummaryWithCapsuleDto[];
   nextCursor: string | null;
 }
 

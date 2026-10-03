@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 
 import { failureText, publishCapsule } from "@/lib/client/api";
-import { useDeviceToken } from "@/lib/client/token";
+import { useOwnerToken } from "@/lib/client/token";
 import { validateCapsuleObject } from "@/lib/validator";
 import type { Capsule } from "@/lib/validator";
 
@@ -30,7 +30,7 @@ export default function PublishPage() {
   const [errors, setErrors] = useState<string[]>([]);
   const [description, setDescription] = useState("");
   const [tags, setTags] = useState("");
-  const token = useDeviceToken();
+  const token = useOwnerToken();
   const [publishedId, setPublishedId] = useState<string | null>(null);
   const [failure, setFailure] = useState("");
   const [busy, setBusy] = useState(false);
@@ -217,10 +217,11 @@ export default function PublishPage() {
           </section>
 
           <section className="mt-4 rounded-card bg-surface p-5 shadow-[var(--h-shadow)]">
-            <h2 className="text-[16px] font-semibold">3. Publish with your device token</h2>
+            <h2 className="text-[16px] font-semibold">3. Publish with your owner token</h2>
             <p className="mt-2 text-[13px] leading-6 text-text-2">
-              Publishing is anonymous. Your browser token is the only owner credential — keep a
-              copy, or you will not be able to delete the capsule later.
+              Publishing is anonymous. Your owner token is the only delete credential — keep a
+              copy, or you will not be able to delete the capsule later. (Installs and reports use
+              a separate anonymous install ID that never owns anything.)
             </p>
             <div className="mt-3 flex flex-wrap items-center gap-2">
               <code className="max-w-full truncate rounded-full bg-surface-2 px-4 py-2 font-mono text-[12px]">
