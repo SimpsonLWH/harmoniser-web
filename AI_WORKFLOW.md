@@ -31,10 +31,14 @@ No other model, MCP server or skill was used to generate code in this repository
 - The parity suite mirrors the app's own unit tests, and `npm run parity` fails when upstream
   changes at the pinned commit.
 - Verified locally and on Vercel: the production build serves `/`, `/capsules`, `/publish`,
-  `/device`, `/privacy`, `/terms`, `robots.txt` and `sitemap.xml` with 200s, security headers are
-  applied, and the API returns the shared error shape (503) before a database is configured. An
-  anonymous temporary Vercel deployment (`vercel deploy --temporary`) built and served the same
-  pages before the Vercel account/Atlas setup that only Lewis can perform.
+  `/device`, `/privacy`, `/terms`, `robots.txt` and `sitemap.xml` with 200s and applies the security
+  headers; the API returns the shared error shape (503) before a database is configured.
+- Deployed to production on 2026-10-03 at <https://harmoniser-web.vercel.app> (Vercel `fra1`,
+  Atlas Frankfurt). Against that deployment: the catalogue listed the five seeded examples, a
+  publish returned 201, the new capsule appeared in a tag-filtered list, the first install counted
+  and the second de-duplicated, delete returned 401 without a token and 403 with a wrong token, the
+  owner token deleted it, and the detail route 404s afterwards. The report path is covered by unit
+  tests but was not exercised against the live database.
 - Not yet verified by a human: the visual match against the native app on a device, the emulator
   import of a marketplace download, and the live deployment smoke test. These must be reported as
   unverified until Lewis or Ash confirms them.

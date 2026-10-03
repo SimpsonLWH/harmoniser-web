@@ -8,6 +8,9 @@ The marketplace is a HackYeah 2026 prototype. Capsules are untrusted JSON, never
 validates every capsule against its own schema and asks the user to allow each permission before
 anything runs.
 
+**Live:** <https://harmoniser-web.vercel.app> (Vercel project `harmoniser-web`, region `fra1`,
+MongoDB Atlas in Frankfurt).
+
 ## Stack and versions
 
 | Part | Version |
@@ -18,7 +21,7 @@ anything runs.
 | Tailwind CSS | 4.x |
 | Mongoose / MongoDB Atlas | 9.10.4 |
 | Vitest | 5.x |
-| Node.js | 22 LTS (`engines: >=22`, Vercel project Node 22.x) |
+| Node.js | 22 LTS locally (`engines: >=22`); Vercel runs the project default 24.x |
 
 `npm audit --omit=dev` reports 0 production vulnerabilities; the five high-severity advisories are
 in the ESLint dev toolchain and are tracked, not shipped.
