@@ -15,7 +15,17 @@ import { RelayDevice, type RelayDeviceDoc } from '@/models/RelayDevice';
 import type { Action, Capsule, DeviceState } from './capsule';
 import { CodeTakenError, type DeviceRecord, type DeviceStore, type Registration } from './store';
 
-/** An unpaired device that has not been heard from for this long is deleted (TTL index). */
+/**
+ * An unpaired device that has not been heard from for 24 hours is deleted by MongoDB (the TTL
+ * index on purgeAt in models/RelayDevice.ts). This is what clears out abandoned /device tabs
+ * and boards that registered once and never came back; a device that does come back gets a
+ * 401 and registers again.
+ *
+ * A paired device must never have a purgeAt. The field is written in three places only, each
+ * of which either makes the device unpaired in the same update (register, release) or matches
+ * unpaired devices only (touchUnclaimed, filtered on ownerHash: null); a claim removes it.
+ * tests/devices/store-conformance.test.ts checks all of this against a real MongoDB.
+ */
 export const UNCLAIMED_RETENTION_MS = 24 * 60 * 60 * 1000;
 /** Rate buckets outlive their window by this much, as in lib/rate-limit.ts. */
 const BUCKET_CLEANUP_MS = 24 * 60 * 60 * 1000;
