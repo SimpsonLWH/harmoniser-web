@@ -36,12 +36,14 @@ export default function TermsPage() {
         <section>
           <h2 className="text-[18px] font-semibold text-text">3. Publishing and anonymity</h2>
           <p className="mt-2">
-            Publishing is anonymous. When you publish, your browser creates a random device token
+            Publishing is anonymous. When you publish, your browser creates a random owner token
             and we store only a keyed hash of it. That token is the only way to delete the capsule
             later: keep a copy. If you lose it, we cannot prove the capsule is yours, and it may
-            stay online until we remove it. Do not publish anything you do not have the right to
-            share, and do not include personal data about anyone, secrets, or content that is
-            unlawful, harmful or misleading.
+            stay online until we remove it. Installs, reports and device pairing use a separate
+            anonymous install ID, which never owns a capsule. The seeded template capsules are
+            permanent built-ins and have no owner token. Do not publish anything you do not have
+            the right to share, and do not include personal data about anyone, secrets, or content
+            that is unlawful, harmful or misleading.
           </p>
         </section>
 
@@ -107,12 +109,10 @@ export default function TermsPage() {
           <h2 className="text-[18px] font-semibold text-text">10. Governing law</h2>
           <p className="mt-2">
             These terms are governed by the law of Poland. The courts of Poland have jurisdiction
-            over any dispute, without affecting any consumer rights you have where you live. You
-            can reach us through{" "}
-            <a className="text-brand hover:underline" href="https://github.com/SimpsonLWH/harmoniser-web/issues" rel="noreferrer">
-              the project issue tracker
-            </a>
-            .
+            over any dispute, without affecting any consumer rights you have where you live. A
+            contact channel will be published before any commercial release; this is a HackYeah
+            2026 prototype. Do not send personal data through public channels.
+            {/* TODO(Lewis): add the operator identity and a contact channel before any commercial release. */}
           </p>
         </section>
       </div>

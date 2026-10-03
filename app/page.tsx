@@ -119,7 +119,7 @@ export default function Home() {
           <h2 className="text-2xl font-semibold tracking-tight">The capsule marketplace</h2>
           <p className="mt-3 text-[15px] leading-7 text-text-2">
             Share a capsule you made, or install one someone else published. Publishing is
-            anonymous: your device token is the only owner credential, and the marketplace stores
+            anonymous: your owner token is the only delete credential, and the marketplace stores
             just its hash. Every download is a JSON file that goes through the app&apos;s own
             validator and permission sheet before anything runs.
           </p>

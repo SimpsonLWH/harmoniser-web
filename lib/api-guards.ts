@@ -25,7 +25,7 @@ export function guardToken(request: Request): Guard<string> {
       response: errorResponse(
         401,
         'unauthorized',
-        'Send your device token in the X-Harmoniser-Token header.',
+        'Send your anonymous token in the X-Harmoniser-Token header.',
         undefined,
         mutationCorsHeaders(request),
       ),

@@ -2,11 +2,10 @@ import { NextResponse } from 'next/server';
 import { Types } from 'mongoose';
 
 import { guardOrigin, guardToken, notFound } from '@/lib/api-guards';
-import { contentHash } from '@/lib/canonical';
 import { mutationCorsHeaders } from '@/lib/cors';
 import { connectDb, isDuplicateKeyError } from '@/lib/db';
 import { handleApiError } from '@/lib/http';
-import { hashPrincipal } from '@/lib/ownership';
+import { hashPrincipal, mutationKey } from '@/lib/ownership';
 import { Capsule } from '@/models/Capsule';
 import { MUTATION_WINDOW_MS, MutationReceipt } from '@/models/MutationReceipt';
 
@@ -42,7 +41,7 @@ export async function POST(request: Request, ctx: Ctx): Promise<NextResponse> {
     }
 
     const principal = hashPrincipal(token.value);
-    const key = contentHash({ capsuleId: id, operation: 'install', principal });
+    const key = mutationKey('install', id, principal);
     let counted = false;
     try {
       await MutationReceipt.create({

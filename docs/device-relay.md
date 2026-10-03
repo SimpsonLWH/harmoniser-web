@@ -28,12 +28,13 @@ device                          relay                              user (app, or
 
 | Caller | Header | What it is |
 | --- | --- | --- |
-| User: the app, or the `/pair` page | `X-Harmoniser-Token: <token>` | The site's one anonymous token (README, "API"): made by the client, 32–256 base64url characters. Whoever claims a device owns it; the owner is stored as `hashPrincipal(token)`, never the token. |
+| User: the app, or the `/pair` page | `X-Harmoniser-Token: <installId>` | The client's anonymous **install ID** (README, "API"): made by the client, 32–256 base64url characters, separate from the publishing ownerToken. Whoever claims a device owns it; the owner is stored as `hashPrincipal(installId)`, never the token. |
 | Device: the board, or a `/device` tab | `Authorization: Bearer <device token>` | Issued by the relay at registration, 43 base64url characters. Stored as an HMAC under `APP_HMAC_SECRET` with its own label, so it can never match a user-token hash. Registering again replaces it. |
 
-The two are not interchangeable: a device token in `X-Harmoniser-Token` owns nothing, and a user
-token as a bearer token is a 401. `Authorization: Bearer` is used for devices because that is what
-the firmware sends; nothing on the user side reads it.
+The two are not interchangeable: a device token in `X-Harmoniser-Token` owns nothing, and an
+install ID as a bearer token is a 401. `Authorization: Bearer` is used for devices because that is
+what the firmware sends; nothing on the user side reads it. The publishing ownerToken is not sent
+to the relay at all — relay ownership uses the install ID.
 
 Errors use the site's envelope, `{"error":{"code","message"}}`. A device only looks at the status.
 

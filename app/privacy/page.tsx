@@ -19,13 +19,12 @@ export default function PrivacyPage() {
             The Harmoniser project (&ldquo;we&rdquo;, &ldquo;us&rdquo;) runs this website and the
             capsule marketplace, and publishes the Harmoniser app for HarmonyOS. For the purposes
             of the EU General Data Protection Regulation (GDPR), we act as the controller for the
-            data described below. You can reach us for any privacy request through{" "}
-            <a className="text-brand hover:underline" href="https://github.com/SimpsonLWH/harmoniser-web/issues" rel="noreferrer">
-              the project issue tracker
-            </a>
-            . Harmoniser is a HackYeah 2026 prototype; this notice will be reviewed before any
-            commercial release.
+            data described below. This hackathon draft does not yet name the controller&apos;s legal
+            identity or a private channel for privacy requests; both will be published before any
+            commercial release. Do not put personal data in a public issue: a public tracker is not
+            a private channel.
           </p>
+          {/* TODO(Lewis): name the data controller and a private privacy-contact channel before any commercial release. */}
         </section>
 
         <section>
@@ -63,9 +62,16 @@ export default function PrivacyPage() {
               enter — this is public by design and shown to anyone who visits the marketplace;
             </li>
             <li>
-              a hash of your anonymous device token. The token itself never leaves your browser or
-              device in plain text and is never shown in public listings; the hash is what proves
-              you can delete a capsule you published;
+              a keyed hash of an anonymous <strong>owner token</strong>. Your browser sends it to
+              the API over HTTPS when you publish or delete, and the server stores only the hash —
+              never the token, and never in a public listing. It is what proves you can delete a
+              capsule you published;
+            </li>
+            <li>
+              a keyed hash of a separate anonymous <strong>install ID</strong>, sent when you
+              install, report or pair a device. It is not a publishing credential and never owns a
+              capsule; it exists so installs and reports can be de-duplicated without identifying
+              you;
             </li>
             <li>
               a one-way hash of your IP address, used only to enforce the publish rate limit and to
@@ -130,19 +136,26 @@ export default function PrivacyPage() {
             Under the GDPR you can ask for access to your data, correction, deletion, restriction,
             portability, and you can object to processing based on legitimate interests. Because
             marketplace publishing is anonymous, we usually cannot identify you from a capsule
-            alone; if you hold the device token used to publish it, you can delete it yourself, and
+            alone; if you hold the owner token used to publish it, you can delete it yourself, and
             we can act on a request that identifies the exact capsule. You also have the right to
             complain to a supervisory authority — for example the Polish Data Protection
             Authority (UODO) where this project was built, or the authority in your own country.
+          </p>
+          <p className="mt-2">
+            The 108 seeded template capsules are permanent built-ins: they were published without
+            an owner who holds a delete credential, so they cannot be deleted with an owner token.
+            An operator can remove them from the database if needed. Capsules you publish yourself
+            keep the normal owner-token delete contract.
           </p>
         </section>
 
         <section>
           <h2 className="text-[18px] font-semibold text-text">Security and children</h2>
           <p className="mt-2">
-            Traffic is encrypted in transit, tokens are stored only as keyed hashes, and the
-            database user is least-privilege. The marketplace is not intended for children, and we
-            do not knowingly collect data from children.
+            Traffic is encrypted in transit; authentication credentials are sent to the API over
+            HTTPS and stored only as keyed hashes. The database user is least-privilege. The
+            marketplace is not intended for children, and we do not knowingly collect data from
+            children.
           </p>
         </section>
 

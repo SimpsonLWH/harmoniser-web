@@ -12,6 +12,7 @@
     "test:watch": "vitest",
     "seed": "tsx scripts/seed.ts",
     "seed:dry": "tsx scripts/seed.ts --dry-run",
+    "indexes": "tsx scripts/sync-indexes.ts",
     "parity": "node scripts/check-parity.mjs"
   },
   "engines": {

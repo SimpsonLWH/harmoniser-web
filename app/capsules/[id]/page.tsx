@@ -5,7 +5,7 @@ import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import { countInstall, deleteCapsule, failureText, fetchCapsule, reportCapsule } from "@/lib/client/api";
-import { getStoredToken, storeToken, useDeviceToken } from "@/lib/client/token";
+import { getOwnerToken, storeOwnerToken, useInstallId, useOwnerToken } from "@/lib/client/token";
 import { formatDate, formatInstalls, permissionLabel } from "@/lib/format";
 import type { CapsuleDetailDto } from "@/lib/types";
 import type { Capsule } from "@/lib/validator";
@@ -26,7 +26,8 @@ export default function CapsuleDetailPage() {
   const [status, setStatus] = useState<Status>("loading");
   const [error, setError] = useState("");
   const [notice, setNotice] = useState("");
-  const token = useDeviceToken();
+  const ownerToken = useOwnerToken();
+  const installId = useInstallId();
   const [tokenInput, setTokenInput] = useState("");
   const [reason, setReason] = useState(REPORT_REASONS[0].value);
   const [busy, setBusy] = useState(false);
@@ -65,7 +66,7 @@ export default function CapsuleDetailPage() {
     }
     setBusy(true);
     setNotice("");
-    const counted = await countInstall(id, token);
+    const counted = await countInstall(id, installId);
     const json = JSON.stringify(detail.capsule, null, 2);
     const blob = new Blob([json], { type: "application/json" });
     const url = URL.createObjectURL(blob);
@@ -97,7 +98,7 @@ export default function CapsuleDetailPage() {
       return;
     }
     setBusy(true);
-    const result = await reportCapsule(id, token, reason);
+    const result = await reportCapsule(id, installId, reason);
     setBusy(false);
     if (result.ok) {
       setNotice(
@@ -115,7 +116,7 @@ export default function CapsuleDetailPage() {
       return;
     }
     setBusy(true);
-    const result = await deleteCapsule(id, token);
+    const result = await deleteCapsule(id, ownerToken);
     setBusy(false);
     if (result.ok) {
       setNotice("Deleted. The public payload is gone.");
@@ -254,31 +255,39 @@ export default function CapsuleDetailPage() {
       </details>
 
       <section className="mt-8 rounded-card bg-surface p-5 shadow-[var(--h-shadow)]">
-        <h2 className="text-[16px] font-semibold">Your device token</h2>
+        <h2 className="text-[16px] font-semibold">Your owner token</h2>
         <p className="mt-2 text-[13px] leading-6 text-text-2">
-          This browser&apos;s anonymous token is your install ID and your publisher credential. Keep
-          a copy: without it, a capsule you published cannot be deleted from this browser.
+          This anonymous token is the publishing and delete credential. Keep a copy: without it, a
+          capsule you published cannot be deleted from this browser. It is sent to the API over
+          HTTPS, and the server stores only a keyed hash of it.
         </p>
         <div className="mt-3 flex flex-wrap items-center gap-2">
           <code className="max-w-full truncate rounded-full bg-surface-2 px-4 py-2 font-mono text-[12px]">
-            {token.length > 0 ? `${token.slice(0, 10)}…${token.slice(-4)}` : "…"}
+            {ownerToken.length > 0 ? `${ownerToken.slice(0, 10)}…${ownerToken.slice(-4)}` : "…"}
           </code>
           <button
             type="button"
             onClick={() => {
-              void navigator.clipboard.writeText(token);
-              setNotice("Device token copied. Store it somewhere safe.");
+              void navigator.clipboard.writeText(ownerToken);
+              setNotice("Owner token copied. Store it somewhere safe.");
             }}
             className="min-h-9 rounded-full bg-surface-2 px-4 text-[13px] font-medium"
           >
             Copy
           </button>
         </div>
+        <p className="mt-3 text-[12px] leading-6 text-text-3">
+          Installs and reports use a separate anonymous install ID (
+          <span className="font-mono">
+            {installId.length > 0 ? `${installId.slice(0, 10)}…${installId.slice(-4)}` : "…"}
+          </span>
+          ), which never owns a capsule. Cleared site data resets both.
+        </p>
         <div className="mt-3 flex flex-col gap-2 sm:flex-row">
           <input
             value={tokenInput}
             onChange={(event) => setTokenInput(event.target.value)}
-            placeholder="Paste another device token to manage its capsules"
+            placeholder="Paste another owner token to manage its capsules"
             className="min-h-11 w-full rounded-input border border-line bg-bg px-4 font-mono text-[12px]"
           />
           <button
@@ -286,10 +295,10 @@ export default function CapsuleDetailPage() {
             onClick={() => {
               const trimmed = tokenInput.trim();
               if (trimmed.length >= 32) {
-                storeToken(trimmed);
-                setNotice("Using the pasted token for this browser.");
+                storeOwnerToken(trimmed);
+                setNotice("Using the pasted owner token for this browser.");
               } else {
-                setNotice("That does not look like a device token.");
+                setNotice("That does not look like an owner token.");
               }
             }}
             className="min-h-11 shrink-0 rounded-full bg-surface-2 px-5 text-[13px] font-medium"
@@ -300,7 +309,7 @@ export default function CapsuleDetailPage() {
         <button
           type="button"
           onClick={() => void remove()}
-          disabled={busy || getStoredToken() === null}
+          disabled={busy || getOwnerToken() === null}
           className="mt-4 min-h-11 rounded-full bg-danger-soft px-5 text-[14px] font-medium text-danger disabled:opacity-60"
         >
           Delete this capsule

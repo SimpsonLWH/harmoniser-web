@@ -36,7 +36,7 @@ in the ESLint dev toolchain and are tracked, not shipped.
 | `/publish` | Paste/upload a capsule, validate it, choose the public metadata, publish |
 | `/device` | Virtual device: a browser tab that pairs and shows a timer or counter like the ESP32 companion |
 | `/pair` | Pairing page behind a device's QR code (`?code=three-word-phrase`) |
-| `/privacy`, `/terms` | GDPR + Polish-law pages, no company named, contact via the issue tracker |
+| `/privacy`, `/terms` | GDPR + Polish-law pages, no company named; controller identity and a private privacy contact are explicit TODOs before any commercial release |
 
 ## Local development
 
@@ -68,13 +68,25 @@ run without it.
 
 ## API
 
-All mutating routes require the anonymous device token in the `X-Harmoniser-Token` header
-(32–256 base64url characters). The server stores only `HMAC-SHA-256(secret, token)`; the token is
-never returned in any response. It is both the publisher credential and the install ID.
+Two anonymous browser identities travel in the same `X-Harmoniser-Token` header (32–256 base64url
+characters). Both are random 32-byte values made by the client, and the server stores only keyed
+HMAC-SHA-256 hashes — a token is never returned, logged or shown in public listings.
+
+- **ownerToken** — the publishing and deletion credential for `POST /api/capsules` and
+  `DELETE /api/capsules/{id}` (hashed with the `owner` label). Losing it means losing self-service
+  delete. In the browser it lives at `harmoniser.ownerToken`; in the app the spec is in
+  `docs/native-integration.md`.
+- **installId** — a separate persistent client id for install/report deduplication and the relay's
+  user side (`hashPrincipal`, the `principal` label). It never owns a capsule: losing it only
+  resets deduplication and unpairs that browser's relay devices.
+
+The relay's device credential is a third token, issued by the server at registration and sent as
+`Authorization: Bearer`; it is neither of the above and is documented in `docs/device-relay.md`.
+None of the three is an account or a verified identity.
 
 | Route | Method | Notes |
 | --- | --- | --- |
-| `/api/capsules` | `GET` | `q` (≤100 chars, `$text` search), `tag` (exact, lowercase), `limit` 1–50 (default 20), opaque `cursor`. Visible capsules only, deterministic `_id` order, `no-store` |
+| `/api/capsules` | `GET` | `q` (≤100 chars, `$text` search), `tag` (exact, lowercase), `limit` 1–50 (default 20, whole integer strings only), opaque `cursor`, optional `include=capsule`. Visible capsules only, deterministic `_id` order, `no-store` |
 | `/api/capsules` | `POST` | `{capsule, name?, description?, tags?}`; envelope ≤12 KiB, capsule ≤8 KiB UTF-8 canonical; full recursive validation; 201 with `{id, contentHash}`; duplicates → 409 with the existing public id |
 | `/api/capsules/[id]` | `GET` | 404 for hidden/deleted/unknown ids; `ETag: "<contentHash>"`; `If-None-Match` → 304 |
 | `/api/capsules/[id]` | `DELETE` | Owner token required, constant-time hash comparison; soft-deletes and removes the public payload |
@@ -92,6 +104,19 @@ Rate limiting uses `RateBucket` documents keyed by `HMAC(secret, route + trusted
 incremented atomically; writes fail closed with 503 when the platform gives no client address.
 Installs and reports use `MutationReceipt` documents with a 24 h TTL. These are demo-grade
 heuristics, not fraud-resistant moderation.
+
+With `include=capsule` every item on the page additionally carries the capsule's public validated
+JSON, so a grid can preview capsules without one request per card:
+
+```
+GET /api/capsules?include=capsule&limit=20
+{"capsules":[{"id":"…","name":"…","widget":true,"review":{…},"capsule":{"schemaVersion":0,…}}],"nextCursor":null}
+```
+
+The default response is unchanged when `include` is absent; any other value is a 400
+`invalid_query`. The payload is the same public JSON the detail route serves — it never includes
+tokens or owner hashes, and the app still validates a capsule and asks for permissions before it
+runs anything.
 
 ## Validator parity
 
@@ -120,6 +145,20 @@ The port currently matches **`Akshaz7/capsules-harmonyos@452777e8ee51cf716101d15
 indexes. The examples are synthetic: descriptions start with “Example”, every capsule carries the
 `example` tag, and nothing implies real installs or real users.
 
+The 108 seeded templates are permanent built-ins: they carry the `template` tag, and their seed
+ownership hash does not match the current `APP_HMAC_SECRET`, so owner-token deletion is not
+supported for them. An authorised operator can remove them in MongoDB Atlas if needed; every
+capsule a user publishes has the normal ownerToken delete contract.
+
+## MongoDB indexes
+
+`npm run indexes` reconciles every index the models declare (including the relay's unique
+partial index on the live pairing code and its TTL cleanup index) and drops stray ones. Run it once
+against a new database, after any model change, and after the first deploy: `autoIndex` is on, but
+on Vercel every instance would otherwise build indexes on its own first request, and a request that
+arrives while a unique index is still building can slip past it. `npm run indexes -- --dry` prints
+what the collections hold today without writing.
+
 ## Deployment (Vercel `fra1` + Atlas Frankfurt)
 
 1. Create the Vercel project from this repo and set the Node.js version to 22.x.
@@ -137,13 +176,16 @@ indexes. The examples are synthetic: descriptions start with “Example”, ever
 - Tokens are hashed, IPs are hashed, DTOs are allowlists, and logs never include payloads or tokens.
 - CSP currently allows Next's inline bootstrap (`'unsafe-inline'` for scripts); moving to per-request
   nonces via middleware is the next hardening step.
-- The browser token lives in `localStorage` and is therefore XSS-exposed by nature; keep scripts
-  minimal. Losing it means losing self-service delete — the UI says so.
+- The browser's ownerToken and installId live in `localStorage` and are therefore XSS-exposed by
+  nature; keep scripts minimal. Losing the ownerToken means losing self-service delete — the UI
+  says so. The one-token era is migrated by copying the old value into both, so existing
+  ownership and relay pairings keep working.
 - No accounts and no Huawei identity in v0. The identity phase is feature-flagged
   (`HUAWEI_AUTH_ENABLED`, `TEST_LOGIN_ENABLED`).
-- The device relay (`/api/devices/**`, `/pair`, `/device`) is Keanu's workstream and is documented
-  in `docs/device-relay.md`, including what has and has not been verified. Its MongoDB store has
-  not yet run against a real database. `models/DeviceSession.ts` is an unused placeholder.
+- The device relay (`/api/devices/**`, `/pair`, `/device`) is documented in
+  `docs/device-relay.md`, including what has and has not been verified: it runs against the
+  production store, the firmware's contract script passes against production, and no real board
+  or phone camera has been tried. `models/DeviceSession.ts` is an unused placeholder.
 - Legal pages are hackathon-draft text written for GDPR + Polish law with no company named; review
   them with a qualified adviser before any commercial store release.
 

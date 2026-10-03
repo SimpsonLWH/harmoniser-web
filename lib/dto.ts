@@ -3,6 +3,7 @@
 import type { Capsule } from './validator';
 import { routeCapsule } from './validator';
 import type { CapsuleSummaryDto, CapsuleDetailDto } from './types';
+import type { CapsuleSummaryWithCapsuleDto } from './types';
 
 export interface CapsuleDocLike {
   _id: unknown;
@@ -37,6 +38,14 @@ export function toSummary(doc: CapsuleDocLike): CapsuleSummaryDto {
 }
 
 export function toDetail(doc: CapsuleDocLike): CapsuleDetailDto {
+  return { ...toSummary(doc), capsule: doc.capsule };
+}
+
+/**
+ * The summary plus the public validated capsule payload. Built on toSummary, whose allowlist
+ * keeps ownerTokenHash, principal hashes and moderation fields out; never spread a raw document.
+ */
+export function toSummaryWithCapsule(doc: CapsuleDocLike): CapsuleSummaryWithCapsuleDto {
   return { ...toSummary(doc), capsule: doc.capsule };
 }
 
