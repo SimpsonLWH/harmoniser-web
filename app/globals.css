@@ -1,75 +1,312 @@
 @import "tailwindcss";
+@import "./tokens.css";
 
-/*
- * Tokens sampled from the Harmoniser build running on the HackYeah emulator (screenshots in
- * public/shots) and from the app's ArkUI defaults. They are a starting point for matching the
- * native visual language, not official HarmonyOS values: verify against the device theme before
- * treating them as authoritative.
- */
-:root {
-  --h-bg: #f1f3f5;
-  --h-surface: #ffffff;
-  --h-surface-2: #e9edf3;
-  --h-text: #182431;
-  --h-text-2: #5e6b7c;
-  --h-text-3: #8a95a5;
-  --h-brand: #0a59f7;
-  --h-brand-soft: #e6efff;
-  --h-warning: #b7791f;
-  --h-warning-soft: #fff4d6;
-  --h-danger: #d9480f;
-  --h-danger-soft: #ffe8e0;
-  --h-border: rgba(24, 36, 49, 0.08);
-  --h-shadow: 0 1px 2px rgba(24, 36, 49, 0.04), 0 8px 24px rgba(24, 36, 49, 0.06);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --h-bg: #000000;
-    --h-surface: #1b1b1b;
-    --h-surface-2: #262626;
-    --h-text: #f1f3f5;
-    --h-text-2: #a6b0bd;
-    --h-text-3: #7d8794;
-    --h-brand: #5c8dff;
-    --h-brand-soft: #17233d;
-    --h-warning: #e8b04b;
-    --h-warning-soft: #33280f;
-    --h-danger: #ff8a65;
-    --h-danger-soft: #3a1a12;
-    --h-border: rgba(241, 243, 245, 0.1);
-    --h-shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 24px rgba(0, 0, 0, 0.35);
-  }
-}
-
+/* Tailwind names for the tokens in tokens.css. Values live there, never here. */
 @theme inline {
-  --color-bg: var(--h-bg);
-  --color-surface: var(--h-surface);
-  --color-surface-2: var(--h-surface-2);
-  --color-text: var(--h-text);
-  --color-text-2: var(--h-text-2);
-  --color-text-3: var(--h-text-3);
-  --color-brand: var(--h-brand);
-  --color-brand-soft: var(--h-brand-soft);
-  --color-warning: var(--h-warning);
-  --color-warning-soft: var(--h-warning-soft);
-  --color-danger: var(--h-danger);
-  --color-danger-soft: var(--h-danger-soft);
-  --color-line: var(--h-border);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-  --radius-card: 20px;
-  --radius-input: 24px;
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-card: var(--card);
+  --color-text: var(--text);
+  --color-text-2: var(--text-2);
+  --color-text-3: var(--text-3);
+  --color-blue: var(--blue);
+  --color-blue-hover: var(--blue-hover);
+  --color-on-blue: var(--on-blue);
+  --color-orange: var(--orange);
+  --color-orange-icon: var(--orange-icon);
+  --color-orange-text: var(--orange-text);
+  --color-orange-tint: var(--orange-tint);
+  --color-tint: var(--tint);
+  --color-chip: var(--chip);
+  --color-chip-text: var(--chip-text);
+  --color-line: var(--line);
+  --color-line-2: var(--line-2);
+  --color-device: var(--device-bg);
+  --color-device-text: var(--device-text);
+  --color-device-text-2: var(--device-text-2);
+  --color-device-key: var(--device-key);
+  --color-device-alert: var(--device-alert);
+
+  /* Aliases for the pre-redesign utility names, removed once no page uses them. */
+  --color-surface-2: var(--card);
+  --color-brand: var(--blue);
+  --color-brand-soft: var(--tint);
+  --color-warning: var(--orange-text);
+  --color-warning-soft: var(--orange-tint);
+  --color-danger: var(--orange-text);
+  --color-danger-soft: var(--orange-tint);
+
+  --font-sans: var(--font);
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+
+  --text-badge: var(--fs-badge);
+  --text-caption: var(--fs-caption);
+  --text-label: var(--fs-label);
+  --text-body: var(--fs-body);
+  --text-title: var(--fs-title);
+  --text-display: var(--fs-display);
+  --text-hero: var(--fs-hero);
+
+  --radius-frame: var(--r-frame);
+  --radius-card: var(--r-card);
+  --radius-btn: var(--r-btn);
+  --radius-chip: var(--r-chip);
+  --radius-tile: var(--r-tile);
+  --radius-input: var(--r-input);
+
+  --spacing-tap: var(--tap);
+
+  --default-transition-duration: 180ms;
+  --default-transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
+}
+
+/* Spec breakpoints: 600, 960, 1280. */
+@theme {
+  --breakpoint-sm: 600px;
+  --breakpoint-md: 960px;
+  --breakpoint-lg: 1280px;
+  --breakpoint-xl: 1440px;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
-  background: var(--h-bg);
-  color: var(--h-text);
+  background-color: var(--bg);
+  background-image: var(--top-glow);
+  background-repeat: no-repeat;
+  color: var(--text);
+  font-family: var(--font);
+  font-weight: 500;
+  overflow-x: clip;
 }
 
 :focus-visible {
-  outline: 2px solid var(--h-brand);
+  outline: 2px solid var(--blue);
   outline-offset: 2px;
+}
+
+::placeholder {
+  color: var(--text-2);
+  opacity: 1;
+}
+
+@layer components {
+  .page {
+    width: 100%;
+    max-width: 1120px;
+    margin-inline: auto;
+    padding-inline: 16px;
+  }
+  @media (min-width: 600px) {
+    .page {
+      padding-inline: 24px;
+    }
+  }
+  @media (min-width: 960px) {
+    .page {
+      padding-inline: 32px;
+    }
+  }
+
+  .page-title {
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    line-height: 1.15;
+    color: var(--text);
+  }
+  @media (min-width: 600px) {
+    .page-title {
+      font-size: var(--fs-display);
+    }
+  }
+
+  .section-title {
+    font-size: var(--fs-title);
+    font-weight: 700;
+    letter-spacing: -0.3px;
+    line-height: 1.25;
+    color: var(--text);
+  }
+
+  .lede {
+    max-width: 65ch;
+    font-size: var(--fs-body);
+    line-height: 1.6;
+    color: var(--text-2);
+  }
+
+  .card {
+    border: 1px solid var(--line-2);
+    border-radius: var(--r-card);
+    background: var(--surface);
+    padding: 16px;
+  }
+  @media (min-width: 600px) {
+    .card {
+      padding: 20px;
+    }
+  }
+
+  .btn {
+    display: inline-flex;
+    min-height: var(--tap);
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border: 1px solid transparent;
+    border-radius: var(--r-btn);
+    padding: 0 18px;
+    font-size: var(--fs-label);
+    font-weight: 700;
+    line-height: 1.2;
+    text-align: center;
+    white-space: nowrap;
+    cursor: pointer;
+    transition-property: background-color, border-color, color, transform;
+    transition-duration: 160ms;
+    transition-timing-function: ease-out;
+  }
+  .btn:active:not(:disabled) {
+    transform: scale(0.98);
+  }
+  .btn:disabled {
+    cursor: default;
+    opacity: 0.55;
+  }
+  .btn-primary {
+    background: var(--blue);
+    color: var(--on-blue);
+  }
+  .btn-primary:hover:not(:disabled) {
+    background: var(--blue-hover);
+  }
+  .btn-secondary {
+    border-color: var(--line);
+    background: var(--surface);
+    color: var(--text);
+  }
+  .btn-secondary:hover:not(:disabled) {
+    background: var(--card);
+  }
+  .btn-ghost {
+    background: transparent;
+    color: var(--chip-text);
+  }
+  .btn-ghost:hover:not(:disabled) {
+    background: var(--chip);
+  }
+  .btn-warn {
+    background: var(--orange-tint);
+    color: var(--orange-text);
+  }
+  .btn-icon {
+    width: var(--tap);
+    padding: 0;
+    border-color: var(--line);
+    border-radius: 999px;
+    background: var(--surface);
+    color: var(--text);
+  }
+
+  .field {
+    display: block;
+    width: 100%;
+    min-height: var(--tap);
+    border: 1px solid var(--line);
+    border-radius: var(--r-input);
+    background: var(--surface);
+    padding: 10px 14px;
+    color: var(--text);
+    font-size: 16px;
+    transition: box-shadow 160ms ease-out, border-color 160ms ease-out;
+  }
+  .field:focus-visible {
+    outline: none;
+    border-color: var(--blue);
+    box-shadow: var(--focus-ring);
+  }
+
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    border-radius: var(--r-chip);
+    background: var(--chip);
+    padding: 3px 8px;
+    color: var(--chip-text);
+    font-size: var(--fs-badge);
+    font-weight: 600;
+    line-height: 16px;
+    white-space: nowrap;
+  }
+  .chip-orange {
+    background: var(--orange-tint);
+    color: var(--orange-text);
+  }
+  .chip-plain {
+    background: var(--card);
+    color: var(--text-2);
+  }
+
+  .icon-tile {
+    display: grid;
+    width: 42px;
+    height: 42px;
+    flex-shrink: 0;
+    place-items: center;
+    border-radius: var(--r-tile);
+    background: var(--tint);
+    color: var(--blue);
+  }
+
+  .status-icon {
+    display: grid;
+    width: 56px;
+    height: 56px;
+    place-items: center;
+    border-radius: 999px;
+    background: var(--tint);
+    color: var(--blue);
+  }
+
+  .notice {
+    border-radius: var(--r-card);
+    background: var(--tint);
+    padding: 14px 16px;
+    color: var(--text);
+    font-size: var(--fs-label);
+    line-height: 1.5;
+  }
+  .notice-warn {
+    background: var(--orange-tint);
+    color: var(--orange-text);
+  }
+
+  .code-block {
+    overflow: auto;
+    border-radius: var(--r-input);
+    background: var(--card);
+    padding: 16px;
+    font-family: var(--font-geist-mono), ui-monospace, monospace;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1.6;
+  }
+
+  .link {
+    color: var(--chip-text);
+    font-weight: 600;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+  }
+  .link:hover {
+    color: var(--blue);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
