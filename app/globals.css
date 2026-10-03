@@ -27,15 +27,6 @@
   --color-device-key: var(--device-key);
   --color-device-alert: var(--device-alert);
 
-  /* Aliases for the pre-redesign utility names, removed once no page uses them. */
-  --color-surface-2: var(--card);
-  --color-brand: var(--blue);
-  --color-brand-soft: var(--tint);
-  --color-warning: var(--orange-text);
-  --color-warning-soft: var(--orange-tint);
-  --color-danger: var(--orange-text);
-  --color-danger-soft: var(--orange-tint);
-
   --font-sans: var(--font);
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
 
