@@ -1,0 +1,421 @@
+[
+  {
+    "route": "/",
+    "width": 390,
+    "scheme": "light",
+    "issues": [
+      "page scrolls sideways: 477 > 390",
+      "small target 119x32: A \"HHarmoniser\"",
+      "small target 104x33: A \"Marketplace\"",
+      "small target 71x33: A \"Publish\"",
+      "small target 75x33: A \"Devices\"",
+      "small target 68x33: A \"GitHub\"",
+      "small target 82x20: A \"Privacy policy\"",
+      "small target 97x20: A \"Terms of service\"",
+      "small target 85x20: A \"Device pairing\"",
+      "small target 99x20: A \"Contact & issues\"",
+      "small target 87x20: A \"App repository\""
+    ]
+  },
+  {
+    "route": "/capsules",
+    "width": 390,
+    "scheme": "light",
+    "issues": [
+      "page scrolls sideways: 477 > 390",
+      "small target 119x32: A \"HHarmoniser\"",
+      "small target 104x33: A \"Marketplace\"",
+      "small target 71x33: A \"Publish\"",
+      "small target 75x33: A \"Devices\"",
+      "small target 68x33: A \"GitHub\"",
+      "small target 48x36: BUTTON \"All\"",
+      "small target 64x36: BUTTON \"timer\"",
+      "small target 79x36: BUTTON \"counter\"",
+      "small target 87x36: BUTTON \"checklist\"",
+      "small target 80x36: BUTTON \"cooking\"",
+      "small target 74x36: BUTTON \"fitness\"",
+      "small target 70x36: BUTTON \"health\"",
+      "small target 66x36: BUTTON \"study\"",
+      "small target 66x36: BUTTON \"home\"",
+      "small target 82x20: A \"Privacy policy\"",
+      "small target 97x20: A \"Terms of service\"",
+      "small target 85x20: A \"Device pairing\"",
+      "small target 99x20: A \"Contact & issues\"",
+      "small target 87x20: A \"App repository\""
+    ]
+  },
+  {
+    "route": "/capsules/6ac15b2810efa04f4e1c1c12",
+    "width": 390,
+    "scheme": "light",
+    "issues": [
+      "page scrolls sideways: 477 > 390",
+      "small target 119x32: A \"HHarmoniser\"",
+      "small target 104x33: A \"Marketplace\"",
+      "small target 71x33: A \"Publish\"",
+      "small target 75x33: A \"Devices\"",
+      "small target 68x33: A \"GitHub\"",
+      "small target 91x17: A \"← Marketplace\"",
+      "small target 316x23: SUMMARY \"View the capsule JSON (schema v1)\"",
+      "small target 63x36: BUTTON \"Copy\"",
+      "small target 82x20: A \"Privacy policy\"",
+      "small target 97x20: A \"Terms of service\"",
+      "small target 85x20: A \"Device pairing\"",
+      "small target 99x20: A \"Contact & issues\"",
+      "small target 87x20: A \"App repository\""
+    ]
+  },
+  {
+    "route": "/capsules/000000000000000000000000",
+    "width": 390,
+    "scheme": "light",
+    "issues": [
+      "page scrolls sideways: 477 > 390",
+      "small target 119x32: A \"HHarmoniser\"",
+      "small target 104x33: A \"Marketplace\"",
+      "small target 71x33: A \"Publish\"",
+      "small target 75x33: A \"Devices\"",
+      "small target 68x33: A \"GitHub\"",
+      "small target 82x20: A \"Privacy policy\"",
+      "small target 97x20: A \"Terms of service\"",
+      "small target 85x20: A \"Device pairing\"",
+      "small target 99x20: A \"Contact & issues\"",
+      "small target 87x20: A \"App repository\""
+    ]
+  },
+  {
+    "route": "/publish",
+    "width": 390,
+    "scheme": "light",
+    "issues": [
+      "page scrolls sideways: 477 > 390",
+      "small target 119x32: A \"HHarmoniser\"",
+      "small target 104x33: A \"Marketplace\"",
+      "small target 71x33: A \"Publish\"",
+      "small target 75x33: A \"Devices\"",
+      "small target 68x33: A \"GitHub\"",
+      "small target 135x36: BUTTON \"Load an example\"",
+      "small target 111x36: LABEL \"Choose a file\"",
+      "small target 318x21: SUMMARY \"Public capsule JSON\"",
+      "small target 101x36: BUTTON \"Copy token\"",
+      "small target 82x20: A \"Privacy policy\"",
+      "small target 97x20: A \"Terms of service\"",
+      "small target 85x20: A \"Device pairing\"",
+      "small target 99x20: A \"Contact & issues\"",
+      "small target 87x20: A \"App repository\""
+    ]
+  },
+  {
+    "route": "/device",
+    "width": 390,
+    "scheme": "light",
+    "issues": [
+      "page scrolls sideways: 477 > 390",
+      "small target 119x32: A \"HHarmoniser\"",
+      "small target 104x33: A \"Marketplace\"",
+      "small target 71x33: A \"Publish\"",
+      "small target 75x33: A \"Devices\"",
+      "small target 68x33: A \"GitHub\"",
+      "small target 103x36: BUTTON \"New device\"",
+      "small target 82x20: A \"Privacy policy\"",
+      "small target 97x20: A \"Terms of service\"",
+      "small target 85x20: A \"Device pairing\"",
+      "small target 99x20: A \"Contact & issues\"",
+      "small target 87x20: A \"App repository\""
+    ]
+  },
+  {
+    "route": "/pair",
+    "width": 390,
+    "scheme": "light",
+    "issues": [
+      "page scrolls sideways: 477 > 390",
+      "small target 119x32: A \"HHarmoniser\"",
+      "small target 104x33: A \"Marketplace\"",
+      "small target 71x33: A \"Publish\"",
+      "small target 75x33: A \"Devices\"",
+      "small target 68x33: A \"GitHub\"",
+      "small target 82x20: A \"Privacy policy\"",
+      "small target 97x20: A \"Terms of service\"",
+      "small target 85x20: A \"Device pairing\"",
+      "small target 99x20: A \"Contact & issues\"",
+      "small target 87x20: A \"App repository\""
+    ]
+  },
+  {
+    "route": "/pair?code=brave-otter-lamp",
+    "width": 390,
+    "scheme": "light",
+    "issues": [
+      "page scrolls sideways: 477 > 390",
+      "small target 119x32: A \"HHarmoniser\"",
+      "small target 104x33: A \"Marketplace\"",
+      "small target 71x33: A \"Publish\"",
+      "small target 75x33: A \"Devices\"",
+      "small target 68x33: A \"GitHub\"",
+      "small target 82x20: A \"Privacy policy\"",
+      "small target 97x20: A \"Terms of service\"",
+      "small target 85x20: A \"Device pairing\"",
+      "small target 99x20: A \"Contact & issues\"",
+      "small target 87x20: A \"App repository\""
+    ]
+  },
+  {
+    "route": "/privacy",
+    "width": 390,
+    "scheme": "light",
+    "issues": [
+      "page scrolls sideways: 477 > 390",
+      "small target 119x32: A \"HHarmoniser\"",
+      "small target 104x33: A \"Marketplace\"",
+      "small target 71x33: A \"Publish\"",
+      "small target 75x33: A \"Devices\"",
+      "small target 68x33: A \"GitHub\"",
+      "small target 82x20: A \"Privacy policy\"",
+      "small target 97x20: A \"Terms of service\"",
+      "small target 85x20: A \"Device pairing\"",
+      "small target 99x20: A \"Contact & issues\"",
+      "small target 87x20: A \"App repository\""
+    ]
+  },
+  {
+    "route": "/terms",
+    "width": 390,
+    "scheme": "light",
+    "issues": [
+      "page scrolls sideways: 477 > 390",
+      "small target 119x32: A \"HHarmoniser\"",
+      "small target 104x33: A \"Marketplace\"",
+      "small target 71x33: A \"Publish\"",
+      "small target 75x33: A \"Devices\"",
+      "small target 68x33: A \"GitHub\"",
+      "small target 82x20: A \"Privacy policy\"",
+      "small target 97x20: A \"Terms of service\"",
+      "small target 85x20: A \"Device pairing\"",
+      "small target 99x20: A \"Contact & issues\"",
+      "small target 87x20: A \"App repository\""
+    ]
+  },
+  {
+    "route": "/this-page-does-not-exist",
+    "width": 390,
+    "scheme": "light",
+    "issues": [
+      "page scrolls sideways: 477 > 390",
+      "small target 119x32: A \"HHarmoniser\"",
+      "small target 104x33: A \"Marketplace\"",
+      "small target 71x33: A \"Publish\"",
+      "small target 75x33: A \"Devices\"",
+      "small target 68x33: A \"GitHub\"",
+      "small target 82x20: A \"Privacy policy\"",
+      "small target 97x20: A \"Terms of service\"",
+      "small target 85x20: A \"Device pairing\"",
+      "small target 99x20: A \"Contact & issues\"",
+      "small target 87x20: A \"App repository\""
+    ]
+  },
+  {
+    "route": "/",
+    "width": 1280,
+    "scheme": "light",
+    "issues": [
+      "small target 119x32: A \"HHarmoniser\"",
+      "small target 104x33: A \"Marketplace\"",
+      "small target 71x33: A \"Publish\"",
+      "small target 75x33: A \"Devices\"",
+      "small target 68x33: A \"GitHub\"",
+      "small target 82x20: A \"Privacy policy\"",
+      "small target 97x20: A \"Terms of service\"",
+      "small target 85x20: A \"Device pairing\"",
+      "small target 99x20: A \"Contact & issues\"",
+      "small target 87x20: A \"App repository\""
+    ]
+  },
+  {
+    "route": "/capsules",
+    "width": 1280,
+    "scheme": "light",
+    "issues": [
+      "small target 119x32: A \"HHarmoniser\"",
+      "small target 104x33: A \"Marketplace\"",
+      "small target 71x33: A \"Publish\"",
+      "small target 75x33: A \"Devices\"",
+      "small target 68x33: A \"GitHub\"",
+      "small target 48x36: BUTTON \"All\"",
+      "small target 64x36: BUTTON \"timer\"",
+      "small target 79x36: BUTTON \"counter\"",
+      "small target 87x36: BUTTON \"checklist\"",
+      "small target 80x36: BUTTON \"cooking\"",
+      "small target 74x36: BUTTON \"fitness\"",
+      "small target 70x36: BUTTON \"health\"",
+      "small target 66x36: BUTTON \"study\"",
+      "small target 66x36: BUTTON \"home\"",
+      "small target 82x20: A \"Privacy policy\"",
+      "small target 97x20: A \"Terms of service\"",
+      "small target 85x20: A \"Device pairing\"",
+      "small target 99x20: A \"Contact & issues\"",
+      "small target 87x20: A \"App repository\""
+    ]
+  },
+  {
+    "route": "/capsules/6ac15b2810efa04f4e1c1c12",
+    "width": 1280,
+    "scheme": "light",
+    "issues": [
+      "small target 119x32: A \"HHarmoniser\"",
+      "small target 104x33: A \"Marketplace\"",
+      "small target 71x33: A \"Publish\"",
+      "small target 75x33: A \"Devices\"",
+      "small target 68x33: A \"GitHub\"",
+      "small target 91x17: A \"← Marketplace\"",
+      "small target 678x23: SUMMARY \"View the capsule JSON (schema v1)\"",
+      "small target 63x36: BUTTON \"Copy\"",
+      "small target 82x20: A \"Privacy policy\"",
+      "small target 97x20: A \"Terms of service\"",
+      "small target 85x20: A \"Device pairing\"",
+      "small target 99x20: A \"Contact & issues\"",
+      "small target 87x20: A \"App repository\""
+    ]
+  },
+  {
+    "route": "/capsules/000000000000000000000000",
+    "width": 1280,
+    "scheme": "light",
+    "issues": [
+      "small target 119x32: A \"HHarmoniser\"",
+      "small target 104x33: A \"Marketplace\"",
+      "small target 71x33: A \"Publish\"",
+      "small target 75x33: A \"Devices\"",
+      "small target 68x33: A \"GitHub\"",
+      "small target 82x20: A \"Privacy policy\"",
+      "small target 97x20: A \"Terms of service\"",
+      "small target 85x20: A \"Device pairing\"",
+      "small target 99x20: A \"Contact & issues\"",
+      "small target 87x20: A \"App repository\""
+    ]
+  },
+  {
+    "route": "/publish",
+    "width": 1280,
+    "scheme": "light",
+    "issues": [
+      "small target 119x32: A \"HHarmoniser\"",
+      "small target 104x33: A \"Marketplace\"",
+      "small target 71x33: A \"Publish\"",
+      "small target 75x33: A \"Devices\"",
+      "small target 68x33: A \"GitHub\"",
+      "small target 135x36: BUTTON \"Load an example\"",
+      "small target 111x36: LABEL \"Choose a file\"",
+      "small target 680x21: SUMMARY \"Public capsule JSON\"",
+      "small target 101x36: BUTTON \"Copy token\"",
+      "small target 82x20: A \"Privacy policy\"",
+      "small target 97x20: A \"Terms of service\"",
+      "small target 85x20: A \"Device pairing\"",
+      "small target 99x20: A \"Contact & issues\"",
+      "small target 87x20: A \"App repository\""
+    ]
+  },
+  {
+    "route": "/device",
+    "width": 1280,
+    "scheme": "light",
+    "issues": [
+      "small target 119x32: A \"HHarmoniser\"",
+      "small target 104x33: A \"Marketplace\"",
+      "small target 71x33: A \"Publish\"",
+      "small target 75x33: A \"Devices\"",
+      "small target 68x33: A \"GitHub\"",
+      "small target 103x36: BUTTON \"New device\"",
+      "small target 82x20: A \"Privacy policy\"",
+      "small target 97x20: A \"Terms of service\"",
+      "small target 85x20: A \"Device pairing\"",
+      "small target 99x20: A \"Contact & issues\"",
+      "small target 87x20: A \"App repository\""
+    ]
+  },
+  {
+    "route": "/pair",
+    "width": 1280,
+    "scheme": "light",
+    "issues": [
+      "small target 119x32: A \"HHarmoniser\"",
+      "small target 104x33: A \"Marketplace\"",
+      "small target 71x33: A \"Publish\"",
+      "small target 75x33: A \"Devices\"",
+      "small target 68x33: A \"GitHub\"",
+      "small target 82x20: A \"Privacy policy\"",
+      "small target 97x20: A \"Terms of service\"",
+      "small target 85x20: A \"Device pairing\"",
+      "small target 99x20: A \"Contact & issues\"",
+      "small target 87x20: A \"App repository\""
+    ]
+  },
+  {
+    "route": "/pair?code=brave-otter-lamp",
+    "width": 1280,
+    "scheme": "light",
+    "issues": [
+      "small target 119x32: A \"HHarmoniser\"",
+      "small target 104x33: A \"Marketplace\"",
+      "small target 71x33: A \"Publish\"",
+      "small target 75x33: A \"Devices\"",
+      "small target 68x33: A \"GitHub\"",
+      "small target 82x20: A \"Privacy policy\"",
+      "small target 97x20: A \"Terms of service\"",
+      "small target 85x20: A \"Device pairing\"",
+      "small target 99x20: A \"Contact & issues\"",
+      "small target 87x20: A \"App repository\""
+    ]
+  },
+  {
+    "route": "/privacy",
+    "width": 1280,
+    "scheme": "light",
+    "issues": [
+      "small target 119x32: A \"HHarmoniser\"",
+      "small target 104x33: A \"Marketplace\"",
+      "small target 71x33: A \"Publish\"",
+      "small target 75x33: A \"Devices\"",
+      "small target 68x33: A \"GitHub\"",
+      "small target 82x20: A \"Privacy policy\"",
+      "small target 97x20: A \"Terms of service\"",
+      "small target 85x20: A \"Device pairing\"",
+      "small target 99x20: A \"Contact & issues\"",
+      "small target 87x20: A \"App repository\""
+    ]
+  },
+  {
+    "route": "/terms",
+    "width": 1280,
+    "scheme": "light",
+    "issues": [
+      "small target 119x32: A \"HHarmoniser\"",
+      "small target 104x33: A \"Marketplace\"",
+      "small target 71x33: A \"Publish\"",
+      "small target 75x33: A \"Devices\"",
+      "small target 68x33: A \"GitHub\"",
+      "small target 82x20: A \"Privacy policy\"",
+      "small target 97x20: A \"Terms of service\"",
+      "small target 85x20: A \"Device pairing\"",
+      "small target 99x20: A \"Contact & issues\"",
+      "small target 87x20: A \"App repository\""
+    ]
+  },
+  {
+    "route": "/this-page-does-not-exist",
+    "width": 1280,
+    "scheme": "light",
+    "issues": [
+      "small target 119x32: A \"HHarmoniser\"",
+      "small target 104x33: A \"Marketplace\"",
+      "small target 71x33: A \"Publish\"",
+      "small target 75x33: A \"Devices\"",
+      "small target 68x33: A \"GitHub\"",
+      "small target 82x20: A \"Privacy policy\"",
+      "small target 97x20: A \"Terms of service\"",
+      "small target 85x20: A \"Device pairing\"",
+      "small target 99x20: A \"Contact & issues\"",
+      "small target 87x20: A \"App repository\""
+    ]
+  }
+]

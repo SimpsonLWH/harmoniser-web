@@ -1,0 +1,115 @@
+6ac16a596ec2f7e4695b5920	Tasks with weather
+6ac166c06ec2f7e4695b591e	Daily motivation
+6ac15b2810efa04f4e1c1c12	Spelling practice
+6ac15b2810efa04f4e1c1c11	Flag guess quiz
+6ac15b2710efa04f4e1c1c10	True or false science quiz
+6ac15b2710efa04f4e1c1c0f	Polish-English flashcards
+6ac15b2710efa04f4e1c1c0e	Capital cities quiz
+6ac15b2710efa04f4e1c1c0d	Times table ×7 quiz
+6ac15b2710efa04f4e1c1c0c	Trip cost for 4 people
+6ac15b2710efa04f4e1c1c0b	Flat expenses split
+6ac15b2710efa04f4e1c1c0a	Sam's pocket money
+6ac15b2610efa04f4e1c1c09	Expense log
+6ac15b2610efa04f4e1c1c08	Savings goal 1000
+6ac15b2610efa04f4e1c1c07	Monthly budget
+6ac15b2610efa04f4e1c1c06	Rex: walks and meals
+6ac15b2610efa04f4e1c1c05	Leaving home
+6ac15b2610efa04f4e1c1c04	Pantry restock
+6ac15b2610efa04f4e1c1c03	Baby feeds and diapers
+6ac15b2510efa04f4e1c1c02	Moving house
+6ac15b2510efa04f4e1c1c01	Packing for my trip
+6ac15b2510efa04f4e1c1c00	Plant watering
+6ac15b2510efa04f4e1c1bff	Chores rota
+6ac15b2510efa04f4e1c1bfe	Cleaning chores
+6ac15b2510efa04f4e1c1bfd	Reading list
+6ac15b2510efa04f4e1c1bfc	Spanish words
+6ac15b2510efa04f4e1c1bfb	Grade average
+6ac15b2510efa04f4e1c1bfa	Study goal 20 h
+6ac15b2410efa04f4e1c1bf9	Homework tracker
+6ac15b2410efa04f4e1c1bf8	Exam revision
+6ac15b2410efa04f4e1c1bf7	Calorie counter
+6ac15b2410efa04f4e1c1bf6	Grill flip timers
+6ac15b2410efa04f4e1c1bf5	Pizza dough timers
+6ac15b2410efa04f4e1c1bf4	Weekly meal plan
+6ac15b2410efa04f4e1c1bf3	Pancake ingredients
+6ac15b2410efa04f4e1c1bf2	Shopping list
+6ac15b2410efa04f4e1c1bf1	Pull-up counter
+6ac15b2310efa04f4e1c1bf0	Step counter
+6ac15b2310efa04f4e1c1bef	30-day push-up challenge
+6ac15b2310efa04f4e1c1bee	Lifting volume log
+6ac15b2310efa04f4e1c1bed	Turn tracker (4 players)
+6ac15b2310efa04f4e1c1bec	Golf: Player
+6ac15b2310efa04f4e1c1beb	Bowling: Player
+6ac15b2310efa04f4e1c1bea	Scrabble: Player 1 vs Player 2
+6ac15b2210efa04f4e1c1be9	Card game scores
+6ac15b2210efa04f4e1c1be8	Player 1 vs Player 2
+6ac15b2210efa04f4e1c1be7	Coffee brew 1+3 min
+6ac15b2210efa04f4e1c1be6	Jumping jacks: 50 in 1 min
+6ac15b2210efa04f4e1c1be5	Running laps (goal 10)
+6ac15b2210efa04f4e1c1be4	Gym workout
+6ac15b2210efa04f4e1c1be3	Sit-up counter
+6ac15b2210efa04f4e1c1be2	Squats: goal 100
+6ac15b2110efa04f4e1c1be1	Sets & reps 3x10
+6ac15b2110efa04f4e1c1be0	Steps goal 10000
+6ac15b2110efa04f4e1c1bdf	Sleep log
+6ac15b2110efa04f4e1c1bde	Mood tracker
+6ac15b2110efa04f4e1c1bdd	Gratitude journal
+6ac15b2110efa04f4e1c1bdc	Vitamins & medication
+6ac15b2110efa04f4e1c1bdb	Unit price comparison
+6ac15b2010efa04f4e1c1bda	Loan payment: 10000 over 24 months
+6ac15b2010efa04f4e1c1bd9	Recipe scaler 4 to 6
+6ac15b2010efa04f4e1c1bd8	Age in days and weeks
+6ac15b2010efa04f4e1c1bd7	VAT calculator 23%
+6ac15b2010efa04f4e1c1bd6	Cups to ml and grams
+6ac15b1f10efa04f4e1c1bd5	Running pace calculator
+6ac15b1f10efa04f4e1c1bd4	Percentage calculator
+6ac15b1f10efa04f4e1c1bd3	BMI calculator
+6ac15b1f10efa04f4e1c1bd2	Discount calculator
+6ac15b1f10efa04f4e1c1bd1	Trip fuel cost
+6ac15b1f10efa04f4e1c1bd0	Evening routine
+6ac15b1f10efa04f4e1c1bcf	Morning routine
+6ac15b1e10efa04f4e1c1bce	No sugar: 30 days
+6ac15b1e10efa04f4e1c1bcd	Reading: 30 pages a day
+6ac15b1e10efa04f4e1c1bcc	Water: 8 glasses
+6ac15b1e10efa04f4e1c1bcb	My habit streak
+6ac15b1e10efa04f4e1c1bca	Football match
+6ac15b1d10efa04f4e1c1bc9	Basketball scoreboard
+6ac15b1d10efa04f4e1c1bc8	Volleyball to 25
+6ac15b1d10efa04f4e1c1bc7	Badminton to 21
+6ac15b1d10efa04f4e1c1bc6	Ping-pong to 11
+6ac15b1c10efa04f4e1c1bc5	Darts 501
+6ac15b1c10efa04f4e1c1bc4	Centimetres to feet and inches
+6ac15b1c10efa04f4e1c1bc3	Kilograms to pounds
+6ac15b1c10efa04f4e1c1bc2	Celsius to Fahrenheit
+6ac15b1c10efa04f4e1c1bc1	Kilometres to miles
+6ac15b1c10efa04f4e1c1bc0	Bill split with tip
+6ac15b1c10efa04f4e1c1bbf	Tip calculator
+6ac15b1c10efa04f4e1c1bbe	Bedtime: bath 15, story 10, lights 5
+6ac15b1b10efa04f4e1c1bbd	Speech 9 min + 1 min warning
+6ac15b1b10efa04f4e1c1bbc	Parking meter 60 min
+6ac15b1b10efa04f4e1c1bbb	RPS best of 3
+6ac15b1b10efa04f4e1c1bba	Quiz night
+6ac15b1b10efa04f4e1c1bb9	Pool race to 5
+6ac15b1b10efa04f4e1c1bb8	Poker chips
+6ac15b1b10efa04f4e1c1bb7	Cornhole to 21
+6ac15b1b10efa04f4e1c1bb6	Chess clock 10 min
+6ac15b1b10efa04f4e1c1bb5	Stretching 1 min each
+6ac15b1a10efa04f4e1c1bb4	Eye break every 20 min
+6ac15b1a10efa04f4e1c1bb3	Bread: rise 60, bake 35
+6ac15b1a10efa04f4e1c1bb2	Laundry 45/60
+6ac15b1a10efa04f4e1c1bb1	Plank 1 min
+6ac15b1a10efa04f4e1c1bb0	Meditation 10 min
+6ac15b1a10efa04f4e1c1baf	Nap timer 20 min
+6ac15b1a10efa04f4e1c1bae	Tea steeping timers
+6ac15b1a10efa04f4e1c1bad	Tabata 20s/10s
+6ac15b1a10efa04f4e1c1bac	Interval training 1/0.5 min
+6ac15b1910efa04f4e1c1bab	Boiled egg timers
+6ac15b1910efa04f4e1c1baa	Cooking timers
+6ac15b1910efa04f4e1c1ba9	Push-up counter
+6ac15b1910efa04f4e1c1ba8	Pomodoro 25/5
+6ac15b1910efa04f4e1c1ba7	Tennis: Player 1 vs Player 2
+6ac1568926763e033107bf49	Shopping list
+6ac1568926763e033107bf48	Bill split
+6ac1568926763e033107bf47	Squat counter
+6ac1568926763e033107bf46	Water goal
+6ac1568926763e033107bf45	Pasta night
