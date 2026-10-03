@@ -1,0 +1,530 @@
+[
+  {
+    "route": "/",
+    "width": 360,
+    "scheme": "light",
+    "issues": []
+  },
+  {
+    "route": "/capsules",
+    "width": 360,
+    "scheme": "light",
+    "issues": []
+  },
+  {
+    "route": "/capsules/6ac15b2810efa04f4e1c1c12",
+    "width": 360,
+    "scheme": "light",
+    "issues": []
+  },
+  {
+    "route": "/capsules/000000000000000000000000",
+    "width": 360,
+    "scheme": "light",
+    "issues": []
+  },
+  {
+    "route": "/publish",
+    "width": 360,
+    "scheme": "light",
+    "issues": []
+  },
+  {
+    "route": "/device",
+    "width": 360,
+    "scheme": "light",
+    "issues": []
+  },
+  {
+    "route": "/pair",
+    "width": 360,
+    "scheme": "light",
+    "issues": []
+  },
+  {
+    "route": "/pair?code=brave-otter-lamp",
+    "width": 360,
+    "scheme": "light",
+    "issues": []
+  },
+  {
+    "route": "/privacy",
+    "width": 360,
+    "scheme": "light",
+    "issues": []
+  },
+  {
+    "route": "/terms",
+    "width": 360,
+    "scheme": "light",
+    "issues": []
+  },
+  {
+    "route": "/this-page-does-not-exist",
+    "width": 360,
+    "scheme": "light",
+    "issues": []
+  },
+  {
+    "route": "/",
+    "width": 390,
+    "scheme": "light",
+    "issues": []
+  },
+  {
+    "route": "/capsules",
+    "width": 390,
+    "scheme": "light",
+    "issues": []
+  },
+  {
+    "route": "/capsules/6ac15b2810efa04f4e1c1c12",
+    "width": 390,
+    "scheme": "light",
+    "issues": []
+  },
+  {
+    "route": "/capsules/000000000000000000000000",
+    "width": 390,
+    "scheme": "light",
+    "issues": []
+  },
+  {
+    "route": "/publish",
+    "width": 390,
+    "scheme": "light",
+    "issues": []
+  },
+  {
+    "route": "/device",
+    "width": 390,
+    "scheme": "light",
+    "issues": []
+  },
+  {
+    "route": "/pair",
+    "width": 390,
+    "scheme": "light",
+    "issues": []
+  },
+  {
+    "route": "/pair?code=brave-otter-lamp",
+    "width": 390,
+    "scheme": "light",
+    "issues": []
+  },
+  {
+    "route": "/privacy",
+    "width": 390,
+    "scheme": "light",
+    "issues": []
+  },
+  {
+    "route": "/terms",
+    "width": 390,
+    "scheme": "light",
+    "issues": []
+  },
+  {
+    "route": "/this-page-does-not-exist",
+    "width": 390,
+    "scheme": "light",
+    "issues": []
+  },
+  {
+    "route": "/",
+    "width": 768,
+    "scheme": "light",
+    "issues": []
+  },
+  {
+    "route": "/capsules",
+    "width": 768,
+    "scheme": "light",
+    "issues": []
+  },
+  {
+    "route": "/capsules/6ac15b2810efa04f4e1c1c12",
+    "width": 768,
+    "scheme": "light",
+    "issues": []
+  },
+  {
+    "route": "/capsules/000000000000000000000000",
+    "width": 768,
+    "scheme": "light",
+    "issues": []
+  },
+  {
+    "route": "/publish",
+    "width": 768,
+    "scheme": "light",
+    "issues": []
+  },
+  {
+    "route": "/device",
+    "width": 768,
+    "scheme": "light",
+    "issues": []
+  },
+  {
+    "route": "/pair",
+    "width": 768,
+    "scheme": "light",
+    "issues": []
+  },
+  {
+    "route": "/pair?code=brave-otter-lamp",
+    "width": 768,
+    "scheme": "light",
+    "issues": []
+  },
+  {
+    "route": "/privacy",
+    "width": 768,
+    "scheme": "light",
+    "issues": []
+  },
+  {
+    "route": "/terms",
+    "width": 768,
+    "scheme": "light",
+    "issues": []
+  },
+  {
+    "route": "/this-page-does-not-exist",
+    "width": 768,
+    "scheme": "light",
+    "issues": []
+  },
+  {
+    "route": "/",
+    "width": 1280,
+    "scheme": "light",
+    "issues": []
+  },
+  {
+    "route": "/capsules",
+    "width": 1280,
+    "scheme": "light",
+    "issues": []
+  },
+  {
+    "route": "/capsules/6ac15b2810efa04f4e1c1c12",
+    "width": 1280,
+    "scheme": "light",
+    "issues": []
+  },
+  {
+    "route": "/capsules/000000000000000000000000",
+    "width": 1280,
+    "scheme": "light",
+    "issues": []
+  },
+  {
+    "route": "/publish",
+    "width": 1280,
+    "scheme": "light",
+    "issues": []
+  },
+  {
+    "route": "/device",
+    "width": 1280,
+    "scheme": "light",
+    "issues": []
+  },
+  {
+    "route": "/pair",
+    "width": 1280,
+    "scheme": "light",
+    "issues": []
+  },
+  {
+    "route": "/pair?code=brave-otter-lamp",
+    "width": 1280,
+    "scheme": "light",
+    "issues": []
+  },
+  {
+    "route": "/privacy",
+    "width": 1280,
+    "scheme": "light",
+    "issues": []
+  },
+  {
+    "route": "/terms",
+    "width": 1280,
+    "scheme": "light",
+    "issues": []
+  },
+  {
+    "route": "/this-page-does-not-exist",
+    "width": 1280,
+    "scheme": "light",
+    "issues": []
+  },
+  {
+    "route": "/",
+    "width": 360,
+    "scheme": "dark",
+    "issues": []
+  },
+  {
+    "route": "/capsules",
+    "width": 360,
+    "scheme": "dark",
+    "issues": []
+  },
+  {
+    "route": "/capsules/6ac15b2810efa04f4e1c1c12",
+    "width": 360,
+    "scheme": "dark",
+    "issues": []
+  },
+  {
+    "route": "/capsules/000000000000000000000000",
+    "width": 360,
+    "scheme": "dark",
+    "issues": []
+  },
+  {
+    "route": "/publish",
+    "width": 360,
+    "scheme": "dark",
+    "issues": []
+  },
+  {
+    "route": "/device",
+    "width": 360,
+    "scheme": "dark",
+    "issues": []
+  },
+  {
+    "route": "/pair",
+    "width": 360,
+    "scheme": "dark",
+    "issues": []
+  },
+  {
+    "route": "/pair?code=brave-otter-lamp",
+    "width": 360,
+    "scheme": "dark",
+    "issues": []
+  },
+  {
+    "route": "/privacy",
+    "width": 360,
+    "scheme": "dark",
+    "issues": []
+  },
+  {
+    "route": "/terms",
+    "width": 360,
+    "scheme": "dark",
+    "issues": []
+  },
+  {
+    "route": "/this-page-does-not-exist",
+    "width": 360,
+    "scheme": "dark",
+    "issues": []
+  },
+  {
+    "route": "/",
+    "width": 390,
+    "scheme": "dark",
+    "issues": []
+  },
+  {
+    "route": "/capsules",
+    "width": 390,
+    "scheme": "dark",
+    "issues": []
+  },
+  {
+    "route": "/capsules/6ac15b2810efa04f4e1c1c12",
+    "width": 390,
+    "scheme": "dark",
+    "issues": []
+  },
+  {
+    "route": "/capsules/000000000000000000000000",
+    "width": 390,
+    "scheme": "dark",
+    "issues": []
+  },
+  {
+    "route": "/publish",
+    "width": 390,
+    "scheme": "dark",
+    "issues": []
+  },
+  {
+    "route": "/device",
+    "width": 390,
+    "scheme": "dark",
+    "issues": []
+  },
+  {
+    "route": "/pair",
+    "width": 390,
+    "scheme": "dark",
+    "issues": []
+  },
+  {
+    "route": "/pair?code=brave-otter-lamp",
+    "width": 390,
+    "scheme": "dark",
+    "issues": []
+  },
+  {
+    "route": "/privacy",
+    "width": 390,
+    "scheme": "dark",
+    "issues": []
+  },
+  {
+    "route": "/terms",
+    "width": 390,
+    "scheme": "dark",
+    "issues": []
+  },
+  {
+    "route": "/this-page-does-not-exist",
+    "width": 390,
+    "scheme": "dark",
+    "issues": []
+  },
+  {
+    "route": "/",
+    "width": 768,
+    "scheme": "dark",
+    "issues": []
+  },
+  {
+    "route": "/capsules",
+    "width": 768,
+    "scheme": "dark",
+    "issues": []
+  },
+  {
+    "route": "/capsules/6ac15b2810efa04f4e1c1c12",
+    "width": 768,
+    "scheme": "dark",
+    "issues": []
+  },
+  {
+    "route": "/capsules/000000000000000000000000",
+    "width": 768,
+    "scheme": "dark",
+    "issues": []
+  },
+  {
+    "route": "/publish",
+    "width": 768,
+    "scheme": "dark",
+    "issues": []
+  },
+  {
+    "route": "/device",
+    "width": 768,
+    "scheme": "dark",
+    "issues": []
+  },
+  {
+    "route": "/pair",
+    "width": 768,
+    "scheme": "dark",
+    "issues": []
+  },
+  {
+    "route": "/pair?code=brave-otter-lamp",
+    "width": 768,
+    "scheme": "dark",
+    "issues": []
+  },
+  {
+    "route": "/privacy",
+    "width": 768,
+    "scheme": "dark",
+    "issues": []
+  },
+  {
+    "route": "/terms",
+    "width": 768,
+    "scheme": "dark",
+    "issues": []
+  },
+  {
+    "route": "/this-page-does-not-exist",
+    "width": 768,
+    "scheme": "dark",
+    "issues": []
+  },
+  {
+    "route": "/",
+    "width": 1280,
+    "scheme": "dark",
+    "issues": []
+  },
+  {
+    "route": "/capsules",
+    "width": 1280,
+    "scheme": "dark",
+    "issues": []
+  },
+  {
+    "route": "/capsules/6ac15b2810efa04f4e1c1c12",
+    "width": 1280,
+    "scheme": "dark",
+    "issues": []
+  },
+  {
+    "route": "/capsules/000000000000000000000000",
+    "width": 1280,
+    "scheme": "dark",
+    "issues": []
+  },
+  {
+    "route": "/publish",
+    "width": 1280,
+    "scheme": "dark",
+    "issues": []
+  },
+  {
+    "route": "/device",
+    "width": 1280,
+    "scheme": "dark",
+    "issues": []
+  },
+  {
+    "route": "/pair",
+    "width": 1280,
+    "scheme": "dark",
+    "issues": []
+  },
+  {
+    "route": "/pair?code=brave-otter-lamp",
+    "width": 1280,
+    "scheme": "dark",
+    "issues": []
+  },
+  {
+    "route": "/privacy",
+    "width": 1280,
+    "scheme": "dark",
+    "issues": []
+  },
+  {
+    "route": "/terms",
+    "width": 1280,
+    "scheme": "dark",
+    "issues": []
+  },
+  {
+    "route": "/this-page-does-not-exist",
+    "width": 1280,
+    "scheme": "dark",
+    "issues": []
+  }
+]
