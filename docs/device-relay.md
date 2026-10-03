@@ -49,14 +49,19 @@ parsing. No `Content-Type` is required on these routes (the capsule routes do re
 {"hw":"3f9c2a7be01d4c55","kind":"wrist","fw":"8a14f2c"}
 ```
 
-`hw`: 1–64 of `A-Z a-z 0-9 _ -`, the device's own stable id (a hash on the board, random in a
-browser). `kind`: 1–32 characters (`wrist`, `web`). `fw`: 1–64 characters.
+`hw`: 1–64 characters of `A-Z a-z 0-9 _ -`, the device's own stable id. That covers 16 to 64 hex
+digits (the board's hashed id) and the `web-` plus 32 hex digits a `/device` tab makes. It should be
+long and unguessable: whoever knows a device's `hw` can register it again, which unpairs it. `kind`: 1–32 characters (`wrist`, `web`). `fw`: 1–64 characters.
 
 `201 {"id":"dev_4b1f…","token":"…","code":"brave-otter-lamp","pair_url":"https://<site>/pair?code=brave-otter-lamp"}`
 
 The same `hw` again gives the same `id` with a new token, code and `pair_url`; the old token and
 code stop working, the device is unpaired, and its capsule, pending action and last state are
 dropped. `version` and `action_seq` keep counting.
+
+A browser request from another site's origin is refused (`403 origin_not_allowed`); the board sends
+no `Origin` and `/device` is same-origin. Two first registrations of one `hw` at the same moment
+give one device.
 
 `400 invalid_registration`, `413`, `429 rate_limited` (300 registrations per client address per
 5 minutes), `503 rate_limit_unavailable` if the platform gave no client address.
@@ -87,6 +92,10 @@ dropped. `version` and `action_seq` keep counting.
 fields default to empty and are refused (`400 invalid_state`) if they have the wrong kind or range.
 Unknown fields are dropped. The token is checked before the body is read.
 
+A report is stored only while the device is paired. From an unpaired device it counts as a sign of
+life and nothing else, and both pairing and unpairing clear what was stored, so a new owner never
+sees what the device showed to the previous one.
+
 ## User side
 
 Every request carries `X-Harmoniser-Token`. Browser requests must also come from an allowed origin
@@ -95,7 +104,7 @@ Without a valid token: `401 unauthorized`.
 
 | Route | Body | Answer |
 | --- | --- | --- |
-| `POST /api/devices/claim` | `{"code":"brave-otter-lamp"}` | `200 {"id","kind"}`. `400 invalid_code` if it is not three words. `404 code_not_found` if no unpaired device has that code (wrong, used or expired). `429 rate_limited` with `Retry-After`. |
+| `POST /api/devices/claim` | `{"code":"brave-otter-lamp"}` | `200 {"id","kind"}`. `400 invalid_code` if it is not three words. `404 code_not_found` if no unpaired device has that code (wrong, used or expired). `409 too_many_devices` if this token already has 20 paired devices (the code is not used up). `429 rate_limited` with `Retry-After`. |
 | `GET /api/devices` | | `200 {"devices":[{"id","kind","fw","version","capsule","last_seen_ms_ago"}]}`, oldest pairing first. |
 | `PUT /api/devices/{id}/capsule` | a capsule, below | `200 {"version":N}`. `400 invalid_capsule` (or `invalid_json`), and then nothing changes. |
 | `POST /api/devices/{id}/action` | `{"action":"increment"}` | `200 {"action_seq":N}`. `400 invalid_action`. Actions: `start`, `pause`, `toggle`, `reset`, `increment`, `motion_on`, `motion_off`. |
@@ -131,10 +140,13 @@ Unknown fields are dropped. The device gets the cleaned capsule, not the bytes t
   and the device's next poll gets a new code. A paired device has no code.
 - No two unpaired devices hold the same code at once (unique index; a clash is retried with a new
   code, five times, then `503`).
-- `pair_url` is `<base>/pair?code=<code>`. The base is `NEXT_PUBLIC_SITE_URL` when set (the deployed
-  site or a custom domain), otherwise the host the device's request came in on. Keep it under 85
+- `pair_url` is `<base>/pair?code=<code>`. The base is `NEXT_PUBLIC_SITE_URL` when that is an
+  `https` URL that is not localhost (the deployed site or a custom domain); otherwise the origin the
+  device's request came in on, so local development and a deployment whose variable is unset or
+  still says localhost hand out a QR code that opens. Keep it under 85
   bytes for the board's QR code: `https://harmoniser-web.vercel.app/pair?code=…` is at most 61.
-- `GET /pair?code=…` shows the words and a "Pair this device" button. Opening the page pairs
+- `GET /pair?code=…` shows the words and a "Pair this device" button. If the code turns out to be
+  used or expired, a field appears for typing the words the device shows now. Opening the page pairs
   nothing; the button claims the device for this browser's own anonymous token (made on first use,
   `lib/client/token.ts`). After pairing, the page can send a timer or a counter and shows what the
   device reports. Without `?code=` it has a field for typing the phrase.
@@ -143,7 +155,10 @@ Unknown fields are dropped. The device gets the cleaned capsule, not the bytes t
   to that browser's token, not to the app's.
 - `GET /device` is a virtual device: it registers as `kind: "web"`, shows the QR code and phrase,
   then behaves like the board (`lib/devices/machine.ts` mirrors `main/capsule.c` and
-  `main/relay_sync.c`). Its registration lives in `localStorage`; "New device" starts over.
+  `main/relay_sync.c`). Its registration lives in `localStorage` and is shared by every tab of the browser: a tab
+  whose token is refused first looks for a registration another tab has stored and only otherwise
+  registers again, and it never retries at once (2 seconds, then 4, 8, 16, 30 after refusals or
+  failures in a row). "New device" starts over.
 
 ## Limits
 
@@ -151,8 +166,9 @@ Unknown fields are dropped. The device gets the cleaned capsule, not the bytes t
 | --- | --- |
 | Claim attempts | 10 per user token and 300 per client address, per 5 minutes; right or wrong, each counts. The per-token limit is what holds guessing back; the per-address one is a generous backstop, because a whole venue shares one NAT address. |
 | Registrations | 300 per client address per 5 minutes. |
+| Paired devices | 20 per user token (`409 too_many_devices`). Checked just before the claim, so two claims at the same instant could end one over. |
 | Request body | 1024 bytes, 8 levels of nesting. |
-| Unpaired devices | Deleted by MongoDB 24 hours after their last request (TTL index on `purgeAt`), so abandoned `/device` tabs do not pile up; one that comes back gets a 401 and registers again. Paired devices have no `purgeAt` and are never deleted this way. |
+| Unpaired devices | Deleted by MongoDB 24 hours after their last request (TTL index on `purgeAt`), so abandoned `/device` tabs do not pile up; one that comes back gets a 401 and registers again. Paired devices have no `purgeAt` and are never deleted automatically, however long they stay silent: an operator may want a cleanup job for those later. |
 
 Counters are `RateBucket` documents keyed by an HMAC of route, subject and window, as in
 `lib/rate-limit.ts`: no address and no token hash is stored in a key. Writes fail closed (`503`)
@@ -208,7 +224,8 @@ RELAY_USER_HEADER="X-Harmoniser-Token: $(openssl rand -base64 32 | tr '+/' '-_' 
 It covers: register and re-register, code uniqueness and the retry on a clash, one winner among
 concurrent claims, expiry and the fresh code on poll, version and `action_seq` under concurrent
 writes, state reports, owner scoping, unpair, rate buckets, the indexes `syncIndexes()` creates, and
-that a paired device never has a `purgeAt`.
+that a paired device never has a `purgeAt`, that no state survives an unpair, the cap on devices per
+owner, and simultaneous first registrations of one `hw`.
 
 ## What is verified
 
@@ -220,6 +237,6 @@ As of 2026-10-03.
 | Route files | Tested through the real `route.ts` exports on the in-memory store: both credentials, origin guard, error envelope, body limits, `pair_url` base. |
 | Firmware's `test_relay.sh` | Passes against `next dev` with the in-memory store (106 checks, 0 failed). |
 | `/pair` and `/device` | Tried by hand in one desktop Chrome: register, QR and phrase shown, pair, counter and timer sent, `+` on the device and `+1` from the remote arrive on the other side. |
-| MongoDB store | `tests/devices/store-conformance.test.ts` runs the same cases against the in-memory store and the MongoDB store: 54 of 54 pass on a local MongoDB 8.2.6 (see below). `test_relay.sh` also passes against `next dev` on that database (106 checks, 0 failed). Not tried on Atlas: the TTL monitor actually deleting a document was not waited for (the index definition and the field values are asserted instead). |
+| MongoDB store | `tests/devices/store-conformance.test.ts` runs the same cases against the in-memory store and the MongoDB store: 64 of 64 pass on a local MongoDB 8.2.6 (see below). `test_relay.sh` also passes against `next dev` on that database (106 checks, 0 failed). Not tried on Atlas: the TTL monitor actually deleting a document was not waited for (the index definition and the field values are asserted instead). |
 | A real board | Not tried against this implementation. |
 | A phone camera on the QR code, real phones | Not tried. |
