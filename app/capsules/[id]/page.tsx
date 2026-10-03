@@ -278,7 +278,7 @@ export default function CapsuleDetailPage() {
               HTTPS, and the server stores only a keyed hash of it.
             </p>
             <div className="mt-3.5 flex flex-wrap items-center gap-2">
-              <code className="flex min-h-tap max-w-full items-center truncate rounded-[14px] bg-card px-4 font-mono text-[12px]">
+              <code className="flex min-h-tap max-w-full items-center truncate rounded-[14px] bg-card px-4 font-mono text-badge">
                 {ownerToken.length > 0 ? `${ownerToken.slice(0, 10)}…${ownerToken.slice(-4)}` : "…"}
               </code>
               <button
@@ -304,7 +304,7 @@ export default function CapsuleDetailPage() {
                 value={tokenInput}
                 onChange={(event) => setTokenInput(event.target.value)}
                 placeholder="Paste another owner token to manage its capsules"
-                className="field font-mono text-[13px]"
+                className="field font-mono text-caption"
               />
               <button
                 type="button"
