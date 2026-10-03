@@ -83,17 +83,17 @@ export default function PublishPage() {
   }
 
   return (
-    <div className="mx-auto w-full max-w-3xl px-4 py-10 sm:px-6">
-      <h1 className="text-3xl font-semibold tracking-tight">Publish a capsule</h1>
-      <p className="mt-3 text-[15px] leading-7 text-text-2">
+    <div className="page max-w-[760px] py-10 sm:py-14">
+      <h1 className="page-title">Publish a capsule</h1>
+      <p className="lede mt-3">
         Paste or drop a capsule JSON file. It is validated against the same schema the app uses
         before anything is published, and you choose exactly what becomes public.
       </p>
 
-      <section className="mt-7 rounded-card bg-surface p-5 shadow-[var(--h-shadow)]">
+      <section className="card mt-7">
         <div className="flex flex-wrap items-center justify-between gap-3">
-          <h2 className="text-[16px] font-semibold">1. Capsule JSON</h2>
-          <div className="flex gap-2">
+          <h2 className="text-body font-bold">1. Capsule JSON</h2>
+          <div className="flex flex-wrap gap-2">
             <button
               type="button"
               onClick={() => {
@@ -101,11 +101,11 @@ export default function PublishPage() {
                 setErrors([]);
                 setCapsule(null);
               }}
-              className="min-h-9 rounded-full bg-surface-2 px-4 text-[13px] font-medium"
+              className="btn btn-secondary"
             >
               Load an example
             </button>
-            <label className="min-h-9 cursor-pointer rounded-full bg-surface-2 px-4 text-[13px] font-medium leading-9">
+            <label className="btn btn-secondary focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-blue">
               Choose a file
               <input
                 type="file"
@@ -136,22 +136,22 @@ export default function PublishPage() {
           rows={12}
           spellCheck={false}
           placeholder='{ "schemaVersion": 0, "id": "tea", "name": "Tea timer", ... }'
-          className="mt-3 w-full rounded-2xl border border-line bg-bg p-4 font-mono text-[12px] leading-5"
+          className="field mt-3.5 p-4 font-mono text-caption font-normal leading-5"
         />
-        <div className="mt-3 flex items-center gap-3">
+        <div className="mt-3.5 flex flex-wrap items-center gap-3">
           <button
             type="button"
             onClick={validate}
-            className="min-h-11 rounded-full bg-brand px-5 text-[14px] font-medium text-white"
+            className="btn btn-primary"
           >
             Validate
           </button>
           {capsule !== null ? (
-            <span className="text-[13px] text-brand">Valid — {capsule.name}</span>
+            <span className="chip">Valid — {capsule.name}</span>
           ) : null}
         </div>
         {errors.length > 0 ? (
-          <ul className="mt-4 max-h-56 space-y-1 overflow-auto rounded-2xl bg-danger-soft p-4 text-[13px] leading-5">
+          <ul className="mt-3.5 max-h-56 space-y-1 overflow-auto rounded-[14px] bg-orange-tint p-4 text-caption leading-5 text-orange-text">
             {errors.map((error) => (
               <li key={error} className="font-mono">
                 {error}
@@ -163,26 +163,26 @@ export default function PublishPage() {
 
       {capsule !== null ? (
         <>
-          <section className="mt-4 rounded-card bg-surface p-5 shadow-[var(--h-shadow)]">
-            <h2 className="text-[16px] font-semibold">2. What becomes public</h2>
-            <p className="mt-2 text-[13px] leading-6 text-text-2">
+          <section className="card mt-3.5">
+            <h2 className="text-body font-bold">2. What becomes public</h2>
+            <p className="mt-2 text-caption leading-5 text-text-2">
               This is exactly what anyone can see. Capsule contents are public data: publish only
               deliberate templates, never private notes, health details or secrets.
             </p>
-            <div className="mt-4 space-y-3">
+            <div className="mt-3.5 space-y-3.5">
               <div>
-                <label className="text-[13px] font-medium" htmlFor="publish-name">
+                <label className="text-caption font-semibold text-text-2" htmlFor="publish-name">
                   Name
                 </label>
                 <input
                   id="publish-name"
                   value={capsule.name}
                   readOnly
-                  className="mt-1 min-h-11 w-full rounded-input border border-line bg-surface-2 px-4 text-[14px]"
+                  className="field mt-1.5 bg-card text-label"
                 />
               </div>
               <div>
-                <label className="text-[13px] font-medium" htmlFor="publish-description">
+                <label className="text-caption font-semibold text-text-2" htmlFor="publish-description">
                   Description ({description.length}/500)
                 </label>
                 <textarea
@@ -191,40 +191,40 @@ export default function PublishPage() {
                   maxLength={500}
                   onChange={(event) => setDescription(event.target.value)}
                   rows={3}
-                  className="mt-1 w-full rounded-2xl border border-line bg-bg p-4 text-[14px]"
+                  className="field mt-1.5 text-label"
                   placeholder="What does it do, and what should people know before installing?"
                 />
               </div>
               <div>
-                <label className="text-[13px] font-medium" htmlFor="publish-tags">
+                <label className="text-caption font-semibold text-text-2" htmlFor="publish-tags">
                   Tags (comma separated, up to 8)
                 </label>
                 <input
                   id="publish-tags"
                   value={tags}
                   onChange={(event) => setTags(event.target.value)}
-                  className="mt-1 min-h-11 w-full rounded-input border border-line bg-bg px-4 text-[14px]"
+                  className="field mt-1.5 text-label"
                   placeholder="cooking, timer"
                 />
               </div>
             </div>
-            <details className="mt-4">
-              <summary className="cursor-pointer text-[14px] font-medium">Public capsule JSON</summary>
-              <pre className="mt-2 max-h-64 overflow-auto rounded-xl bg-surface-2 p-4 text-[12px] leading-5">
+            <details className="mt-3.5">
+              <summary className="flex min-h-tap cursor-pointer items-center text-label font-bold">Public capsule JSON</summary>
+              <pre className="code-block mt-2 max-h-64">
                 {preview}
               </pre>
             </details>
           </section>
 
-          <section className="mt-4 rounded-card bg-surface p-5 shadow-[var(--h-shadow)]">
-            <h2 className="text-[16px] font-semibold">3. Publish with your owner token</h2>
-            <p className="mt-2 text-[13px] leading-6 text-text-2">
+          <section className="card mt-3.5">
+            <h2 className="text-body font-bold">3. Publish with your owner token</h2>
+            <p className="mt-2 text-caption leading-5 text-text-2">
               Publishing is anonymous. Your owner token is the only delete credential — keep a
               copy, or you will not be able to delete the capsule later. (Installs and reports use
               a separate anonymous install ID that never owns anything.)
             </p>
-            <div className="mt-3 flex flex-wrap items-center gap-2">
-              <code className="max-w-full truncate rounded-full bg-surface-2 px-4 py-2 font-mono text-[12px]">
+            <div className="mt-3.5 flex flex-wrap items-center gap-2">
+              <code className="flex min-h-tap max-w-full items-center truncate rounded-[14px] bg-card px-4 font-mono text-badge">
                 {token.length > 0 ? `${token.slice(0, 10)}…${token.slice(-4)}` : "…"}
               </code>
               <button
@@ -232,7 +232,7 @@ export default function PublishPage() {
                 onClick={() => {
                   void navigator.clipboard.writeText(token);
                 }}
-                className="min-h-9 rounded-full bg-surface-2 px-4 text-[13px] font-medium"
+                className="btn btn-secondary"
               >
                 Copy token
               </button>
@@ -241,19 +241,19 @@ export default function PublishPage() {
               type="button"
               onClick={() => void publish()}
               disabled={busy}
-              className="mt-4 min-h-11 rounded-full bg-brand px-6 text-[14px] font-medium text-white disabled:opacity-60"
+              className="btn btn-primary mt-3.5 px-6"
             >
               {busy ? "Publishing…" : "Publish capsule"}
             </button>
             {failure.length > 0 ? (
-              <p className="mt-3 rounded-card bg-danger-soft p-4 text-[14px]">{failure}</p>
+              <p className="notice notice-warn mt-3.5">{failure}</p>
             ) : null}
             {publishedId !== null ? (
-              <div className="mt-4 rounded-card bg-brand-soft p-4 text-[14px]">
-                <p className="font-medium">Published.</p>
+              <div className="notice mt-3.5">
+                <p className="font-bold">Published.</p>
                 <p className="mt-1">
                   It is live at{" "}
-                  <Link href={`/capsules/${publishedId}`} className="text-brand underline">
+                  <Link href={`/capsules/${publishedId}`} className="link break-all">
                     /capsules/{publishedId}
                   </Link>
                   . Keep your token: it is the only way to delete it.
