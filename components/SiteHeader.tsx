@@ -9,7 +9,7 @@ const NAV = [
 ];
 
 const NAV_ITEM =
-  "inline-flex min-h-tap shrink-0 items-center rounded-btn px-3 text-label font-semibold text-text-2 transition-colors hover:bg-chip hover:text-chip-text";
+  "inline-flex min-h-tap shrink-0 items-center rounded-btn px-2.5 text-label sm:px-3 font-semibold text-text-2 transition-colors hover:bg-chip hover:text-chip-text";
 
 export function SiteHeader() {
   return (
@@ -20,7 +20,7 @@ export function SiteHeader() {
           <span className="text-[19px] font-bold tracking-[-0.2px]">Harmoniser</span>
         </Link>
         {/* Under 600px the nav takes its own row and scrolls inside itself if it ever overflows. */}
-        <nav className="-mx-1 flex w-full items-center gap-1 overflow-x-auto pb-1 sm:mx-0 sm:ml-auto sm:w-auto sm:overflow-visible sm:pb-0">
+        <nav className="-mx-1 flex w-full items-center gap-0 overflow-x-auto pb-1 sm:mx-0 sm:ml-auto sm:w-auto sm:gap-1 sm:overflow-visible sm:pb-0">
           {NAV.map((item) => (
             <Link key={item.href} href={item.href} className={NAV_ITEM}>
               {item.label}
