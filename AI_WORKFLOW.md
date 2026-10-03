@@ -98,3 +98,17 @@ browser. No other model, MCP server or skill was used to generate code in this r
   branch is not deployed), and any real phone/board usage. The privacy and terms pages remain
   hackathon drafts; the controller identity, private privacy contact and Atlas password rotation
   are Lewis's review items.
+
+## Web redesign to match the HarmonyOS app (2026-10-04, Claude Code, session T8)
+
+- Generated: `app/tokens.css` (the app's colour, radius and type tokens, light and dark),
+  the Tailwind mapping and component classes in `app/globals.css`, Manrope via `next/font`,
+  `components/Logo.tsx`, `components/Icons.tsx`, `components/StatusBlock.tsx`, a new
+  `app/favicon.ico`, and className-only restyles of every page and shared component. Branch
+  `redesign-web`; details and proof in `docs/web-redesign/report.md`.
+- Verified by the agent: lint, typecheck, `npm test` (461 passed, 37 skipped), `npm run build`
+  with an identical route list, an automated audit of 11 page states at 360/390/768/1280px in
+  light and dark (no sideways scroll, no truncated buttons, 44px targets, visible focus),
+  contrast of the spec's token pairs, and all 115 marketplace items rendering locally.
+- Not verified: real Huawei devices with HarmonyOS Sans installed, and the Vercel preview with
+  production data.
