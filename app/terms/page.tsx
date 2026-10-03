@@ -8,13 +8,13 @@ export const metadata: Metadata = {
 
 export default function TermsPage() {
   return (
-    <article className="mx-auto w-full max-w-3xl px-4 py-12 sm:px-6">
-      <h1 className="text-3xl font-semibold tracking-tight">Terms of service</h1>
-      <p className="mt-3 text-[13px] text-text-3">Last updated: 3 October 2026</p>
+    <article className="page max-w-[760px] py-10 sm:py-14">
+      <h1 className="page-title">Terms of service</h1>
+      <p className="chip chip-plain mt-4">Last updated: 3 October 2026</p>
 
-      <div className="mt-8 space-y-8 text-[15px] leading-7 text-text-2">
+      <div className="mt-10 max-w-[68ch] space-y-10 text-label leading-7 text-text-2">
         <section>
-          <h2 className="text-[18px] font-semibold text-text">1. These terms</h2>
+          <h2 className="section-title">1. These terms</h2>
           <p className="mt-2">
             These terms govern your use of the Harmoniser website and capsule marketplace
             (together, &ldquo;the service&rdquo;). By browsing, publishing, installing or reporting a
@@ -24,7 +24,7 @@ export default function TermsPage() {
         </section>
 
         <section>
-          <h2 className="text-[18px] font-semibold text-text">2. What the service is</h2>
+          <h2 className="section-title">2. What the service is</h2>
           <p className="mt-2">
             The service lets people publish and install <em>capsules</em>: small JSON descriptions
             of single-purpose apps. Capsules are data, not code. The Harmoniser app on your device
@@ -34,7 +34,7 @@ export default function TermsPage() {
         </section>
 
         <section>
-          <h2 className="text-[18px] font-semibold text-text">3. Publishing and anonymity</h2>
+          <h2 className="section-title">3. Publishing and anonymity</h2>
           <p className="mt-2">
             Publishing is anonymous. When you publish, your browser creates a random owner token
             and we store only a keyed hash of it. That token is the only way to delete the capsule
@@ -48,7 +48,7 @@ export default function TermsPage() {
         </section>
 
         <section>
-          <h2 className="text-[18px] font-semibold text-text">4. Installing</h2>
+          <h2 className="section-title">4. Installing</h2>
           <p className="mt-2">
             Installing downloads the capsule JSON to your device; the app then validates it and
             shows its permission sheet. Install counts shown on the site are best-effort counters,
@@ -58,7 +58,7 @@ export default function TermsPage() {
         </section>
 
         <section>
-          <h2 className="text-[18px] font-semibold text-text">5. Moderation</h2>
+          <h2 className="section-title">5. Moderation</h2>
           <p className="mt-2">
             Every capsule has a report action with fixed reasons. When enough distinct reports are
             accepted, the capsule is hidden from the marketplace automatically while we review it.
@@ -68,7 +68,7 @@ export default function TermsPage() {
         </section>
 
         <section>
-          <h2 className="text-[18px] font-semibold text-text">6. Your content</h2>
+          <h2 className="section-title">6. Your content</h2>
           <p className="mt-2">
             You keep ownership of the capsule text you publish. By publishing you grant us a
             non-exclusive licence to store, display and distribute that text through the service,
@@ -78,7 +78,7 @@ export default function TermsPage() {
         </section>
 
         <section>
-          <h2 className="text-[18px] font-semibold text-text">7. No warranty</h2>
+          <h2 className="section-title">7. No warranty</h2>
           <p className="mt-2">
             The service is an experimental prototype provided &ldquo;as is&rdquo; and &ldquo;as
             available&rdquo;, without warranties of any kind, express or implied, including
@@ -88,7 +88,7 @@ export default function TermsPage() {
         </section>
 
         <section>
-          <h2 className="text-[18px] font-semibold text-text">8. Limitation of liability</h2>
+          <h2 className="section-title">8. Limitation of liability</h2>
           <p className="mt-2">
             To the fullest extent permitted by law, we are not liable for indirect or consequential
             losses, loss of data, or damage arising from capsules published by others or from your
@@ -98,7 +98,7 @@ export default function TermsPage() {
         </section>
 
         <section>
-          <h2 className="text-[18px] font-semibold text-text">9. Changes</h2>
+          <h2 className="section-title">9. Changes</h2>
           <p className="mt-2">
             We may change the service and these terms. The date at the top will change when we do,
             and continued use after a change means you accept the updated terms.
@@ -106,7 +106,7 @@ export default function TermsPage() {
         </section>
 
         <section>
-          <h2 className="text-[18px] font-semibold text-text">10. Governing law</h2>
+          <h2 className="section-title">10. Governing law</h2>
           <p className="mt-2">
             These terms are governed by the law of Poland. The courts of Poland have jurisdiction
             over any dispute, without affecting any consumer rights you have where you live. A

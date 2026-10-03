@@ -8,13 +8,13 @@ export const metadata: Metadata = {
 
 export default function PrivacyPage() {
   return (
-    <article className="mx-auto w-full max-w-3xl px-4 py-12 sm:px-6">
-      <h1 className="text-3xl font-semibold tracking-tight">Privacy policy</h1>
-      <p className="mt-3 text-[13px] text-text-3">Last updated: 3 October 2026</p>
+    <article className="page max-w-[760px] py-10 sm:py-14">
+      <h1 className="page-title">Privacy policy</h1>
+      <p className="chip chip-plain mt-4">Last updated: 3 October 2026</p>
 
-      <div className="mt-8 space-y-8 text-[15px] leading-7 text-text-2">
+      <div className="mt-10 max-w-[68ch] space-y-10 text-label leading-7 text-text-2">
         <section>
-          <h2 className="text-[18px] font-semibold text-text">Who is responsible</h2>
+          <h2 className="section-title">Who is responsible</h2>
           <p className="mt-2">
             The Harmoniser project (&ldquo;we&rdquo;, &ldquo;us&rdquo;) runs this website and the
             capsule marketplace, and publishes the Harmoniser app for HarmonyOS. For the purposes
@@ -28,7 +28,7 @@ export default function PrivacyPage() {
         </section>
 
         <section>
-          <h2 className="text-[18px] font-semibold text-text">What the app does on your device</h2>
+          <h2 className="section-title">What the app does on your device</h2>
           <ul className="mt-2 list-disc space-y-2 pl-5">
             <li>
               Capsules you create, their state (counters, checklists, timers) and your permission
@@ -52,7 +52,7 @@ export default function PrivacyPage() {
         </section>
 
         <section>
-          <h2 className="text-[18px] font-semibold text-text">What the marketplace stores</h2>
+          <h2 className="section-title">What the marketplace stores</h2>
           <p className="mt-2">
             If you publish a capsule on this site, or install one, we process:
           </p>
@@ -89,7 +89,7 @@ export default function PrivacyPage() {
         </section>
 
         <section>
-          <h2 className="text-[18px] font-semibold text-text">Why we may process it (legal bases)</h2>
+          <h2 className="section-title">Why we may process it (legal bases)</h2>
           <ul className="mt-2 list-disc space-y-2 pl-5">
             <li>
               <strong className="font-medium text-text">Performance of a service you asked for</strong>{" "}
@@ -108,7 +108,7 @@ export default function PrivacyPage() {
         </section>
 
         <section>
-          <h2 className="text-[18px] font-semibold text-text">How long we keep it</h2>
+          <h2 className="section-title">How long we keep it</h2>
           <ul className="mt-2 list-disc space-y-2 pl-5">
             <li>
               Published capsules: until the publisher deletes them or we remove them (deletion
@@ -121,7 +121,7 @@ export default function PrivacyPage() {
         </section>
 
         <section>
-          <h2 className="text-[18px] font-semibold text-text">Who processes it with us</h2>
+          <h2 className="section-title">Who processes it with us</h2>
           <p className="mt-2">
             The site and its API run on Vercel, and the data is stored in MongoDB Atlas. Both are
             established providers that process data on our behalf, and both may process data
@@ -131,7 +131,7 @@ export default function PrivacyPage() {
         </section>
 
         <section>
-          <h2 className="text-[18px] font-semibold text-text">Your rights</h2>
+          <h2 className="section-title">Your rights</h2>
           <p className="mt-2">
             Under the GDPR you can ask for access to your data, correction, deletion, restriction,
             portability, and you can object to processing based on legitimate interests. Because
@@ -150,7 +150,7 @@ export default function PrivacyPage() {
         </section>
 
         <section>
-          <h2 className="text-[18px] font-semibold text-text">Security and children</h2>
+          <h2 className="section-title">Security and children</h2>
           <p className="mt-2">
             Traffic is encrypted in transit; authentication credentials are sent to the API over
             HTTPS and stored only as keyed hashes. The database user is least-privilege. The
@@ -160,7 +160,7 @@ export default function PrivacyPage() {
         </section>
 
         <section>
-          <h2 className="text-[18px] font-semibold text-text">Changes</h2>
+          <h2 className="section-title">Changes</h2>
           <p className="mt-2">
             We will update this page when the marketplace changes, and the date at the top will
             change with it. This notice covers the HackYeah 2026 prototype and will be reviewed
