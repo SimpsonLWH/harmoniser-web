@@ -11,21 +11,21 @@ export const metadata: Metadata = {
 
 export default function DevicePage() {
   return (
-    <div className="mx-auto w-full max-w-3xl px-4 py-8 sm:px-6 sm:py-12">
-      <h1 className="text-3xl font-semibold tracking-tight">A second device, in this tab</h1>
-      <p className="mt-3 text-[15px] leading-7 text-text-2">
+    <div className="page max-w-[760px] py-10 sm:py-14">
+      <h1 className="page-title">A second device, in this tab</h1>
+      <p className="lede mt-3">
         This page acts like the wrist companion: it shows a pairing code, then a timer or a counter
         sent from a paired phone. Scan the QR code with a phone camera, or type the three words on
-        the <Link href="/pair" className="text-brand hover:underline">pairing page</Link>.
+        the <Link href="/pair" className="link">pairing page</Link>.
       </p>
 
       <div className="mt-8">
         <VirtualDevice />
       </div>
 
-      <div className="mt-10 space-y-6 text-[15px] leading-7 text-text-2">
+      <div className="mt-12 max-w-[65ch] space-y-8 text-label leading-7 text-text-2">
         <section>
-          <h2 className="text-[18px] font-semibold text-text">How it works</h2>
+          <h2 className="section-title">How it works</h2>
           <ol className="mt-2 list-decimal space-y-2 pl-5">
             <li>The device registers and gets a pairing code that works once, for ten minutes.</li>
             <li>
@@ -40,7 +40,7 @@ export default function DevicePage() {
         </section>
 
         <section>
-          <h2 className="text-[18px] font-semibold text-text">What this is not</h2>
+          <h2 className="section-title">What this is not</h2>
           <ul className="mt-2 list-disc space-y-2 pl-5">
             <li>
               Not a Huawei watch or TV. The other device today is this page, or the team&apos;s ESP32
@@ -53,7 +53,7 @@ export default function DevicePage() {
           </ul>
         </section>
 
-        <p className="text-[12px] text-text-3">
+        <p className="text-badge leading-5 text-text-2">
           Pairing words come from the EFF Short Wordlist #1 by the Electronic Frontier Foundation,
           used under CC BY 3.0 US.
         </p>

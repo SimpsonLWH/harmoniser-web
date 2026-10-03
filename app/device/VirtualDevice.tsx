@@ -195,61 +195,61 @@ export function VirtualDevice() {
 
   return (
     <div className="mx-auto w-full max-w-sm">
-      <div className="relative flex aspect-[4/5] w-full flex-col items-center justify-center overflow-hidden rounded-[44px] bg-[#0b0f14] p-6 text-center text-white shadow-[var(--h-shadow)]">
-        <p className="absolute top-5 text-[12px] tracking-wide text-white/60" role="status">
+      <div className="relative flex aspect-[4/5] w-full flex-col items-center justify-center overflow-hidden rounded-[44px] border border-[var(--frame-border)] bg-device p-6 text-center text-device-text shadow-[var(--shadow-frame)]">
+        <p className="absolute top-5 text-badge font-semibold text-device-text-2" role="status">
           {link === "offline" ? "cloud offline" : link === "starting" ? "connecting…" : paired ? "paired" : "not paired"}
         </p>
 
         {!paired && view.code !== null && (
           <>
             {view.pairUrl !== null && (
-              <div className="rounded-2xl bg-white p-3">
+              <div className="rounded-card bg-white p-3">
                 <QRCodeSVG value={view.pairUrl} level="M" size={200} marginSize={2} title="Pairing QR code" />
               </div>
             )}
-            <p className="mt-4 text-[12px] text-white/60">scan, or type</p>
-            <p className="font-mono text-[22px] font-semibold tracking-tight" data-testid="pairing-code">
+            <p className="mt-4 text-badge text-device-text-2">scan, or type</p>
+            <p className="font-mono text-title font-semibold tracking-tight" data-testid="pairing-code">
               {view.code}
             </p>
           </>
         )}
 
-        {!paired && view.code === null && <p className="text-[15px] text-white/70">Getting a pairing code…</p>}
+        {!paired && view.code === null && <p className="text-label text-device-text-2">Getting a pairing code…</p>}
 
         {paired && shown.type === "idle" && (
-          <p className="max-w-[14rem] text-[15px] leading-6 text-white/70">
+          <p className="max-w-[14rem] text-label leading-6 text-device-text-2">
             Paired. Send a timer or a counter from the app to see it here.
           </p>
         )}
 
         {paired && shown.type === "timer" && (
           <>
-            <p className="max-w-full truncate text-[16px] text-white/70">{shown.label || "Timer"}</p>
-            <p className="mt-1 font-mono text-[64px] font-semibold leading-none tabular-nums" data-testid="timer">
+            <p className="max-w-full truncate text-body text-device-text-2">{shown.label || "Timer"}</p>
+            <p className="mt-1 text-hero font-extrabold leading-none tracking-[-1px] tabular-nums" data-testid="timer">
               {formatClock(remainingSeconds(shown, now))}
             </p>
             <button
               type="button"
               onClick={onTap}
-              className="mt-6 min-h-12 rounded-full bg-white/15 px-7 text-[15px] font-medium"
+              className="btn mt-6 min-h-12 bg-device-key px-7 text-device-text"
             >
               {shown.done ? "Reset" : shown.running ? "Pause" : "Start"}
             </button>
-            {shown.done && <p className="mt-3 text-[14px] text-[#ffb37a]">Time is up</p>}
+            {shown.done && <p className="mt-3 text-label font-semibold text-device-alert">Time is up</p>}
           </>
         )}
 
         {paired && shown.type === "counter" && (
           <>
-            <p className="max-w-full truncate text-[16px] text-white/70">{shown.label || "Counter"}</p>
-            <p className="mt-1 font-mono text-[72px] font-semibold leading-none tabular-nums" data-testid="count">
+            <p className="max-w-full truncate text-body text-device-text-2">{shown.label || "Counter"}</p>
+            <p className="mt-1 text-hero font-extrabold leading-none tracking-[-1px] tabular-nums" data-testid="count">
               {shown.count}
             </p>
             <button
               type="button"
               onClick={onTap}
               aria-label="Add one"
-              className="mt-6 grid size-20 place-items-center rounded-full bg-brand text-[40px] font-medium leading-none text-white"
+              className="mt-6 grid size-20 place-items-center rounded-full bg-blue text-display font-medium leading-none text-on-blue transition-colors hover:bg-blue-hover"
             >
               +
             </button>
@@ -257,9 +257,9 @@ export function VirtualDevice() {
         )}
       </div>
 
-      <div className="mt-4 flex items-center justify-between gap-3 text-[13px] text-text-3">
+      <div className="mt-4 flex items-center justify-between gap-3 text-caption text-text-2">
         <span>This tab is a device of kind “web”.</span>
-        <button type="button" onClick={forget} className="min-h-9 rounded-full bg-surface-2 px-4 font-medium text-text-2">
+        <button type="button" onClick={forget} className="btn btn-secondary">
           New device
         </button>
       </div>
