@@ -4,7 +4,9 @@ import type { PollAnswer } from "@/lib/devices/relay";
 import {
   IDLE,
   UNSYNCED,
+  afterUnauthorized,
   applyAction,
+  nextRequestDelayMs,
   formatClock,
   remainingSeconds,
   report,
@@ -199,6 +201,61 @@ describe("tap and reports", () => {
     const counted = showCapsule(counter, 0);
     expect(reportChanged(report(counted, 1, 0), report(applyAction(counted, "increment", 0)!, 1, 0))).toBe(true);
     expect(reportChanged(report(counted, 1, 0), report(counted, 2, 0))).toBe(true);
+  });
+});
+
+describe("afterUnauthorized", () => {
+  const used = { hw: "web-1", id: "dev_1", token: "old-token" };
+
+  it("registers again under the same hardware id when storage still holds the refused registration", () => {
+    expect(afterUnauthorized(used, used)).toEqual({ kind: "register", hw: "web-1" });
+  });
+
+  it("takes over the registration another tab stored meanwhile, instead of registering again", () => {
+    expect(afterUnauthorized(used, { hw: "web-1", id: "dev_1", token: "new-token" })).toEqual({
+      kind: "adopt",
+      hw: "web-1",
+      id: "dev_1",
+      token: "new-token",
+    });
+    expect(afterUnauthorized(used, { hw: "web-2", id: "dev_2", token: "other" })).toMatchObject({
+      kind: "adopt",
+      hw: "web-2",
+      id: "dev_2",
+    });
+  });
+
+  it.each([{}, { hw: "web-1" }, { id: "dev_9" }, { token: "t" }, { id: "", token: "" }])(
+    "registers again when storage holds no complete registration: %j",
+    (stored) => {
+      expect(afterUnauthorized(used, stored)).toEqual({ kind: "register", hw: "web-1" });
+    },
+  );
+
+  it("falls back to the stored hardware id when the tab has none", () => {
+    expect(afterUnauthorized({}, { hw: "web-7" })).toEqual({ kind: "register", hw: "web-7" });
+  });
+
+  it("settles two tabs that share one refused registration on a single new one", () => {
+    // Tab A is refused first and registers again; what it stores is what tab B then finds.
+    const stale = { hw: "web-1", id: "dev_1", token: "stale" };
+    expect(afterUnauthorized(stale, stale).kind).toBe("register");
+    const storedByA = { hw: "web-1", id: "dev_1", token: "from-a" };
+    const b = afterUnauthorized(stale, storedByA);
+    expect(b).toMatchObject({ kind: "adopt", token: "from-a" });
+    // And if B's adopted token is refused as well while storage has not changed, it registers.
+    expect(afterUnauthorized(storedByA, storedByA).kind).toBe("register");
+  });
+});
+
+describe("nextRequestDelayMs", () => {
+  it("is the poll interval after a good answer and never 0", () => {
+    expect(nextRequestDelayMs(0)).toBe(2000);
+    expect(nextRequestDelayMs(-1)).toBe(2000);
+  });
+
+  it("grows with failures in a row: 2, 4, 8, 16, then 30 seconds", () => {
+    expect([1, 2, 3, 4, 5, 6, 50].map(nextRequestDelayMs)).toEqual([2000, 4000, 8000, 16_000, 30_000, 30_000, 30_000]);
   });
 });
 

@@ -6,7 +6,9 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { pollDevice, registerDevice, reportDevice } from "@/lib/client/devices";
 import type { DeviceState } from "@/lib/devices/capsule";
 import {
+  afterUnauthorized,
   formatClock,
+  nextRequestDelayMs,
   remainingSeconds,
   report,
   reportChanged,
@@ -14,6 +16,7 @@ import {
   takePoll,
   tap,
   UNSYNCED,
+  type StoredRegistration,
   type SyncState,
 } from "@/lib/devices/machine";
 
@@ -24,32 +27,27 @@ import {
  */
 
 const STORAGE_KEY = "harmoniser.virtualDevice";
-const POLL_MS = 2000;
 const HEARTBEAT_MS = 10_000;
-const BACKOFF_MS = [2000, 4000, 8000, 16_000, 30_000];
 
-interface Registration {
-  hw: string;
-  id: string;
-  token: string;
-}
+type Registration = StoredRegistration;
 
+// Whoever knows a device's hw can register it again and so unpair it: 128 random bits.
 function randomHw(): string {
-  const bytes = new Uint8Array(8);
+  const bytes = new Uint8Array(16);
   crypto.getRandomValues(bytes);
   return "web-" + Array.from(bytes, (b) => b.toString(16).padStart(2, "0")).join("");
 }
 
-function loadRegistration(): Partial<Registration> {
+function loadRegistration(): Registration {
   try {
     const parsed: unknown = JSON.parse(window.localStorage.getItem(STORAGE_KEY) ?? "{}");
-    return typeof parsed === "object" && parsed !== null ? (parsed as Partial<Registration>) : {};
+    return typeof parsed === "object" && parsed !== null ? (parsed as Registration) : {};
   } catch {
     return {};
   }
 }
 
-function saveRegistration(registration: Partial<Registration>): void {
+function saveRegistration(registration: Registration): void {
   try {
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(registration));
   } catch {
@@ -66,7 +64,7 @@ export function VirtualDevice() {
   const [generation, setGeneration] = useState(0);
 
   const state = useRef<SyncState>(UNSYNCED);
-  const registration = useRef<Partial<Registration>>({});
+  const registration = useRef<Registration>({});
   const lastReport = useRef<{ body: DeviceState; at: number } | null>(null);
 
   const sendReport = useCallback(async (force: boolean) => {
@@ -89,45 +87,68 @@ export function VirtualDevice() {
     let timer: ReturnType<typeof setTimeout> | undefined;
     let failures = 0;
 
+    function adopt(next: Registration): void {
+      registration.current = next;
+      state.current = UNSYNCED;
+      lastReport.current = null;
+    }
+
     async function step(): Promise<void> {
       if (cancelled) {
         return;
       }
-      let ok = false;
-      const current = registration.current;
-      if (current.id === undefined || current.token === undefined) {
-        const hw = current.hw ?? randomHw();
-        const answer = await registerDevice(hw);
-        if (answer.ok && !cancelled) {
-          registration.current = { hw, id: answer.data.id, token: answer.data.token };
-          saveRegistration(registration.current);
-          state.current = { ...UNSYNCED, code: answer.data.code, pairUrl: answer.data.pair_url };
-          lastReport.current = null;
-          ok = true;
+      const used = registration.current;
+      if (used.id === undefined || used.token === undefined) {
+        // Another tab of this browser may have registered since this one last looked.
+        const stored = loadRegistration();
+        if (stored.id !== undefined && stored.token !== undefined) {
+          adopt(stored);
+        } else {
+          const hw = used.hw ?? stored.hw ?? randomHw();
+          const answer = await registerDevice(hw);
+          if (cancelled) {
+            return;
+          }
+          if (answer.ok) {
+            adopt({ hw, id: answer.data.id, token: answer.data.token });
+            saveRegistration(registration.current);
+            state.current = { ...UNSYNCED, code: answer.data.code, pairUrl: answer.data.pair_url };
+          } else {
+            failures += 1;
+          }
         }
       } else {
-        const answer = await pollDevice(current.id, current.token);
-        if (answer.ok && !cancelled) {
+        const answer = await pollDevice(used.id, used.token);
+        if (cancelled) {
+          return;
+        }
+        if (answer.ok) {
+          failures = 0;
           state.current = takePoll(state.current, answer.data, Date.now());
-          ok = true;
           await sendReport(false);
-        } else if (answer.status === 401 || answer.status === 404) {
-          // The relay no longer knows this device: register again under the same hardware id.
-          registration.current = { hw: current.hw };
-          saveRegistration(registration.current);
-          state.current = UNSYNCED;
-          ok = true;
+        } else {
+          failures += 1;
+          if (answer.status === 401 || answer.status === 404) {
+            // The relay no longer takes this token. If another tab has registered again, use
+            // its registration; only otherwise register again (lib/devices/machine.ts).
+            const next = afterUnauthorized(used, loadRegistration());
+            if (next.kind === "adopt") {
+              adopt({ hw: next.hw, id: next.id, token: next.token });
+            } else {
+              adopt({ hw: next.hw });
+              saveRegistration(registration.current);
+            }
+          }
         }
       }
       if (cancelled) {
         return;
       }
-      failures = ok ? 0 : failures + 1;
-      setLink(ok ? "online" : failures >= 2 ? "offline" : "online");
+      setLink(failures >= 2 ? "offline" : "online");
       setView(state.current);
-      const registered = registration.current.id !== undefined;
-      const wait = ok ? (registered && state.current.synced ? POLL_MS : 0) : BACKOFF_MS[Math.min(failures, BACKOFF_MS.length) - 1];
-      timer = setTimeout(() => void step(), wait);
+      // Never at once: the poll interval after a good answer or a registration, longer and
+      // longer after refusals and failures.
+      timer = setTimeout(() => void step(), nextRequestDelayMs(failures));
     }
 
     registration.current = loadRegistration();

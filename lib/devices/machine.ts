@@ -199,3 +199,45 @@ export function formatClock(totalSeconds: number): string {
   const two = (value: number) => String(value).padStart(2, "0");
   return hours > 0 ? `${hours}:${two(minutes)}:${two(seconds)}` : `${two(minutes)}:${two(seconds)}`;
 }
+
+// ---- the /device page's registration, shared by every tab of one browser ----
+
+export interface StoredRegistration {
+  readonly hw?: string;
+  readonly id?: string;
+  readonly token?: string;
+}
+
+export type AfterUnauthorized =
+  | { readonly kind: "adopt"; readonly id: string; readonly token: string; readonly hw: string | undefined }
+  | { readonly kind: "register"; readonly hw: string | undefined };
+
+// What to do when the relay answers 401 to the registration `used`. `stored` is what
+// localStorage holds at that moment. If another tab has registered again meanwhile, its id
+// and token are there: take them over instead of registering once more (which would end that
+// tab's token, and so on back and forth). Otherwise register again under the same hardware id.
+export function afterUnauthorized(used: StoredRegistration, stored: StoredRegistration): AfterUnauthorized {
+  const hasOther =
+    typeof stored.id === "string" &&
+    typeof stored.token === "string" &&
+    stored.id !== "" &&
+    stored.token !== "" &&
+    (stored.id !== used.id || stored.token !== used.token);
+  if (hasOther) {
+    return { kind: "adopt", id: stored.id as string, token: stored.token as string, hw: stored.hw ?? used.hw };
+  }
+  return { kind: "register", hw: used.hw ?? stored.hw };
+}
+
+export const POLL_INTERVAL_MS = 2000;
+const RETRY_MS = [2000, 4000, 8000, 16_000, 30_000];
+
+// How long to wait before the next request. `failures` counts requests in a row that did not
+// end in a good poll: no answer, an error, or a 401. Never 0, so a device that keeps being
+// refused slows down instead of spinning: 2, 4, 8, 16, then 30 seconds, as on the board.
+export function nextRequestDelayMs(failures: number): number {
+  if (failures <= 0) {
+    return POLL_INTERVAL_MS;
+  }
+  return RETRY_MS[Math.min(failures, RETRY_MS.length) - 1] ?? POLL_INTERVAL_MS;
+}
