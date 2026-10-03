@@ -30,6 +30,11 @@ No other model, MCP server or skill was used to generate code in this repository
   results belong in the commit message or the PR.
 - The parity suite mirrors the app's own unit tests, and `npm run parity` fails when upstream
   changes at the pinned commit.
+- Verified locally and on Vercel: the production build serves `/`, `/capsules`, `/publish`,
+  `/device`, `/privacy`, `/terms`, `robots.txt` and `sitemap.xml` with 200s, security headers are
+  applied, and the API returns the shared error shape (503) before a database is configured. An
+  anonymous temporary Vercel deployment (`vercel deploy --temporary`) built and served the same
+  pages before the Vercel account/Atlas setup that only Lewis can perform.
 - Not yet verified by a human: the visual match against the native app on a device, the emulator
   import of a marketplace download, and the live deployment smoke test. These must be reported as
   unverified until Lewis or Ash confirms them.
