@@ -1,6 +1,6 @@
 # AI workflow log
 
-This project is built with AI assistance during HackYeah 2026 (Kraków, 3–4 October 2026). This file
+This project is built with AI assistance during HackYeah 2026 (Kraków, 3-4 October 2026). This file
 records what the agents did, what was verified, and what remains a human decision.
 
 ## Agents and tools used
@@ -11,6 +11,7 @@ records what the agents did, what was verified, and what remains a human decisio
 | 2026-10-03 | OpenAI Codex (GPT-5.x, desktop app) | Follow-up patch: ownerToken/installId split, `include=capsule`, strict `limit` parsing, built-in and privacy copy, read-only production/DB checks |
 | 2026-10-03 | Instinct brief (“Build the capsule marketplace”, written 2026-10-03 20:12 CEST) | Source requirements for the marketplace: API contract, collections, ownership model, parity and UI rules |
 | 2026-10-03 | Claude Code (Claude Opus, CLI agent) | Device relay: `/api/devices/**`, `/pair`, `/device`, `lib/devices/`, `models/RelayDevice.ts`, tests, `docs/device-relay.md` |
+| 2026-10-04 | OpenAI Codex (GPT-5.x, desktop app) | Landing rebuild in the app's capsule-frame design: the eleven canvas frames as React components, the app icon layers as favicon and brand mark, light-only tokens, the copy sweep, and the copy guard test |
 
 The device relay work also used the Chrome DevTools MCP server to try `/pair` and `/device` in a
 browser. No other model, MCP server or skill was used to generate code in this repository.
@@ -26,6 +27,23 @@ browser. No other model, MCP server or skill was used to generate code in this r
   was deliberately not ported: the marketplace never runs a capsule.
 - Screenshots on the landing page come from the team's own emulator stress test
   (`Harmoniser-test-artifacts/test-1-20261003-1820`), resized to 900 px wide.
+- The landing page no longer uses those screenshots. The eleven new capsule frames are drawn in
+  React from the canvas files (`Converter`, `Habits`, `Main`, `Packing`, `Pomodoro`,
+  `PomodoroDark`, `Quiz`, `Split`, `Tennis`, `TennisFold`, `Water`), so the site shows the new
+  design before the app build ships it. Only `Main` is interactive; the rest are labelled images.
+- `app/favicon.ico`, `app/icon.png`, `app/apple-icon.png`, `public/icon-1024.png` and
+  `public/brand-icon.png` are composited in Python (Pillow) from the app's own
+  `AppScope/resources/base/media/background.png` and `foreground.png` layers: background first,
+  then the mark group scaled to 84% and centred, so it reads at 16 px.
+- Site copy is checked by `tests/no-ai-tells.test.ts`: no em dashes or en dashes anywhere in the
+  repo (the generated Next.js block in `AGENTS.md` is exempt because `next dev` rewrites it), and a
+  short list of marketing phrases is banned. The site is fixed to light mode on purpose; the app's
+  own dark mode appears only inside the `PomodoroDark` frame.
+- Pairing codes: a real registration drew "islam-goofy-evil" from the EFF list, which is a random
+  draw and also not acceptable on someone's screen. `lib/devices/phrase.ts` now removes 77
+  sensitive words (belief and identity, violence, drugs, sex, illness) from the draw instead of
+  retrying after generation, leaving 1,218 words and about 31 bits. Tests assert the blocklist
+  only names real EFF words and that no generated code can contain one.
 
 ## Human review and verification
 
@@ -50,7 +68,7 @@ browser. No other model, MCP server or skill was used to generate code in this r
 ## Limits of the generated work
 
 - No accounts or Huawei identity are implemented; they are documented as later phases. The device
-  relay is implemented — see the section below and `docs/device-relay.md`.
+  relay is implemented, see the section below and `docs/device-relay.md`.
 - Moderation (reports, hiding) is a demo heuristic, not fraud-resistant.
 - The CSP still allows Next's inline bootstrap.
 
@@ -74,7 +92,7 @@ browser. No other model, MCP server or skill was used to generate code in this r
   `lib/dto.ts`, README/native-integration/device-relay/privacy/terms copy, and tests
   (`tests/client-tokens.test.ts`, `tests/list-query.test.ts`, `tests/dto.test.ts`,
   `tests/pair-url.test.ts`).
-- Verified by the agent: lint, typecheck, `npm test` (461 passed, 37 skipped — the MongoDB half of
+- Verified by the agent: lint, typecheck, `npm test` (461 passed, 37 skipped; the MongoDB half of
   the relay conformance suite), `npm run build`, `npm run parity`, and a read-only production
   check of the catalogue's default shape, cursor walk, `robots.txt`/`sitemap.xml` and
   `nextCursor`.

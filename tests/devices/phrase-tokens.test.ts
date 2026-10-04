@@ -1,6 +1,13 @@
 import { describe, expect, it } from "vitest";
 
-import { CODE_PATTERN, CODE_WORDS, generateCode, normaliseCode, parseCode } from "@/lib/devices/phrase";
+import {
+  BLOCKED_WORDS,
+  CODE_PATTERN,
+  CODE_WORDS,
+  generateCode,
+  normaliseCode,
+  parseCode,
+} from "@/lib/devices/phrase";
 import { deviceTokenMatches, hashDeviceToken, newDeviceId, newDeviceToken, parseBearer } from "@/lib/devices/tokens";
 import { hashPrincipal, hashToken } from "@/lib/ownership";
 import { EFF_SHORT_WORDLIST } from "@/lib/devices/wordlist";
@@ -13,9 +20,29 @@ describe("word list", () => {
     expect(EFF_SHORT_WORDLIST[1295]).toBe("zoom");
   });
 
-  it("uses every word but the one with a hyphen", () => {
-    expect(EFF_SHORT_WORDLIST.filter((word) => !CODE_WORDS.includes(word))).toEqual(["yo-yo"]);
+  it("leaves out the hyphenated word and every blocked word", () => {
+    const leftOut = EFF_SHORT_WORDLIST.filter((word) => !CODE_WORDS.includes(word));
+    expect(leftOut.sort()).toEqual(["yo-yo", ...BLOCKED_WORDS].sort());
     expect(CODE_WORDS.every((word) => /^[a-z]{3,5}$/.test(word))).toBe(true);
+  });
+
+  it("has a blocklist of real EFF words that never reach a code", () => {
+    expect(BLOCKED_WORDS.length).toBeGreaterThan(50);
+    expect(new Set(BLOCKED_WORDS).size).toBe(BLOCKED_WORDS.length);
+    for (const word of BLOCKED_WORDS) {
+      expect(EFF_SHORT_WORDLIST).toContain(word);
+      expect(CODE_WORDS).not.toContain(word);
+    }
+  });
+
+  it("cannot draw the words of a phrase that was seen in the wild", () => {
+    for (const word of ["islam", "goofy", "evil"]) {
+      if (BLOCKED_WORDS.includes(word)) {
+        expect(CODE_WORDS).not.toContain(word);
+      }
+    }
+    expect(CODE_WORDS).not.toContain("islam");
+    expect(CODE_WORDS).not.toContain("evil");
   });
 });
 
@@ -26,6 +53,7 @@ describe("generateCode", () => {
       expect(code).toMatch(CODE_PATTERN);
       expect(code.length).toBeLessThanOrEqual(17);
       expect(code.split("-").every((word) => CODE_WORDS.includes(word))).toBe(true);
+      expect(code.split("-").some((word) => BLOCKED_WORDS.includes(word))).toBe(false);
     }
   });
 
@@ -36,7 +64,7 @@ describe("generateCode", () => {
       asked.push(max);
       return picks[asked.length - 1] ?? 0;
     });
-    expect(asked).toEqual([1295, 1295, 1295]);
+    expect(asked).toEqual([CODE_WORDS.length, CODE_WORDS.length, CODE_WORDS.length]);
     expect(code).toBe(`acid-zoom-acorn`);
   });
 
