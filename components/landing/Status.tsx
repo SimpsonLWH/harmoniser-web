@@ -6,7 +6,7 @@
 const REAL = [
   "Rules, templates, the on-device model, the permission gatekeeper and its log.",
   "Timer, counter, checklist, number, text and button capsules, plus schema v1 scores and live results.",
-  "2x2 and 2x4 home-screen widgets, calendar events, battery, motion and weather readings.",
+  "2x2 and 2x4 home-screen widgets, calendar events, and battery and weather readings.",
   "Marketplace browse and install against the live API.",
 ];
 
@@ -17,7 +17,7 @@ const SIMULATED = [
 
 const NOT_YET = [
   "TV and watch capsules.",
-  "A capsule that vibrates, and notifications after the app is closed.",
+  "Capsule-triggered vibration, and notifications that fire after the app closes.",
   "Voice input, and languages other than English.",
 ];
 

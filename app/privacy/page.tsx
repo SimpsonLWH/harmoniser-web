@@ -49,22 +49,25 @@ export default function PrivacyPage() {
             <li>
               Smart is the default AI mode in the current hackathon build. Cloud AI needs a
               provider key on your device; without one, nothing is sent to a model provider. With
-              keys in place, a request that needs a cloud model goes to Mistral (EU) for logic
-              where Mistral is configured, or to Claude by Anthropic, which is outside the EU, for
-              live information such as a weather-based task list, news, prices or opening hours.
-              Providers outside the EU are allowed by default.
+              keys in place, a request that needs a cloud model goes to Mistral (EU) for logic when
+              that key is configured, or to Claude by Anthropic, which is outside the EU, for live
+              information such as a weather-based task list, news, prices or opening hours. If only
+              one provider key is configured, requests that need the cloud use it. Providers
+              outside the EU are allowed by default.
             </li>
             <li>
-              Before a provider&apos;s first use, the app shows a notice that names it and says
-              whether it is outside the EU. In Settings, one switch keeps the cloud EU-only, and
-              On-device only mode turns cloud generation off.
+              Before using a provider the app shows a notice that names it and says whether it is
+              outside the EU, unless that acceptance is already remembered. In Settings, one switch
+              keeps the cloud EU-only, and On-device only mode turns cloud generation off.
             </li>
             <li>
               The provider receives the text you type. A weather request that names a bundled city
               adds one line of forecast, and for other live requests Anthropic may run a web search
               on its side. An edit that needs the cloud also sends the capsule&apos;s definition,
-              never its saved values. Your key stays on your device and is never packed into the
-              app or sent to us.
+              never its saved values. If you use Snap, the app reads the photo on your phone first;
+              if that fails and you let the cloud try, the photo goes to the configured provider
+              under the same notice. Your key stays on your device and is never packed into the app
+              or sent to us.
             </li>
             <li>
               When a capsule asks for a device feature (reminders, notifications, motion, and so
