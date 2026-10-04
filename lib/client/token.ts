@@ -10,7 +10,7 @@
  *   relay's user side (/pair, "send to another device"). The server stores only
  *   hashPrincipal(installId). It never owns a capsule.
  *
- * A third credential — the relay's device bearer token — is issued by the server to a device
+ * A third credential, the relay's device bearer token, is issued by the server to a device
  * and is not kept here at all; see docs/device-relay.md.
  *
  * Both are random 32-byte values in localStorage, so they are XSS-exposed by nature; the site

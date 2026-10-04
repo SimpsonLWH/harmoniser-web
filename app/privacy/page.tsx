@@ -59,11 +59,11 @@ export default function PrivacyPage() {
           <ul className="mt-2 list-disc space-y-2 pl-5">
             <li>
               the capsule JSON you choose to publish, with the name, description and tags you
-              enter — this is public by design and shown to anyone who visits the marketplace;
+              enter. This is public by design and shown to anyone who visits the marketplace;
             </li>
             <li>
               a keyed hash of an anonymous <strong>owner token</strong>. Your browser sends it to
-              the API over HTTPS when you publish or delete, and the server stores only the hash —
+              the API over HTTPS when you publish or delete, and the server stores only the hash:
               never the token, and never in a public listing. It is what proves you can delete a
               capsule you published;
             </li>
@@ -138,7 +138,7 @@ export default function PrivacyPage() {
             marketplace publishing is anonymous, we usually cannot identify you from a capsule
             alone; if you hold the owner token used to publish it, you can delete it yourself, and
             we can act on a request that identifies the exact capsule. You also have the right to
-            complain to a supervisory authority — for example the Polish Data Protection
+            complain to a supervisory authority, for example the Polish Data Protection
             Authority (UODO) where this project was built, or the authority in your own country.
           </p>
           <p className="mt-2">

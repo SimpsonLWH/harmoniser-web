@@ -1,6 +1,6 @@
 /**
  * Creates and reconciles every MongoDB index the models declare, once, from a
- * script — instead of leaving it to `autoIndex` on a serverless cold start.
+ * script, instead of leaving it to `autoIndex` on a serverless cold start.
  *
  * Mongoose builds indexes on first use when `autoIndex` is on (the default),
  * but on Vercel each instance does that race independently, and a request

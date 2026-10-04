@@ -1,4 +1,4 @@
-# Native integration spec — marketplace
+# Native integration spec: marketplace
 
 For the Harmoniser app (`Akshaz7/capsules-harmonyos`). The marketplace itself lives in this
 repository; nothing here requires editing the app's Web layer, and the marketplace never executes a
@@ -23,10 +23,10 @@ Base URL: the deployed site (`NEXT_PUBLIC_SITE_URL`).
 Headers: `X-Harmoniser-Token` carries one of two app identities, both generated with at least 32
 bytes of entropy on first run and stored in Preferences. They must be different values:
 
-- **ownerToken** — used only for `POST /api/capsules` and `DELETE /api/capsules/{id}`. It is the
+- **ownerToken**: used only for `POST /api/capsules` and `DELETE /api/capsules/{id}`. It is the
   publishing and deletion credential; the server stores only its keyed hash. Losing it means the
   app can no longer delete a capsule it published.
-- **installId** — used for install and report calls, and for the relay's user side ("Show on
+- **installId**: used for install and report calls, and for the relay's user side ("Show on
   another device"). It never owns a capsule. Losing it only resets install/report deduplication
   and unpairs that app's relay devices.
 

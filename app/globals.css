@@ -1,65 +1,82 @@
 @import "tailwindcss";
 
 /*
- * Tokens sampled from the Harmoniser build running on the HackYeah emulator (screenshots in
- * public/shots) and from the app's ArkUI defaults. They are a starting point for matching the
- * native visual language, not official HarmonyOS values: verify against the device theme before
- * treating them as authoritative.
+ * Tokens come from the Harmoniser app icon and the capsule-frame redesign:
+ * brand #2F5BFF and accent #FF7A45 are sampled from the logo layers in
+ * AppScope/resources/base/media, everything else from the canvas frames.
+ * Dark values are the canvas dark frame (PomodoroDark).
  */
 :root {
-  --h-bg: #f1f3f5;
+  --h-bg: #f2f4f9;
+  --h-bg-top: #dce5ff;
+  --h-bg-mid: #eef2fb;
   --h-surface: #ffffff;
-  --h-surface-2: #e9edf3;
-  --h-text: #182431;
-  --h-text-2: #5e6b7c;
-  --h-text-3: #8a95a5;
-  --h-brand: #0a59f7;
-  --h-brand-soft: #e6efff;
+  --h-surface-2: #f5f7fb;
+  --h-surface-3: #f1f3f8;
+  --h-text: #1b2236;
+  --h-text-2: #5b6478;
+  --h-text-3: #3d4a66;
+  --h-brand: #2f5bff;
+  --h-brand-deep: #1f45d6;
+  --h-brand-ink: #2a47c7;
+  --h-brand-soft: #eaf0ff;
+  --h-accent: #ff7a45;
+  --h-accent-soft: #ffefe6;
+  --h-accent-ink: #a8411a;
   --h-warning: #b7791f;
   --h-warning-soft: #fff4d6;
-  --h-danger: #d9480f;
-  --h-danger-soft: #ffe8e0;
-  --h-border: rgba(24, 36, 49, 0.08);
-  --h-shadow: 0 1px 2px rgba(24, 36, 49, 0.04), 0 8px 24px rgba(24, 36, 49, 0.06);
+  --h-danger: #c2410c;
+  --h-danger-soft: #ffefe6;
+  --h-line: #e8ecf4;
+  --h-line-2: #dce2ee;
+  --h-track: #e4e9f3;
+  --h-shadow: 0 18px 40px rgba(27, 34, 54, 0.1), 0 1px 2px rgba(27, 34, 54, 0.05);
+  --h-shadow-sm: 0 1px 3px rgba(27, 34, 54, 0.12);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --h-bg: #000000;
-    --h-surface: #1b1b1b;
-    --h-surface-2: #262626;
-    --h-text: #f1f3f5;
-    --h-text-2: #a6b0bd;
-    --h-text-3: #7d8794;
-    --h-brand: #5c8dff;
-    --h-brand-soft: #17233d;
-    --h-warning: #e8b04b;
-    --h-warning-soft: #33280f;
-    --h-danger: #ff8a65;
-    --h-danger-soft: #3a1a12;
-    --h-border: rgba(241, 243, 245, 0.1);
-    --h-shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 24px rgba(0, 0, 0, 0.35);
-  }
-}
-
+/*
+ * Radius scale: pills for anything tappable (22px), frames 28px, tiles 18-22px,
+ * inputs 12-16px. Elevation is a tinted shadow, never pure black. Z-index scale:
+ * header 20, overlays 40.
+ *
+ * One theme only: the site is fixed to light. The app's own dark mode is shown
+ * inside the PomodoroDark frame, which is product content, not a site theme.
+ */
 @theme inline {
   --color-bg: var(--h-bg);
+  --color-bg-top: var(--h-bg-top);
+  --color-bg-mid: var(--h-bg-mid);
   --color-surface: var(--h-surface);
   --color-surface-2: var(--h-surface-2);
+  --color-surface-3: var(--h-surface-3);
   --color-text: var(--h-text);
   --color-text-2: var(--h-text-2);
   --color-text-3: var(--h-text-3);
   --color-brand: var(--h-brand);
+  --color-brand-deep: var(--h-brand-deep);
+  --color-brand-ink: var(--h-brand-ink);
   --color-brand-soft: var(--h-brand-soft);
+  --color-accent: var(--h-accent);
+  --color-accent-soft: var(--h-accent-soft);
+  --color-accent-ink: var(--h-accent-ink);
   --color-warning: var(--h-warning);
   --color-warning-soft: var(--h-warning-soft);
   --color-danger: var(--h-danger);
   --color-danger-soft: var(--h-danger-soft);
-  --color-line: var(--h-border);
-  --font-sans: var(--font-geist-sans);
+  --color-line: var(--h-line);
+  --color-line-2: var(--h-line-2);
+  --color-track: var(--h-track);
+  --font-sans: var(--font-manrope);
   --font-mono: var(--font-geist-mono);
-  --radius-card: 20px;
-  --radius-input: 24px;
+  --radius-card: 28px;
+  --radius-tile: 20px;
+  --radius-input: 12px;
+  --shadow-frame: var(--h-shadow);
+  --shadow-raise: var(--h-shadow-sm);
+}
+
+html {
+  color-scheme: light;
 }
 
 body {
@@ -67,9 +84,148 @@ body {
   color: var(--h-text);
 }
 
+/*
+ * The landing page washes from the frame gradient at the top into the page
+ * colour, exactly like the canvas screens.
+ */
+.page-wash {
+  background-image: linear-gradient(
+    180deg,
+    var(--h-bg-top) 0,
+    var(--h-bg-mid) 320px,
+    var(--h-bg) 620px
+  );
+}
+
+/*
+ * Phone frames draw at their real 390x844 (or 820x740) logical size and scale to
+ * the column with container steps, so the layout inside stays pixel-faithful at
+ * any viewport. No JavaScript, no layout shift.
+ */
+.frame-wrap {
+  container-type: inline-size;
+  width: 100%;
+}
+
+.frame-stage {
+  --s: 0.5;
+  height: calc(var(--frame-h) * 1px * var(--s));
+  overflow: hidden;
+}
+
+.frame-shot {
+  width: calc(var(--frame-w) * 1px);
+  height: calc(var(--frame-h) * 1px);
+  transform: scale(var(--s));
+  transform-origin: top left;
+}
+
+@container (min-width: 210px) {
+  .frame-stage[data-size="phone"] { --s: 0.54; }
+}
+@container (min-width: 240px) {
+  .frame-stage[data-size="phone"] { --s: 0.6; }
+}
+@container (min-width: 268px) {
+  .frame-stage[data-size="phone"] { --s: 0.66; }
+}
+@container (min-width: 296px) {
+  .frame-stage[data-size="phone"] { --s: 0.75; }
+}
+@container (min-width: 316px) {
+  .frame-stage[data-size="phone"] { --s: 0.8; }
+}
+@container (min-width: 336px) {
+  .frame-stage[data-size="phone"] { --s: 0.85; }
+}
+@container (min-width: 356px) {
+  .frame-stage[data-size="phone"] { --s: 0.9; }
+}
+@container (min-width: 376px) {
+  .frame-stage[data-size="phone"] { --s: 0.95; }
+}
+@container (min-width: 391px) {
+  .frame-stage[data-size="phone"] { --s: 1; }
+}
+@container (min-width: 430px) {
+  .frame-stage[data-size="phone"] { --s: 1.05; }
+}
+@container (min-width: 452px) {
+  .frame-stage[data-size="phone"] { --s: 1.1; }
+}
+@container (min-width: 474px) {
+  .frame-stage[data-size="phone"] { --s: 1.15; }
+}
+@container (min-width: 496px) {
+  .frame-stage[data-size="phone"] { --s: 1.2; }
+}
+@container (min-width: 518px) {
+  .frame-stage[data-size="phone"] { --s: 1.25; }
+}
+@container (min-width: 540px) {
+  .frame-stage[data-size="phone"] { --s: 1.3; }
+}
+
+@container (min-width: 336px) {
+  .frame-stage[data-size="fold"] { --s: 0.4; }
+}
+@container (min-width: 378px) {
+  .frame-stage[data-size="fold"] { --s: 0.45; }
+}
+@container (min-width: 419px) {
+  .frame-stage[data-size="fold"] { --s: 0.5; }
+}
+@container (min-width: 460px) {
+  .frame-stage[data-size="fold"] { --s: 0.55; }
+}
+@container (min-width: 501px) {
+  .frame-stage[data-size="fold"] { --s: 0.6; }
+}
+@container (min-width: 542px) {
+  .frame-stage[data-size="fold"] { --s: 0.65; }
+}
+@container (min-width: 583px) {
+  .frame-stage[data-size="fold"] { --s: 0.7; }
+}
+@container (min-width: 624px) {
+  .frame-stage[data-size="fold"] { --s: 0.75; }
+}
+@container (min-width: 665px) {
+  .frame-stage[data-size="fold"] { --s: 0.8; }
+}
+@container (min-width: 706px) {
+  .frame-stage[data-size="fold"] { --s: 0.85; }
+}
+@container (min-width: 747px) {
+  .frame-stage[data-size="fold"] { --s: 0.9; }
+}
+@container (min-width: 788px) {
+  .frame-stage[data-size="fold"] { --s: 0.95; }
+}
+@container (min-width: 821px) {
+  .frame-stage[data-size="fold"] { --s: 1; }
+}
+
+.rail {
+  scrollbar-width: none;
+}
+
+.rail::-webkit-scrollbar {
+  display: none;
+}
+
+.rail-mask {
+  mask-image: linear-gradient(90deg, transparent 0, #000 28px, #000 calc(100% - 48px), transparent 100%);
+}
+
 :focus-visible {
   outline: 2px solid var(--h-brand);
   outline-offset: 2px;
+}
+
+::selection {
+  background: var(--h-brand-soft);
+  color: var(--h-brand-ink);
 }
 
 @media (prefers-reduced-motion: reduce) {

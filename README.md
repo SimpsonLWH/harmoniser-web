@@ -15,7 +15,7 @@ MongoDB Atlas in Frankfurt).
 
 | Part | Version |
 | --- | --- |
-| Next.js (App Router, no `src/`, Turbopack) | 16.3.8 — the patched release from the September 2026 security bulletin |
+| Next.js (App Router, no `src/`, Turbopack) | 16.3.8, the patched release from the September 2026 security bulletin |
 | React / React DOM | 19.2.8 |
 | TypeScript | strict, latest 5.x |
 | Tailwind CSS | 4.x |
@@ -59,7 +59,7 @@ run without it.
 
 | Variable | Required | Purpose |
 | --- | --- | --- |
-| `MONGODB_URI` | API + seed | Atlas connection string (Frankfurt, least-privilege user); must include the database name (`/harmoniser`) — a path-less URI silently targets MongoDB's default `test` database |
+| `MONGODB_URI` | API + seed | Atlas connection string (Frankfurt, least-privilege user); must include the database name (`/harmoniser`); a path-less URI silently targets MongoDB's default `test` database |
 | `APP_HMAC_SECRET` | API + seed | HMAC key for owner-token hashes and rate-limit IP buckets |
 | `ALLOWED_ORIGINS` | API | Exact browser origins allowed to mutate (comma-separated); native clients send no Origin |
 | `NEXT_PUBLIC_SITE_URL` | recommended | Public base URL for metadata, sitemap and robots |
@@ -68,15 +68,15 @@ run without it.
 
 ## API
 
-Two anonymous browser identities travel in the same `X-Harmoniser-Token` header (32–256 base64url
+Two anonymous browser identities travel in the same `X-Harmoniser-Token` header (32-256 base64url
 characters). Both are random 32-byte values made by the client, and the server stores only keyed
-HMAC-SHA-256 hashes — a token is never returned, logged or shown in public listings.
+HMAC-SHA-256 hashes. A token is never returned, logged or shown in public listings.
 
-- **ownerToken** — the publishing and deletion credential for `POST /api/capsules` and
+- **ownerToken**: the publishing and deletion credential for `POST /api/capsules` and
   `DELETE /api/capsules/{id}` (hashed with the `owner` label). Losing it means losing self-service
   delete. In the browser it lives at `harmoniser.ownerToken`; in the app the spec is in
   `docs/native-integration.md`.
-- **installId** — a separate persistent client id for install/report deduplication and the relay's
+- **installId**: a separate persistent client id for install/report deduplication and the relay's
   user side (`hashPrincipal`, the `principal` label). It never owns a capsule: losing it only
   resets deduplication and unpairs that browser's relay devices.
 
@@ -86,7 +86,7 @@ None of the three is an account or a verified identity.
 
 | Route | Method | Notes |
 | --- | --- | --- |
-| `/api/capsules` | `GET` | `q` (≤100 chars, `$text` search), `tag` (exact, lowercase), `limit` 1–50 (default 20, whole integer strings only), opaque `cursor`, optional `include=capsule`. Visible capsules only, deterministic `_id` order, `no-store` |
+| `/api/capsules` | `GET` | `q` (≤100 chars, `$text` search), `tag` (exact, lowercase), `limit` 1-50 (default 20, whole integer strings only), opaque `cursor`, optional `include=capsule`. Visible capsules only, deterministic `_id` order, `no-store` |
 | `/api/capsules` | `POST` | `{capsule, name?, description?, tags?}`; envelope ≤12 KiB, capsule ≤8 KiB UTF-8 canonical; full recursive validation; 201 with `{id, contentHash}`; duplicates → 409 with the existing public id |
 | `/api/capsules/[id]` | `GET` | 404 for hidden/deleted/unknown ids; `ETag: "<contentHash>"`; `If-None-Match` → 304 |
 | `/api/capsules/[id]` | `DELETE` | Owner token required, constant-time hash comparison; soft-deletes and removes the public payload |
@@ -114,7 +114,7 @@ GET /api/capsules?include=capsule&limit=20
 ```
 
 The default response is unchanged when `include` is absent; any other value is a 400
-`invalid_query`. The payload is the same public JSON the detail route serves — it never includes
+`invalid_query`. The payload is the same public JSON the detail route serves, and it never includes
 tokens or owner hashes, and the app still validates a capsule and asks for permissions before it
 runs anything.
 
@@ -177,7 +177,7 @@ what the collections hold today without writing.
 - CSP currently allows Next's inline bootstrap (`'unsafe-inline'` for scripts); moving to per-request
   nonces via middleware is the next hardening step.
 - The browser's ownerToken and installId live in `localStorage` and are therefore XSS-exposed by
-  nature; keep scripts minimal. Losing the ownerToken means losing self-service delete — the UI
+  nature; keep scripts minimal. Losing the ownerToken means losing self-service delete, and the UI
   says so. The one-token era is migrated by copying the old value into both, so existing
   ownership and relay pairings keep working.
 - No accounts and no Huawei identity in v0. The identity phase is feature-flagged

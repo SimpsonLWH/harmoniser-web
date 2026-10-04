@@ -41,7 +41,7 @@ interface Fixture {
 
 const FIXTURES: Fixture[] = [
   {
-    description: 'Example — three timers for pasta night: pasta, sauce and bread.',
+    description: 'Example: three timers for pasta night: pasta, sauce and bread.',
     tags: ['example', 'cooking', 'timer'],
     capsule: {
       schemaVersion: 0,
@@ -58,7 +58,7 @@ const FIXTURES: Fixture[] = [
     },
   },
   {
-    description: 'Example — an eight-glass water counter with one tap to add a glass.',
+    description: 'Example: an eight-glass water counter with one tap to add a glass.',
     tags: ['example', 'health', 'counter'],
     capsule: {
       schemaVersion: 0,
@@ -74,7 +74,7 @@ const FIXTURES: Fixture[] = [
     },
   },
   {
-    description: 'Example — a squat counter that counts from the phone’s motion sensor.',
+    description: 'Example: a squat counter that counts from the phone’s motion sensor.',
     tags: ['example', 'fitness', 'counter'],
     capsule: {
       schemaVersion: 0,
@@ -89,7 +89,7 @@ const FIXTURES: Fixture[] = [
     },
   },
   {
-    description: 'Example — a live bill split: total, people and tip, with the share updating as you type.',
+    description: 'Example: a live bill split: total, people and tip, with the share updating as you type.',
     tags: ['example', 'finance'],
     capsule: {
       schemaVersion: 1,
@@ -112,7 +112,7 @@ const FIXTURES: Fixture[] = [
     },
   },
   {
-    description: 'Example — a shopping list you can add to and undo, with a live item count.',
+    description: 'Example: a shopping list you can add to and undo, with a live item count.',
     tags: ['example', 'home', 'checklist'],
     capsule: {
       schemaVersion: 1,

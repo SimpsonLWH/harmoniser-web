@@ -62,7 +62,7 @@ export default function TermsPage() {
           <p className="mt-2">
             Every capsule has a report action with fixed reasons. When enough distinct reports are
             accepted, the capsule is hidden from the marketplace automatically while we review it.
-            We may also remove or hide any capsule, or restrict publishing, at any time — for
+            We may also remove or hide any capsule, or restrict publishing, at any time, for
             example to comply with the law, protect people, or keep the service working.
           </p>
         </section>

@@ -103,7 +103,7 @@ export default function CapsuleDetailPage() {
     if (result.ok) {
       setNotice(
         result.data.hidden
-          ? "Thanks — that report took the capsule out of the marketplace for review."
+          ? "Thanks. That report took the capsule out of the marketplace for review."
           : "Thanks, your report was recorded.",
       );
     } else {
@@ -319,7 +319,7 @@ export default function CapsuleDetailPage() {
       <section className="mt-4 rounded-card border border-line p-5">
         <h2 className="text-[16px] font-semibold">Report this capsule</h2>
         <p className="mt-2 text-[13px] text-text-2">
-          Reports are anonymous and use fixed reasons — no free text. Three accepted reports hide a
+          Reports are anonymous and use fixed reasons, with no free text. Three accepted reports hide a
           capsule while it is reviewed.
         </p>
         <div className="mt-3 flex flex-col gap-2 sm:flex-row">
@@ -353,7 +353,7 @@ export default function CapsuleDetailPage() {
         <h2 className="text-[16px] font-semibold text-text">Other devices</h2>
         <p className="mt-2">
           Phone and home-screen widgets are supported today. TV, watch and the ESP32 wrist
-          prototype are coming next —{" "}
+          prototype are coming next.{" "}
           <Link href="/device" className="text-brand hover:underline">
             see the pairing preview
           </Link>

@@ -1,5 +1,5 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import type { Metadata, Viewport } from "next";
+import { Geist_Mono, Manrope } from "next/font/google";
 
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
@@ -7,9 +7,10 @@ import { siteUrl } from "@/lib/env";
 
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const manrope = Manrope({
+  variable: "--font-manrope",
   subsets: ["latin"],
+  display: "swap",
 });
 
 const geistMono = Geist_Mono({
@@ -20,27 +21,36 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl()),
   title: {
-    default: "Harmoniser — tiny apps, made by asking",
+    default: "Harmoniser: tiny apps, made by asking",
     template: "%s · Harmoniser",
   },
   description:
-    "Describe a tiny app in one sentence and get it running natively on HarmonyOS. Each capsule is plain JSON, checked against a strict schema, and can only use the permissions you allow.",
+    "Describe what you need and Harmoniser builds a small app that runs on HarmonyOS. Capsules are plain JSON, checked against a strict schema, and they only use the permissions you allow.",
   applicationName: "Harmoniser",
   openGraph: {
-    title: "Harmoniser — tiny apps, made by asking",
+    title: "Harmoniser: tiny apps, made by asking",
     description:
       "Small single-purpose apps for HarmonyOS, generated from a sentence, validated against a strict schema and gated by your permissions.",
     type: "website",
+    images: [{ url: "/icon-1024.png", width: 1024, height: 1024, alt: "The Harmoniser app icon" }],
+  },
+  twitter: {
+    card: "summary",
+    title: "Harmoniser: tiny apps, made by asking",
+    description:
+      "Small single-purpose apps for HarmonyOS, generated from a sentence, validated against a strict schema and gated by your permissions.",
+    images: ["/icon-1024.png"],
   },
   robots: { index: true, follow: true },
 };
 
+export const viewport: Viewport = {
+  themeColor: "#dce5ff",
+};
+
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html
-      lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
-    >
+    <html lang="en" className={`${manrope.variable} ${geistMono.variable} h-full antialiased`}>
       <body className="flex min-h-full flex-col font-sans">
         <SiteHeader />
         <main className="flex flex-1 flex-col">{children}</main>

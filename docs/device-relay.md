@@ -28,13 +28,13 @@ device                          relay                              user (app, or
 
 | Caller | Header | What it is |
 | --- | --- | --- |
-| User: the app, or the `/pair` page | `X-Harmoniser-Token: <installId>` | The client's anonymous **install ID** (README, "API"): made by the client, 32–256 base64url characters, separate from the publishing ownerToken. Whoever claims a device owns it; the owner is stored as `hashPrincipal(installId)`, never the token. |
+| User: the app, or the `/pair` page | `X-Harmoniser-Token: <installId>` | The client's anonymous **install ID** (README, "API"): made by the client, 32-256 base64url characters, separate from the publishing ownerToken. Whoever claims a device owns it; the owner is stored as `hashPrincipal(installId)`, never the token. |
 | Device: the board, or a `/device` tab | `Authorization: Bearer <device token>` | Issued by the relay at registration, 43 base64url characters. Stored as an HMAC under `APP_HMAC_SECRET` with its own label, so it can never match a user-token hash. Registering again replaces it. |
 
 The two are not interchangeable: a device token in `X-Harmoniser-Token` owns nothing, and an
 install ID as a bearer token is a 401. `Authorization: Bearer` is used for devices because that is
 what the firmware sends; nothing on the user side reads it. The publishing ownerToken is not sent
-to the relay at all — relay ownership uses the install ID.
+to the relay at all; relay ownership uses the install ID.
 
 Errors use the site's envelope, `{"error":{"code","message"}}`. A device only looks at the status.
 
@@ -50,9 +50,9 @@ parsing. No `Content-Type` is required on these routes (the capsule routes do re
 {"hw":"3f9c2a7be01d4c55","kind":"wrist","fw":"8a14f2c"}
 ```
 
-`hw`: 1–64 characters of `A-Z a-z 0-9 _ -`, the device's own stable id. That covers 16 to 64 hex
+`hw`: 1-64 characters of `A-Z a-z 0-9 _ -`, the device's own stable id. That covers 16 to 64 hex
 digits (the board's hashed id) and the `web-` plus 32 hex digits a `/device` tab makes. It should be
-long and unguessable: whoever knows a device's `hw` can register it again, which unpairs it. `kind`: 1–32 characters (`wrist`, `web`). `fw`: 1–64 characters.
+long and unguessable: whoever knows a device's `hw` can register it again, which unpairs it. `kind`: 1-32 characters (`wrist`, `web`). `fw`: 1-64 characters.
 
 `201 {"id":"dev_4b1f…","token":"…","code":"brave-otter-lamp","pair_url":"https://<site>/pair?code=brave-otter-lamp"}`
 
@@ -133,7 +133,7 @@ Unknown fields are dropped. The device gets the cleaned capsule, not the bytes t
 
 ## Pairing
 
-- The code is three lower-case words of 3–5 letters joined by hyphens, from the EFF Short Wordlist #1
+- The code is three lower-case words of 3-5 letters joined by hyphens, from the EFF Short Wordlist #1
   (1,296 words; the one entry with a hyphen, `yo-yo`, is left out: 1,295 words, about 31 bits).
   Attribution: `NOTICE`, and a line on `/pair` and `/device`.
 - `claim` takes it as a person types it: any case, hyphens or spaces (`Brave Otter Lamp`).

@@ -147,7 +147,7 @@ export default function PublishPage() {
             Validate
           </button>
           {capsule !== null ? (
-            <span className="text-[13px] text-brand">Valid — {capsule.name}</span>
+            <span className="text-[13px] text-brand">Valid: {capsule.name}</span>
           ) : null}
         </div>
         {errors.length > 0 ? (
@@ -219,7 +219,7 @@ export default function PublishPage() {
           <section className="mt-4 rounded-card bg-surface p-5 shadow-[var(--h-shadow)]">
             <h2 className="text-[16px] font-semibold">3. Publish with your owner token</h2>
             <p className="mt-2 text-[13px] leading-6 text-text-2">
-              Publishing is anonymous. Your owner token is the only delete credential — keep a
+              Publishing is anonymous. Your owner token is the only delete credential, so keep a
               copy, or you will not be able to delete the capsule later. (Installs and reports use
               a separate anonymous install ID that never owns anything.)
             </p>
