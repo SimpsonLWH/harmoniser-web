@@ -2,13 +2,18 @@ import Link from "next/link";
 
 import { BrandIcon } from "@/components/frames/icons";
 
+/*
+ * The header stays to two destinations: the pitch deck and the marketplace.
+ * Publish, Devices, the source repository and the build link live on the
+ * landing page (hero and Run it yourself) and in the footer.
+ */
 const NAV = [
-  { href: "/capsules", label: "Marketplace" },
-  { href: "/publish", label: "Publish" },
-  { href: "/device", label: "Devices" },
-];
+  { href: "/pitch", label: "Slides", hard: true },
+  { href: "/capsules", label: "Marketplace", hard: false },
+] as const;
 
-const APP_REPO = "https://github.com/Akshaz7/capsules-harmonyos";
+const linkClass =
+  "rounded-full px-3 py-2 font-medium text-text-2 transition-colors hover:bg-surface-2 hover:text-text";
 
 export function SiteHeader() {
   return (
@@ -20,36 +25,18 @@ export function SiteHeader() {
         </Link>
 
         <nav className="ml-auto flex items-center gap-1 text-[14px]">
-          {NAV.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className="rounded-full px-3 py-2 font-medium text-text-2 transition-colors hover:bg-surface-2 hover:text-text"
-            >
-              {item.label}
-            </Link>
-          ))}
-          {/* The deck is a standalone static document, so this gets a full page load. */}
-          <a
-            href="/pitch"
-            className="rounded-full px-3 py-2 font-medium text-text-2 transition-colors hover:bg-surface-2 hover:text-text"
-          >
-            Pitch
-          </a>
-          <a
-            href={APP_REPO}
-            className="hidden rounded-full px-3 py-2 font-medium text-text-2 transition-colors hover:bg-surface-2 hover:text-text md:inline-flex"
-            rel="noreferrer"
-          >
-            GitHub
-          </a>
-          <a
-            href={APP_REPO}
-            className="ml-1 hidden min-h-10 items-center whitespace-nowrap rounded-full bg-brand px-4 text-[14px] font-semibold text-white transition-colors hover:bg-brand-deep sm:inline-flex"
-            rel="noreferrer"
-          >
-            Get the build
-          </a>
+          {NAV.map((item) =>
+            item.hard ? (
+              /* The deck is a standalone static document, so this gets a full page load. */
+              <a key={item.href} href={item.href} className={linkClass}>
+                {item.label}
+              </a>
+            ) : (
+              <Link key={item.href} href={item.href} className={linkClass}>
+                {item.label}
+              </Link>
+            ),
+          )}
         </nav>
       </div>
     </header>
