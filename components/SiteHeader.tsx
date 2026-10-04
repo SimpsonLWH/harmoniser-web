@@ -9,27 +9,31 @@ const NAV = [
 ];
 
 const NAV_ITEM =
-  "inline-flex min-h-tap shrink-0 items-center rounded-btn px-2.5 text-label sm:px-3 font-semibold text-text-2 transition-colors hover:bg-chip hover:text-chip-text";
+  "inline-flex min-h-tap shrink-0 items-center px-2.5 text-[15px] font-medium text-text-2 transition-colors hover:text-text";
 
 export function SiteHeader() {
   return (
-    <header className="sticky top-0 z-20 border-b border-line-2 bg-[var(--header-bg)] backdrop-blur-[16px]">
-      <div className="page flex flex-wrap items-center gap-x-3 py-1.5">
-        <Link href="/" className="-ml-1 inline-flex min-h-tap items-center gap-2 rounded-btn px-1 text-text">
+    <header className="sticky top-0 z-50 border-b border-line bg-[var(--header-bg)] backdrop-blur-md">
+      <div className="page flex flex-wrap items-center gap-x-4 py-2.5">
+        <Link href="/" className="inline-flex min-h-tap items-center gap-2.5 text-text">
           <LogoMark />
-          <span className="text-[19px] font-bold tracking-[-0.2px]">Harmoniser</span>
+          <span className="font-display text-[19px] font-bold tracking-[-0.2px]">Harmoniser</span>
         </Link>
-        {/* Under 600px the nav takes its own row and scrolls inside itself if it ever overflows. */}
-        <nav className="-mx-1 flex w-full items-center gap-0 overflow-x-auto pb-1 sm:mx-0 sm:ml-auto sm:w-auto sm:gap-1 sm:overflow-visible sm:pb-0">
+        <nav className="order-3 flex w-full items-center gap-1 overflow-x-auto sm:order-none sm:mx-auto sm:w-auto">
           {NAV.map((item) => (
             <Link key={item.href} href={item.href} className={NAV_ITEM}>
               {item.label}
             </Link>
           ))}
-          <a href="https://github.com/Akshaz7/capsules-harmonyos" className={NAV_ITEM} rel="noreferrer">
+        </nav>
+        <div className="ml-auto flex items-center gap-2 sm:ml-0">
+          <a href="https://github.com/Akshaz7/capsules-harmonyos" className="btn btn-secondary" rel="noreferrer">
             GitHub
           </a>
-        </nav>
+          <Link href="/capsules" className="btn btn-primary hidden sm:inline-flex">
+            Browse capsules
+          </Link>
+        </div>
       </div>
     </header>
   );
