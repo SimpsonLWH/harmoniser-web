@@ -546,6 +546,7 @@
         if (e.key === 'p' || e.key === 'P') { e.preventDefault(); window.print(); }
         if (e.key === 'Escape') location.href = location.pathname + '#1';
       });
+      fontsReady().then(function () { safe(function () { aiWires($('#s10')); }); });
       return;
     }
 
