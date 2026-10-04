@@ -21,14 +21,14 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl()),
   title: {
-    default: "Harmoniser — tiny apps, made by asking",
+    default: "Harmoniser — tiny apps you don't need to download",
     template: "%s · Harmoniser",
   },
   description:
     "Describe a tiny app in one sentence and get it running natively on HarmonyOS. Each capsule is plain JSON, checked against a strict schema, and can only use the permissions you allow.",
   applicationName: "Harmoniser",
   openGraph: {
-    title: "Harmoniser — tiny apps, made by asking",
+    title: "Harmoniser — tiny apps you don't need to download",
     description:
       "Small single-purpose apps for HarmonyOS, generated from a sentence, validated against a strict schema and gated by your permissions.",
     type: "website",

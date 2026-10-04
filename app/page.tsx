@@ -53,7 +53,7 @@ export default function Home() {
       <section className="flex flex-col items-center pb-10 pt-8 text-center sm:pt-14">
         <p className="chip">HarmonyOS · HackYeah 2026</p>
         <h1 className="mt-4 text-[34px] font-extrabold leading-[1.1] tracking-[-0.8px] sm:text-[48px] sm:tracking-[-1.2px]">
-          Tiny apps, made by asking.
+          Tiny apps you don&apos;t need to download.
         </h1>
         <p className="lede mt-4 sm:text-[17px]">
           Describe what you need in one sentence and Harmoniser builds a capsule: a small,
