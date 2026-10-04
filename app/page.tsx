@@ -35,7 +35,7 @@ export default function Home() {
               HackYeah 2026 &middot; HarmonyOS
             </p>
             <h1 className="mt-6 text-4xl font-extrabold leading-[1.08] tracking-tight sm:text-5xl lg:text-6xl">
-              <WordSpring text="Tiny apps, made by asking." />
+              <WordSpring text="Tiny apps you don't need to download." />
             </h1>
             <p className="mt-6 max-w-[42ch] text-[17px] leading-8 text-text-2">
               Describe what you need. Harmoniser builds a small app that runs on HarmonyOS and only
