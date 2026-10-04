@@ -1,7 +1,14 @@
-import Image from "next/image";
 import Link from "next/link";
 
-import { CapsuleIcon, PhoneIcon, ShieldIcon } from "@/components/Icons";
+import { AppFrame } from "@/components/AppFrame";
+import {
+  CapsuleIcon,
+  ChecklistIcon,
+  CompassIcon,
+  PhoneIcon,
+  ShieldIcon,
+} from "@/components/Icons";
+import { PackingCapsule, PomodoroCapsule, SplitCapsule } from "@/components/SampleCapsules";
 
 const STEPS = [
   {
@@ -33,195 +40,117 @@ const DIFFERENTIATORS = [
   },
 ];
 
-const STEP_ICONS = [<CapsuleIcon key="ask" size={28} />, <ShieldIcon key="approve" size={28} />, <PhoneIcon key="use" size={28} />];
+const DIFFERENTIATOR_ICONS = [<CapsuleIcon key="capsule" />, <PhoneIcon key="phone" />, <ShieldIcon key="shield" />];
+
+const PLACES = [
+  { title: "Phone:", body: "the tested target, API 20+." },
+  { title: "Home screen:", body: "2×2 and 2×4 widgets for capsules the router allows." },
+];
 
 export default function Home() {
   return (
-    <>
-      {/* Hero */}
-      <section className="relative overflow-hidden pb-16 pt-10 lg:pb-24 lg:pt-16">
-        <div className="page grid items-center gap-12 lg:grid-cols-[1.05fr_1fr]">
-          <div>
-            <p className="eyebrow">HarmonyOS · HackYeah 2026</p>
-            <h1 className="display-1 mt-4">
-              Tiny apps,
-              <br />
-              made by <span className="highlight">asking</span>.
-            </h1>
-            <p className="lede mt-6">
-              Describe what you need in one sentence and Harmoniser builds a capsule: a small,
-              single-purpose app that runs natively on HarmonyOS. Capsules are plain JSON, checked
-              against a strict schema, and can only use the device features you allow.
-            </p>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <Link href="/capsules" className="btn btn-primary btn-lg">
-                Browse the marketplace
-              </Link>
-              <a href="https://github.com/Akshaz7/capsules-harmonyos" className="btn btn-secondary btn-lg" rel="noreferrer">
-                Get the build
-              </a>
-            </div>
-            <p className="mt-4 text-[14px] text-text-2">
-              Experimental research build, tested on the HackYeah API 24 emulator.
-            </p>
-          </div>
-          <div className="relative flex justify-center">
-            <span aria-hidden="true" className="absolute left-[calc(50%-230px)] top-16 hidden h-40 w-32 -rotate-6 rounded-card border border-line bg-surface/80 shadow-[var(--shadow-card)] sm:block" />
-            <span aria-hidden="true" className="absolute right-[calc(50%-230px)] top-28 hidden h-40 w-32 rotate-6 rounded-card border border-line bg-surface/80 shadow-[var(--shadow-card)] sm:block" />
-            <div className="relative w-[270px] rounded-[44px] border-[10px] border-text bg-text shadow-[var(--shadow-raised)]">
-              <Image
-                src="/shots/home.jpg"
-                alt="Harmoniser home screen with a request box, example chips and a grid of saved capsules"
-                width={947}
-                height={2048}
-                priority
-                className="h-auto w-full rounded-[34px]"
-              />
-            </div>
-          </div>
+    <div className="page">
+      <section className="flex flex-col items-center pb-10 pt-8 text-center sm:pt-14">
+        <p className="chip">HarmonyOS · HackYeah 2026</p>
+        <h1 className="mt-4 text-[34px] font-extrabold leading-[1.1] tracking-[-0.8px] sm:text-[48px] sm:tracking-[-1.2px]">
+          Tiny apps, made by asking.
+        </h1>
+        <p className="lede mt-4 sm:text-[17px]">
+          Describe what you need in one sentence and Harmoniser builds a capsule: a small,
+          single-purpose app that runs natively on HarmonyOS. Capsules are plain JSON, checked
+          against a strict schema, and can only use the device features you allow.
+        </p>
+        <div className="mt-7 flex w-full flex-col justify-center gap-2.5 sm:w-auto sm:flex-row">
+          <Link href="/capsules" className="btn btn-primary btn-lg">
+            Browse the marketplace
+          </Link>
+          <a href="https://github.com/Akshaz7/capsules-harmonyos" className="btn btn-secondary btn-lg text-[17px] font-bold" rel="noreferrer">
+            Get the build
+          </a>
+        </div>
+        <p className="caption mt-4">Experimental research build, tested on the HackYeah API 24 emulator.</p>
+      </section>
+
+      {/* Three capsules drawn as the app draws them. */}
+      <section className="-mx-4 overflow-x-auto px-4 pb-14 pt-2 md:overflow-visible">
+        <div className="mx-auto flex w-max gap-5 md:w-auto md:justify-center">
+          <PomodoroCapsule className="h-[700px] w-[340px] shrink-0" />
+          <PackingCapsule className="h-[700px] w-[340px] shrink-0" />
+          <SplitCapsule className="h-[700px] w-[340px] shrink-0" />
         </div>
       </section>
 
-      {/* Numbered list, like LUME's "The problem" */}
-      <section aria-labelledby="why" className="border-t border-line">
-        <div className="page grid gap-12 py-20 lg:grid-cols-2 lg:py-28">
-          <div>
-            <p className="eyebrow">Why Harmoniser</p>
-            <h2 id="why" className="display-2 mt-4">
-              What makes it different
-            </h2>
-          </div>
-          <ol className="border-t border-line">
-            {DIFFERENTIATORS.map((item, index) => (
-              <li key={item.title} className="flex gap-6 border-b border-line py-6">
-                <span className="w-6 shrink-0 pt-0.5 font-display text-[15px] font-bold text-text-2 tabular-nums">
-                  0{index + 1}
-                </span>
-                <div>
-                  <h3 className="font-display text-[18px] font-bold">{item.title}</h3>
-                  <p className="mt-1.5 text-[16px] leading-7 text-text-2">{item.body}</p>
-                </div>
+      <div className="mx-auto flex max-w-[760px] flex-col gap-6 pt-6">
+        <AppFrame icon={<ChecklistIcon />} name="How it works" nameAs="h2">
+          {STEPS.map((step, index) => (
+            <div key={step.title} className="card flex gap-3.5">
+              <span className="grid size-8 shrink-0 place-items-center rounded-full bg-blue text-[15px] font-extrabold text-white tabular-nums">
+                {index + 1}
+              </span>
+              <div className="flex flex-col gap-1">
+                <h3 className="title">{step.title}</h3>
+                <p className="text-[15px] leading-6 text-text-2">{step.body}</p>
+              </div>
+            </div>
+          ))}
+        </AppFrame>
+
+        <AppFrame icon={<ShieldIcon />} name="What makes it different" nameAs="h2">
+          {DIFFERENTIATORS.map((item, index) => (
+            <div key={item.title} className="card flex gap-3.5">
+              <span className="icon-tile bg-surface">{DIFFERENTIATOR_ICONS[index]}</span>
+              <div className="flex flex-col gap-1">
+                <h3 className="title">{item.title}</h3>
+                <p className="text-[15px] leading-6 text-text-2">{item.body}</p>
+              </div>
+            </div>
+          ))}
+        </AppFrame>
+
+        <AppFrame
+          icon={<CapsuleIcon />}
+          name="The capsule marketplace"
+          nameAs="h2"
+          footer={
+            <>
+              <Link href="/capsules" className="btn btn-primary flex-1">
+                Browse capsules
+              </Link>
+              <Link href="/publish" className="btn btn-secondary flex-1">
+                Publish a capsule
+              </Link>
+            </>
+          }
+        >
+          <p className="text-[16px] leading-7 text-text-2">
+            Share a capsule you made, or install one someone else published. Publishing is
+            anonymous: your owner token is the only delete credential, and the marketplace stores
+            just its hash. Every download is a JSON file that goes through the app&apos;s own
+            validator and permission sheet before anything runs.
+          </p>
+        </AppFrame>
+
+        <AppFrame icon={<CompassIcon />} name="Where capsules run today" nameAs="h2">
+          <ul className="flex flex-col rounded-[20px] bg-card">
+            {PLACES.map((place, index) => (
+              <li key={place.title} className={`px-4 py-3.5 text-[15px] leading-6 text-text-2 ${index > 0 ? "card-row" : ""}`}>
+                <strong className="font-bold text-text">{place.title}</strong> {place.body}
               </li>
             ))}
-          </ol>
-        </div>
-      </section>
-
-      {/* Three steps */}
-      <section aria-labelledby="how" className="section-dots border-t border-line">
-        <div className="page py-20 text-center lg:py-28">
-          <p className="eyebrow">How it works</p>
-          <h2 id="how" className="display-2 mx-auto mt-4 max-w-3xl">
-            {STEPS.map((step) => step.title).join(". ")}.
-          </h2>
-          <div className="mt-14 grid gap-10 md:grid-cols-3">
-            {STEPS.map((step, index) => (
-              <div key={step.title} className="flex flex-col items-center">
-                <div className="flex h-32 w-full max-w-[220px] items-center justify-center rounded-card border border-line bg-surface shadow-[var(--shadow-card)]">
-                  <span className="icon-tile size-14 rounded-2xl">{STEP_ICONS[index]}</span>
-                </div>
-                <h3 className="mt-6 flex items-center gap-3 font-display text-[18px] font-bold">
-                  <span className="grid size-7 place-items-center rounded-full bg-tint text-[13px] text-blue tabular-nums">
-                    {index + 1}
-                  </span>
-                  {step.title}
-                </h3>
-                <p className="mt-3 max-w-sm text-[16px] leading-7 text-text-2">{step.body}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Marketplace feature, like LUME's role panel */}
-      <section className="border-t border-line">
-        <div className="page py-20 lg:py-28">
-          <div className="grid items-center gap-10 overflow-hidden rounded-card border border-line bg-surface p-6 shadow-[var(--shadow-card)] md:grid-cols-[1fr_1.2fr] md:p-10">
-            <div className="flex justify-center rounded-card bg-bg py-8">
-              <Image
-                src="/shots/detail.jpg"
-                alt="A capsule detail screen showing blocked components that need a denied permission"
-                width={947}
-                height={2048}
-                className="h-auto w-full max-w-[220px] rounded-[28px] border border-line shadow-[var(--shadow-raised)]"
-              />
-            </div>
-            <div>
-              <h2 className="display-2">The capsule marketplace</h2>
-              <p className="mt-4 text-[17px] leading-7 text-text-2">
-                Share a capsule you made, or install one someone else published. Publishing is
-                anonymous: your owner token is the only delete credential, and the marketplace
-                stores just its hash. Every download is a JSON file that goes through the app&apos;s
-                own validator and permission sheet before anything runs.
-              </p>
-              <div className="mt-6 flex flex-wrap gap-3">
-                <Link href="/capsules" className="btn btn-primary btn-lg">
-                  Browse capsules
-                </Link>
-                <Link href="/publish" className="btn btn-secondary btn-lg">
-                  Publish a capsule
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Bento, like LUME's features grid */}
-      <section className="border-t border-line">
-        <div className="page py-20 lg:py-28">
-          <p className="eyebrow">Devices</p>
-          <h2 className="display-2 mt-4">Where capsules run today</h2>
-          <div className="mt-10 grid gap-4 md:grid-cols-3">
-            <div className="card md:col-span-2">
-              <h3 className="display-3">Phone</h3>
-              <p className="mt-2 text-[16px] leading-7 text-text-2">the tested target, API 20+.</p>
-              <span className="chip mt-5"><PhoneIcon size={14} /> HarmonyOS</span>
-            </div>
-            <div className="card">
-              <h3 className="display-3">Home screen</h3>
-              <p className="mt-2 text-[16px] leading-7 text-text-2">2×2 and 2×4 widgets for capsules the router allows.</p>
-            </div>
-            <div className="card">
-              <h3 className="display-3">TV and watch</h3>
-              <p className="mt-2 text-[16px] leading-7 text-text-2">
-                coming next —{" "}
-                <Link href="/device" className="link">
-                  device pairing preview
-                </Link>
-                .
-              </p>
-            </div>
-            <div className="card md:col-span-2">
-              <h3 className="display-3">ESP32 wrist prototype</h3>
-              <p className="mt-2 text-[16px] leading-7 text-text-2">
-                a lab stand-in, not a Huawei device; the phone gatekeeper still decides what may be sent.
-              </p>
-              <span className="chip chip-orange mt-5"><ShieldIcon size={14} /> Permissions are the API</span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Blue band, like LUME's "Pick your seat" */}
-      <section className="section-dots bg-blue [--dot:rgba(255,255,255,0.14)]">
-        <div className="page grid items-center gap-8 py-20 lg:grid-cols-[1.4fr_1fr] lg:py-24">
-          <div>
-            <h2 className="display-2 !text-white">Tiny apps, made by asking.</h2>
-            <p className="mt-4 max-w-xl text-[17px] leading-7 text-white/85">
-              Experimental research build, tested on the HackYeah API 24 emulator.
-            </p>
-          </div>
-          <div className="flex flex-wrap gap-3 lg:justify-end">
-            <Link href="/capsules" className="btn btn-white btn-lg">
-              Browse the marketplace
-            </Link>
-            <Link href="/publish" className="btn btn-outline-white btn-lg">
-              Publish a capsule
-            </Link>
-          </div>
-        </div>
-      </section>
-    </>
+            <li className="card-row px-4 py-3.5 text-[15px] leading-6 text-text-2">
+              <strong className="font-bold text-text">TV and watch:</strong> coming next —{" "}
+              <Link href="/device" className="link">
+                device pairing preview
+              </Link>
+              .
+            </li>
+            <li className="card-row px-4 py-3.5 text-[15px] leading-6 text-text-2">
+              <strong className="font-bold text-text">ESP32 wrist prototype:</strong> a lab
+              stand-in, not a Huawei device; the phone gatekeeper still decides what may be sent.
+            </li>
+          </ul>
+        </AppFrame>
+      </div>
+    </div>
   );
 }

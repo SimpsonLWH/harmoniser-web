@@ -19,7 +19,7 @@ import type { DeviceSummary, StateAnswer } from "@/lib/devices/relay";
 const OFFLINE_AFTER_MS = 15_000;
 const PRIMARY = "btn btn-primary";
 const QUIET = "btn btn-secondary";
-const CARD = "card mt-5";
+const CARD = "frame mt-5 p-4 sm:p-5";
 
 function deviceName(device: { id: string; kind: string }): string {
   const what = device.kind === "wrist" ? "Wrist companion" : device.kind === "web" ? "Browser tab" : device.kind;

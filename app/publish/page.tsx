@@ -90,7 +90,7 @@ export default function PublishPage() {
         before anything is published, and you choose exactly what becomes public.
       </p>
 
-      <section className="card mt-7">
+      <section className="frame mt-7 p-4 sm:p-5">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <h2 className="text-body font-bold">1. Capsule JSON</h2>
           <div className="flex flex-wrap gap-2">
@@ -163,7 +163,7 @@ export default function PublishPage() {
 
       {capsule !== null ? (
         <>
-          <section className="card mt-3.5">
+          <section className="frame mt-3.5 p-4 sm:p-5">
             <h2 className="text-body font-bold">2. What becomes public</h2>
             <p className="mt-2 text-caption leading-5 text-text-2">
               This is exactly what anyone can see. Capsule contents are public data: publish only
@@ -216,7 +216,7 @@ export default function PublishPage() {
             </details>
           </section>
 
-          <section className="card mt-3.5">
+          <section className="frame mt-3.5 p-4 sm:p-5">
             <h2 className="text-body font-bold">3. Publish with your owner token</h2>
             <p className="mt-2 text-caption leading-5 text-text-2">
               Publishing is anonymous. Your owner token is the only delete credential — keep a

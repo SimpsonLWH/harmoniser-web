@@ -4,7 +4,6 @@
 /* Tailwind names for the tokens in tokens.css. Values live there, never here. */
 @theme inline {
   --color-bg: var(--bg);
-  --color-bg-2: var(--bg-2);
   --color-surface: var(--surface);
   --color-card: var(--card);
   --color-text: var(--text);
@@ -13,7 +12,6 @@
   --color-blue: var(--blue);
   --color-blue-hover: var(--blue-hover);
   --color-on-blue: var(--on-blue);
-  --color-glow: var(--glow);
   --color-orange: var(--orange);
   --color-orange-icon: var(--orange-icon);
   --color-orange-text: var(--orange-text);
@@ -23,6 +21,10 @@
   --color-chip-text: var(--chip-text);
   --color-line: var(--line);
   --color-line-2: var(--line-2);
+  --color-track: var(--track);
+  --color-input-border: var(--input-border);
+  --color-soft-button: var(--soft-button);
+  --color-orange-tint-soft: var(--orange-tint-soft);
   --color-device: var(--device-bg);
   --color-device-text: var(--device-text);
   --color-device-text-2: var(--device-text-2);
@@ -30,7 +32,6 @@
   --color-device-alert: var(--device-alert);
 
   --font-sans: var(--font);
-  --font-display: var(--font-display);
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
 
   --text-badge: var(--fs-badge);
@@ -54,23 +55,27 @@
   --default-transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
 }
 
+/* App breakpoints: 600 (foldable), 960, 1280. */
+@theme {
+  --breakpoint-sm: 600px;
+  --breakpoint-md: 960px;
+  --breakpoint-lg: 1280px;
+  --breakpoint-xl: 1440px;
+}
+
 html {
   -webkit-text-size-adjust: 100%;
 }
 
 body {
   background-color: var(--bg);
+  background-image: var(--top-glow);
+  background-repeat: no-repeat;
   color: var(--text);
   font-family: var(--font);
-  font-size: 16px;
-  font-weight: 400;
+  font-size: 15px;
+  font-weight: 500;
   overflow-x: clip;
-}
-
-h1,
-h2,
-h3 {
-  font-family: var(--font-display);
 }
 
 /* In the base layer so component classes (the .field ring) can override it. */
@@ -82,100 +87,69 @@ h3 {
 }
 
 ::placeholder {
-  color: #9aa3b5;
+  color: var(--text-2);
   opacity: 1;
 }
 
+/* Every class below is a copy of an app component (Capsules entry/src/main/ets/components). */
 @layer components {
   .page {
     width: 100%;
-    max-width: 80rem;
+    max-width: 1120px;
     margin-inline: auto;
-    padding-inline: 1rem;
+    padding-inline: 16px;
   }
-  @media (min-width: 640px) {
-    .page { padding-inline: 1.5rem; }
+  @media (min-width: 600px) {
+    .page { padding-inline: 24px; }
   }
-  @media (min-width: 1024px) {
-    .page { padding-inline: 2rem; }
-  }
-
-  .display-1 {
-    font-family: var(--font-display);
-    font-size: clamp(2.75rem, 6vw, 4.75rem);
-    font-weight: 700;
-    letter-spacing: -0.03em;
-    line-height: 1.02;
-    color: var(--text);
-  }
-  .display-2,
-  .page-title {
-    font-family: var(--font-display);
-    font-size: clamp(2rem, 4vw, 3rem);
-    font-weight: 700;
-    letter-spacing: -0.02em;
-    line-height: 1.08;
-    color: var(--text);
-  }
-  .display-3,
-  .section-title {
-    font-family: var(--font-display);
-    font-size: 1.375rem;
-    font-weight: 700;
-    letter-spacing: -0.01em;
-    line-height: 1.25;
-    color: var(--text);
+  @media (min-width: 960px) {
+    .page { padding-inline: 32px; }
   }
 
-  .eyebrow {
-    display: inline-block;
-    color: var(--text-2);
-    font-size: 0.75rem;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
+  /* Type roles (theme/Tokens.ets Type). */
+  .page-title { font-size: 28px; font-weight: 800; letter-spacing: -0.5px; line-height: 1.15; color: var(--text); }
+  @media (min-width: 600px) {
+    .page-title { font-size: 34px; }
   }
-  .eyebrow::before {
-    content: "";
-    display: inline-block;
-    width: 14px;
-    height: 2px;
-    margin-right: 0.5rem;
-    border-radius: 999px;
-    background: var(--blue);
-    vertical-align: 0.28em;
+  .question { font-size: 24px; font-weight: 800; letter-spacing: -0.3px; line-height: 1.2; color: var(--text); }
+  .section-title { font-size: 22px; font-weight: 800; letter-spacing: -0.3px; line-height: 1.25; color: var(--text); }
+  .title { font-size: 17px; font-weight: 700; line-height: 22px; color: var(--text); }
+  .lede { max-width: 60ch; font-size: 16px; font-weight: 500; line-height: 1.55; color: var(--text-2); }
+  .caption { font-size: 13px; font-weight: 500; line-height: 18px; color: var(--text-2); }
+
+  /* CapsuleFrame: floating white card, radius 28, blue 12% border, frame shadow. */
+  .frame {
+    overflow: hidden;
+    border: 1px solid var(--frame-border);
+    border-radius: var(--r-frame);
+    background: var(--frame-bg);
+    box-shadow: var(--shadow-frame);
+  }
+  .frame-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-bottom: 1px solid var(--line-2);
+    padding: 12px 10px 12px 14px;
+  }
+  .frame-body { display: flex; flex-direction: column; gap: 14px; padding: 16px; }
+  .frame-foot {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    border-top: 1px solid var(--line-2);
+    padding: 10px 12px 12px;
   }
 
-  .highlight {
-    background: linear-gradient(transparent 18%, var(--glow) 18%, var(--glow) 88%, transparent 88%);
-    padding-inline: 0.04em;
-    -webkit-box-decoration-break: clone;
-    box-decoration-break: clone;
-  }
+  /* Card: card fill, radius 18 (20 large), no border, no shadow. */
+  .card { border-radius: var(--r-card-large); background: var(--card); padding: 16px; }
+  .card-row { border-top: 1px solid var(--line); }
 
-  .lede {
-    max-width: 38rem;
-    font-size: 1.125rem;
-    line-height: 1.6;
-    color: var(--text-2);
-  }
+  /* HeroCard: blue fill, radius 22, white content. */
+  .hero-card { border-radius: var(--r-hero-card); background: var(--blue); padding: 18px 20px 16px; color: var(--on-blue); }
 
-  .section-dots {
-    background-image: radial-gradient(var(--dot) 1px, transparent 1px);
-    background-size: 22px 22px;
-  }
-
-  .card {
-    border: 1px solid var(--line);
-    border-radius: var(--r-card);
-    background: var(--surface);
-    padding: 20px;
-    box-shadow: var(--shadow-card);
-  }
-  @media (min-width: 640px) {
-    .card { padding: 24px; }
-  }
-
+  /* Buttons (components/Buttons.ets). */
   .btn {
     display: inline-flex;
     min-height: var(--tap);
@@ -184,106 +158,94 @@ h3 {
     justify-content: center;
     gap: 8px;
     border: 1px solid transparent;
-    border-radius: 999px;
-    padding: 0 20px;
-    font-family: var(--font);
-    font-size: 14px;
+    border-radius: var(--r-btn);
+    padding: 0 16px;
+    font-size: 15px;
     font-weight: 600;
     line-height: 1.2;
     text-align: center;
     white-space: nowrap;
     cursor: pointer;
-    transition-property: background-color, border-color, color, transform, box-shadow;
+    transition-property: background-color, border-color, color, transform;
     transition-duration: 160ms;
     transition-timing-function: ease-out;
   }
-  .btn:active:not(:disabled) { transform: scale(0.97); }
+  .btn:active:not(:disabled) { transform: scale(0.98); }
   .btn:disabled { cursor: default; opacity: 0.55; }
-  .btn-lg { min-height: 48px; padding: 0 24px; font-size: 16px; }
-  .btn-primary { background: var(--blue); color: var(--on-blue); box-shadow: var(--sheen); }
+  /* PrimaryButton: blue, white 17/700, 54 tall radius 18 (48 tall radius 16 when small). */
+  .btn-primary { min-height: 48px; padding: 0 18px; background: var(--blue); color: var(--on-blue); font-size: 17px; font-weight: 700; }
   .btn-primary:hover:not(:disabled) { background: var(--blue-hover); }
-  .btn-secondary { border-color: var(--line); background: var(--surface); color: var(--text); }
-  .btn-secondary:hover:not(:disabled) { border-color: #cfd6e3; background: var(--bg-2); }
-  .btn-ghost { background: transparent; color: var(--chip-text); }
+  .btn-lg { min-height: 54px; border-radius: var(--r-btn-large); padding: 0 22px; }
+  /* SecondaryButton: surface, 1px input border, 15/600, 46 tall. */
+  .btn-secondary { min-height: 46px; border-color: var(--input-border); background: var(--surface); color: var(--text); }
+  .btn-secondary:hover:not(:disabled) { background: var(--card); }
+  /* GhostButton: no fill, chip text. */
+  .btn-ghost { background: transparent; color: var(--chip-text); padding: 0 12px; }
   .btn-ghost:hover:not(:disabled) { background: var(--chip); }
-  .btn-warn { background: var(--orange-tint); color: var(--orange-text); }
-  .btn-white { background: #ffffff; color: var(--blue); }
-  .btn-white:hover { background: #f1f4ff; }
-  .btn-outline-white { border-color: rgba(255, 255, 255, 0.5); color: #ffffff; }
-  .btn-outline-white:hover { background: rgba(255, 255, 255, 0.12); }
+  /* SoftButton: orange tint, orange text 17/700. */
+  .btn-warn { min-height: 48px; border-radius: var(--r-btn-large); background: var(--orange-tint); color: var(--orange-text); font-size: 17px; font-weight: 700; }
+  /* IconButton: 44 circle; soft = #F1F3F8, otherwise surface + input border. */
+  .btn-icon { width: var(--tap); height: var(--tap); padding: 0; border-color: var(--input-border); border-radius: 999px; background: var(--surface); color: var(--text); }
+  .btn-icon-soft { border-color: transparent; background: var(--soft-button); }
+  /* "Change it…" style pill. */
+  .pill { display: inline-flex; min-height: var(--tap); align-items: center; gap: 8px; border: 1px solid var(--input-border); border-radius: var(--r-pill); background: var(--card); padding: 0 16px; color: var(--text-2); font-size: 15px; font-weight: 500; }
 
+  /* Inputs: 44 tall, radius 12, input border, white. */
   .field {
     display: block;
     width: 100%;
-    min-height: 48px;
-    border: 1px solid var(--line);
+    min-height: var(--tap);
+    border: 1px solid var(--input-border);
     border-radius: var(--r-input);
     background: var(--surface);
-    padding: 10px 16px;
+    padding: 10px 14px;
     color: var(--text);
     font-size: 16px;
+    font-weight: 600;
     transition: box-shadow 160ms ease-out, border-color 160ms ease-out;
   }
-  .field:focus-visible {
-    outline: none;
-    border-color: var(--blue);
-    box-shadow: var(--focus-ring);
-  }
+  .field:focus-visible { outline: none; border-color: var(--blue); box-shadow: var(--focus-ring); }
 
+  /* Chip: chip fill, chip text 12/600, radius 10. */
   .chip {
     display: inline-flex;
     align-items: center;
-    gap: 4px;
-    border: 1px solid transparent;
-    border-radius: 999px;
+    gap: 5px;
+    border-radius: var(--r-chip);
     background: var(--chip);
-    padding: 2px 10px;
+    padding: 2px 8px;
     color: var(--chip-text);
     font-size: 12px;
     font-weight: 600;
-    line-height: 18px;
+    line-height: 16px;
     white-space: nowrap;
   }
   .chip-orange { background: var(--orange-tint); color: var(--orange-text); }
-  .chip-plain { border-color: var(--line); background: var(--surface); color: var(--text-2); }
+  .chip-plain { background: var(--soft-button); color: var(--text-2); }
 
-  .icon-tile {
-    display: grid;
-    width: 40px;
-    height: 40px;
-    flex-shrink: 0;
-    place-items: center;
-    border-radius: 12px;
-    background: var(--tint);
-    color: var(--blue);
-  }
+  /* Segmented control (Pomodoro board). */
+  .segmented { display: inline-flex; gap: 2px; border-radius: var(--r-chip-large); background: var(--track); padding: 3px; }
+  .segment { min-height: var(--tap); flex-shrink: 0; border-radius: 11px; padding: 0 16px; color: var(--text-2); font-size: 15px; font-weight: 600; white-space: nowrap; }
+  .segment[aria-pressed="true"] { background: var(--surface); color: var(--text); box-shadow: 0 1px 3px rgba(27, 34, 54, 0.12); }
 
-  .status-icon {
-    display: grid;
-    width: 56px;
-    height: 56px;
-    place-items: center;
-    border-radius: 999px;
-    background: var(--tint);
-    color: var(--blue);
-  }
+  /* IconTile: 42, radius 13, tint, blue icon. */
+  .icon-tile { display: grid; width: 42px; height: 42px; flex-shrink: 0; place-items: center; border-radius: var(--r-tile); background: var(--tint); color: var(--blue); }
 
-  .notice {
-    border: 1px solid var(--line);
-    border-radius: var(--r-card);
-    background: var(--tint);
-    padding: 14px 16px;
-    color: var(--text);
-    font-size: var(--fs-label);
-    line-height: 1.5;
-  }
-  .notice-warn { border-color: transparent; background: var(--orange-tint); color: var(--orange-text); }
+  /* EmptyState circle. */
+  .status-icon { display: grid; width: 56px; height: 56px; place-items: center; border-radius: 28px; background: var(--tint); color: var(--blue); }
+
+  /* Progress bar: 8 tall, track, blue fill. */
+  .progress { height: 8px; overflow: hidden; border-radius: 4px; background: var(--track); }
+  .progress > span { display: block; height: 8px; border-radius: 4px; background: var(--blue); }
+
+  .notice { border-radius: var(--r-card); background: var(--tint); padding: 14px 16px; color: var(--text); font-size: 15px; line-height: 1.5; }
+  /* ErrorCard: orange tint soft, orange text. */
+  .notice-warn { background: var(--orange-tint-soft); color: var(--orange-text); }
 
   .code-block {
     overflow: auto;
-    border: 1px solid var(--line);
-    border-radius: 12px;
-    background: var(--bg-2);
+    border-radius: var(--r-input);
+    background: var(--card);
     padding: 16px;
     font-family: var(--font-geist-mono), ui-monospace, monospace;
     font-size: 12px;
@@ -291,15 +253,8 @@ h3 {
     line-height: 1.6;
   }
 
-  .link {
-    color: var(--blue);
-    font-weight: 600;
-    text-decoration: underline;
-    text-decoration-color: rgba(47, 91, 255, 0.35);
-    text-decoration-thickness: 1px;
-    text-underline-offset: 3px;
-  }
-  .link:hover { text-decoration-color: currentColor; }
+  .link { color: var(--blue); font-weight: 600; text-decoration: underline; text-decoration-color: rgba(47, 91, 255, 0.35); text-underline-offset: 3px; }
+  .link:hover { color: var(--blue-hover); text-decoration-color: currentColor; }
 }
 
 @media (prefers-reduced-motion: reduce) {

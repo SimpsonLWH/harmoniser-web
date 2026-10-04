@@ -8,7 +8,7 @@ export function CapsuleCard({ capsule }: { capsule: CapsuleSummaryDto }) {
   return (
     <Link
       href={`/capsules/${capsule.id}`}
-      className="flex min-w-0 flex-col gap-3.5 rounded-card border border-line-2 bg-surface p-4 transition-colors hover:border-line hover:bg-card"
+      className="frame flex min-w-0 flex-col gap-3.5 p-4 transition-transform hover:-translate-y-0.5"
     >
       <div className="flex min-w-0 items-center gap-3">
         <span className="icon-tile">

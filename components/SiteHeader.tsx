@@ -8,32 +8,28 @@ const NAV = [
   { href: "/device", label: "Devices" },
 ];
 
+// The app's HostBar: logo + wordmark left, round white-72% controls right.
 const NAV_ITEM =
-  "inline-flex min-h-tap shrink-0 items-center px-2.5 text-[15px] font-medium text-text-2 transition-colors hover:text-text";
+  "inline-flex min-h-tap shrink-0 items-center rounded-[22px] bg-[var(--white-72)] px-4 text-[15px] font-semibold text-text transition-colors hover:bg-surface";
 
 export function SiteHeader() {
   return (
-    <header className="sticky top-0 z-50 border-b border-line bg-[var(--header-bg)] backdrop-blur-md">
-      <div className="page flex flex-wrap items-center gap-x-4 py-2.5">
+    <header className="sticky top-0 z-20 bg-[var(--header-bg)] backdrop-blur-[16px]">
+      <div className="page flex flex-wrap items-center gap-x-3 gap-y-2 pb-2.5 pt-3 sm:pt-[18px]">
         <Link href="/" className="inline-flex min-h-tap items-center gap-2.5 text-text">
           <LogoMark />
-          <span className="font-display text-[19px] font-bold tracking-[-0.2px]">Harmoniser</span>
+          <span className="text-[19px] font-bold tracking-[-0.2px]">Harmoniser</span>
         </Link>
-        <nav className="order-3 flex w-full items-center gap-1 overflow-x-auto sm:order-none sm:mx-auto sm:w-auto">
+        <nav className="flex w-full items-center gap-1.5 overflow-x-auto sm:ml-auto sm:w-auto">
           {NAV.map((item) => (
             <Link key={item.href} href={item.href} className={NAV_ITEM}>
               {item.label}
             </Link>
           ))}
-        </nav>
-        <div className="ml-auto flex items-center gap-2 sm:ml-0">
-          <a href="https://github.com/Akshaz7/capsules-harmonyos" className="btn btn-secondary" rel="noreferrer">
+          <a href="https://github.com/Akshaz7/capsules-harmonyos" className={NAV_ITEM} rel="noreferrer">
             GitHub
           </a>
-          <Link href="/capsules" className="btn btn-primary hidden sm:inline-flex">
-            Browse capsules
-          </Link>
-        </div>
+        </nav>
       </div>
     </header>
   );

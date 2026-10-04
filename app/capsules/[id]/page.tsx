@@ -263,14 +263,14 @@ export default function CapsuleDetailPage() {
         </article>
 
         <div className="flex min-w-0 flex-col gap-3.5">
-          <details className="card group">
+          <details className="frame group p-4 sm:p-5">
             <summary className="flex min-h-tap cursor-pointer items-center text-label font-bold">
               View the capsule JSON ({detail.schemaVersion === 1 ? "schema v1" : "schema v0"})
             </summary>
             <pre className="code-block mt-3 max-h-96">{JSON.stringify(detail.capsule, null, 2)}</pre>
           </details>
 
-          <section className="card">
+          <section className="frame p-4 sm:p-5">
             <h2 className="text-body font-bold">Your owner token</h2>
             <p className="mt-2 max-w-[65ch] text-caption leading-5 text-text-2">
               This anonymous token is the publishing and delete credential. Keep a copy: without it, a
@@ -332,7 +332,7 @@ export default function CapsuleDetailPage() {
             </button>
           </section>
 
-          <section className="card">
+          <section className="frame p-4 sm:p-5">
             <h2 className="text-body font-bold">Report this capsule</h2>
             <p className="mt-2 max-w-[65ch] text-caption leading-5 text-text-2">
               Reports are anonymous and use fixed reasons — no free text. Three accepted reports hide a
@@ -365,7 +365,7 @@ export default function CapsuleDetailPage() {
             </div>
           </section>
 
-          <section className="rounded-card bg-card p-4 text-caption leading-5 text-text-2 sm:p-5">
+          <section className="frame p-4 text-caption leading-5 text-text-2 sm:p-5">
             <h2 className="text-body font-bold text-text">Other devices</h2>
             <p className="mt-2 max-w-[65ch]">
               Phone and home-screen widgets are supported today. TV, watch and the ESP32 wrist

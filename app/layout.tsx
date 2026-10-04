@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
-import { Geist_Mono, Inter } from "next/font/google";
-import localFont from "next/font/local";
+import { Geist_Mono, Manrope } from "next/font/google";
 
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
@@ -8,18 +7,10 @@ import { siteUrl } from "@/lib/env";
 
 import "./globals.css";
 
-const inter = Inter({
-  variable: "--font-inter",
+const manrope = Manrope({
+  variable: "--font-manrope",
   subsets: ["latin"],
-});
-
-// Satoshi by Indian Type Foundry, from Fontshare (free for commercial use).
-const satoshi = localFont({
-  variable: "--font-satoshi",
-  src: [
-    { path: "./fonts/Satoshi-Medium.woff2", weight: "500" },
-    { path: "./fonts/Satoshi-Bold.woff2", weight: "700" },
-  ],
+  weight: ["400", "500", "600", "700", "800"],
 });
 
 const geistMono = Geist_Mono({
@@ -49,7 +40,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${satoshi.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${manrope.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col font-sans">
         <SiteHeader />
