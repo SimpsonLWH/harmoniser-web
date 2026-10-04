@@ -14,6 +14,7 @@ const EXAMPLE = `{
   ]
 }`;
 
+/* Examples of permission names the schema can declare. */
 const PERMISSIONS = ["reminders", "motion", "battery", "weather"];
 
 export function Bento() {
@@ -54,8 +55,8 @@ export function Bento() {
         <div className="rounded-card bg-surface p-6 shadow-frame sm:p-7">
           <h3 className="text-[22px] font-bold tracking-tight">Permissions are the API</h3>
           <p className="mt-2 text-[15px] leading-7 text-text-2">
-            Four capsule permissions are enforced end to end. Deny one and that part is shown as
-            blocked, refused when tapped, and written to the log.
+            Capsule permissions are checked before a device feature runs. Deny one and that part is
+            shown as blocked, refused when tapped, and written to the log.
           </p>
           <div className="mt-4 flex flex-wrap gap-2">
             {PERMISSIONS.map((permission) => (

@@ -39,8 +39,9 @@
  * inputs 12-16px. Elevation is a tinted shadow, never pure black. Z-index scale:
  * header 20, overlays 40.
  *
- * One theme only: the site is fixed to light. The app's own dark mode is shown
- * inside the PomodoroDark frame, which is product content, not a site theme.
+ * One theme only: the site is fixed to light, and the current app build is light
+ * mode only, so every frame on this page shows product content in its shipped
+ * theme.
  */
 @theme inline {
   --color-bg: var(--h-bg);

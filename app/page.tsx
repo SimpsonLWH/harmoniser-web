@@ -75,8 +75,9 @@ export default function Home() {
             One sentence, one capsule
           </h2>
           <p className="mt-4 max-w-[56ch] text-[16px] leading-7 text-text-2">
-            Most requests never leave the phone. The parser and the templates work offline, and the
-            cloud model is a switch you turn on, not the default.
+            The parser and the templates work offline and build most requests on the phone. When a
+            request needs a cloud model, the app names the provider first, which may be outside the
+            EU. One switch keeps the cloud EU-only, and another turns it off.
           </p>
           <div className="mt-10">
             <Steps />
@@ -110,11 +111,11 @@ export default function Home() {
 
         <section aria-labelledby="fold" className="border-t border-line pt-16 lg:pt-20">
           <h2 id="fold" className="text-3xl font-bold tracking-tight sm:text-4xl">
-            It folds. It goes dark.
+            It folds. It grows.
           </h2>
           <p className="mt-4 max-w-[56ch] text-[16px] leading-7 text-text-2">
-            The same capsule rearranges itself for a wider screen, and the frames follow the system
-            theme.
+            On a wider screen the same capsule puts its panes side by side. The current hackathon
+            build runs in light mode, so these are the frames it draws today.
           </p>
           <div className="mt-10">
             <FoldDark />

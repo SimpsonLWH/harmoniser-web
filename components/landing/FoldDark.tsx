@@ -2,11 +2,11 @@
 
 import { motion, useReducedMotion } from "motion/react";
 
-import { PomodoroDarkScreen, TennisFoldScreen } from "@/components/frames/screens";
+import { PomodoroScreen, TennisFoldScreen } from "@/components/frames/screens";
 
 /*
- * The same capsule on a bigger screen and in the dark. The foldable opens once
- * when it scrolls into view; after that it is a still frame.
+ * The same capsule on a bigger screen. The foldable opens once when it scrolls
+ * into view; after that it is a still frame.
  */
 export function FoldDark() {
   const reduce = useReducedMotion();
@@ -31,9 +31,9 @@ export function FoldDark() {
         viewport={{ once: true, amount: 0.3 }}
         transition={{ type: "spring", stiffness: 120, damping: 20, delay: 0.2 }}
       >
-        <PomodoroDarkScreen decorative />
+        <PomodoroScreen decorative />
         <p className="mt-3 text-[13px] font-semibold text-text-2">
-          Dark mode follows the system, so a late break does not light up the room.
+          The same capsule at phone size, drawn in the light theme the current build ships.
         </p>
       </motion.div>
     </div>
