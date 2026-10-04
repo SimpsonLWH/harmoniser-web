@@ -62,12 +62,59 @@ export default function Home() {
               <PrimaryLink href={APP_REPO} external>
                 Get the build
               </PrimaryLink>
+              <a
+                href="#trailer"
+                className="inline-flex min-h-12 items-center justify-center rounded-full border border-line bg-surface px-6 text-[15px] font-semibold text-text transition-colors hover:bg-surface-2"
+              >
+                Watch the trailer
+              </a>
             </div>
           </div>
 
           <div className="mx-auto w-full max-w-[360px]">
             <LiveTasksFrame />
           </div>
+        </section>
+
+        <section aria-labelledby="trailer" className="border-t border-line pt-16 lg:pt-20">
+          <h2 id="trailer" className="text-3xl font-bold tracking-tight sm:text-4xl">
+            Watch the trailer
+          </h2>
+          <p className="mt-4 max-w-[56ch] text-[16px] leading-7 text-text-2">
+            Sixty-five seconds recorded on the hackathon build: one sentence in, a running capsule
+            out, with every permission checked on the phone first.
+          </p>
+          <figure className="mt-8">
+            <div className="overflow-hidden rounded-card bg-black shadow-frame">
+              <video
+                className="aspect-video w-full"
+                controls
+                playsInline
+                preload="metadata"
+                poster="/trailer/poster.jpg"
+                aria-label="Harmoniser trailer: from one sentence to a running capsule"
+              >
+                <source src="/trailer/harmoniser-trailer.mp4" type="video/mp4" />
+                Your browser cannot play this video.{" "}
+                <a href="/trailer/harmoniser-trailer.mp4" download>
+                  Download the MP4
+                </a>
+                .
+              </video>
+            </div>
+            <figcaption className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-3">
+              <a
+                href="/trailer/harmoniser-trailer.mp4"
+                download
+                className="inline-flex min-h-12 items-center justify-center rounded-full bg-brand px-6 text-[15px] font-semibold text-white transition-colors hover:bg-brand-deep"
+              >
+                Download the trailer
+              </a>
+              <span className="text-[13px] leading-6 text-text-2">
+                MP4, 1080p, 65 seconds, 10 MB. No account needed.
+              </span>
+            </figcaption>
+          </figure>
         </section>
 
         <section aria-labelledby="how" className="border-t border-line pt-16">
