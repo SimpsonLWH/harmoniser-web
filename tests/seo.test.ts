@@ -146,18 +146,18 @@ describe("AI readable files", () => {
   it("states the network behaviour and the limits without overclaiming", () => {
     expect(short).toMatch(/Smart is the default AI mode/);
     expect(short).toMatch(/Claude \(Anthropic, outside the EU\)/);
-    expect(short).toMatch(/Providers outside the EU are allowed by default/);
+    expect(short).toMatch(/Providers outside the EU are off by default/);
     expect(short).toMatch(/notice naming the provider before it is used/);
-    expect(short).toMatch(/keeps the cloud EU-only/);
+    expect(short).toMatch(/Allow non-EU providers/);
     expect(short).toMatch(/On-device only blocks cloud generation/);
     expect(short).toMatch(/Open-Meteo/);
     expect(short).toMatch(/Snap button reads a photo on the phone first/);
     expect(short).toMatch(/ESP32 stand-in/);
     expect(short).toMatch(/not a ranking or citation factor/);
     expect(short).not.toMatch(/never leaves the phone|nothing leaves the phone/i);
-    /* The shipped app allows providers outside the EU by default and sends more than the request text. */
+    /* The app gates non-EU providers behind a setting and sends more than the request text. */
     for (const text of [full, ...FAQ_ITEMS.map((item) => item.answer)]) {
-      expect(text).not.toMatch(/need a separate setting|only the request text|off by default|configured EU cloud provider/i);
+      expect(text).not.toMatch(/cloud ai is off by default|the cloud model is a switch|need a separate setting|only the request text|configured EU cloud provider/i);
     }
   });
 

@@ -148,5 +148,9 @@ browser. No other model, MCP server or skill was used to generate code in this r
 - Added `tests/landing.test.ts` for the light-only claims and extended `tests/seo.test.ts` for the
   Snap wording. Inspected app branch: `origin/redesign/app` at `f693252`; the exact demo build SHA
   is still unconfirmed, so the site says "current hackathon build".
+- Corrected the non-EU default after rechecking `pages/AppSettings.ets` at `origin/redesign/app`
+  `f693252` and at the trailer's demo commit `70f67d4`: `allowNonEu` defaults false ("Off by
+  default"), so the copy now says providers outside the EU are off until Allow non-EU providers is
+  enabled. This supersedes the earlier "allowed by default" wording.
 - Not done in this pass: marketplace validator parity, the MIT license decision and the 11-listing
   cleanup. See the handoff note; the validator step was left out rather than shipped untested.

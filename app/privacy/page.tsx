@@ -48,17 +48,17 @@ export default function PrivacyPage() {
             </li>
             <li>
               Smart is the default AI mode in the current hackathon build. Cloud AI needs a
-              provider key on your device; without one, nothing is sent to a model provider. With
-              keys in place, a request that needs a cloud model goes to Mistral (EU) for logic when
-              that key is configured, or to Claude by Anthropic, which is outside the EU, for live
-              information such as a weather-based task list, news, prices or opening hours. If only
-              one provider key is configured, requests that need the cloud use it. Providers
-              outside the EU are allowed by default.
+              provider key on your device; without one, nothing is sent to a model provider. When a
+              request needs a cloud model, the app uses Mistral (EU) if that key is configured.
+              Cloud providers outside the EU are off by default; turning on Allow non-EU providers
+              in Settings lets live information such as a weather-based task list, news, prices or
+              opening hours use Claude by Anthropic, which is outside the EU, when an Anthropic key
+              is configured.
             </li>
             <li>
               Before using a provider the app shows a notice that names it and says whether it is
-              outside the EU, unless that acceptance is already remembered. In Settings, one switch
-              keeps the cloud EU-only, and On-device only mode turns cloud generation off.
+              outside the EU, unless that acceptance is already remembered. Allow non-EU providers
+              is off by default, and On-device only mode turns cloud generation off.
             </li>
             <li>
               The provider receives the text you type. A weather request that names a bundled city
