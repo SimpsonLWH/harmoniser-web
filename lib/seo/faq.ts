@@ -3,10 +3,13 @@
  * and the schema cannot drift.
  *
  * Wording rules: no em dashes, no banned marketing phrases, no claims the app
- * source does not support. Smart is the default AI mode and can use a configured
- * EU provider after its first-use notice; On-device only blocks cloud generation
- * and the marketplace search that runs during creation. The Marketplace tab
- * itself still talks to the marketplace.
+ * source does not support. Smart is the default AI mode. With provider keys on
+ * the device it can use Mistral (EU) and Claude (outside the EU, allowed by
+ * default), each after a notice naming the provider; one switch makes the cloud
+ * EU-only. On-device only blocks cloud generation and the marketplace search
+ * that runs during creation, and in that mode the Marketplace tab lists only the
+ * shipped examples without a network call. Do not describe the cloud as off by
+ * default or as EU-only by default.
  */
 
 export interface FaqItem {
@@ -33,7 +36,7 @@ export const FAQ_ITEMS: readonly FaqItem[] = [
   {
     question: "What leaves my phone?",
     answer:
-      "Rules and bundled templates run on the device. Smart is the default AI mode and can use a configured EU cloud provider after its first-use notice, and that provider receives the request text. On-device only blocks cloud generation and the marketplace search that runs during creation. Marketplace browsing, installs, publishing, weather and device sharing are separate network features: weather sends only the chosen bundled city's coordinates to Open-Meteo, and device sharing asks before each send.",
+      "In the current hackathon build, rules and bundled templates run on the device and build most requests. Smart is the default AI mode. When a request needs a cloud model and a provider key is on the device, it goes to Mistral (EU) for logic where Mistral is configured, or to Claude (Anthropic, outside the EU) for live information such as a weather-based task list. Providers outside the EU are allowed by default. The app shows a notice naming the provider before its first use, and one switch in Settings keeps the cloud EU-only. The provider receives the request text, plus one forecast line for a weather request that names a bundled city; a cloud edit also sends the capsule's definition, never its saved values. On-device only blocks cloud generation and the marketplace search that runs during creation. Marketplace browsing, installs, publishing, weather and device sharing are separate network features: weather sends only the chosen bundled city's coordinates to Open-Meteo, and device sharing asks before a capsule's first send and remembers the answer.",
   },
   {
     question: "What does it cost, and what is not built yet?",

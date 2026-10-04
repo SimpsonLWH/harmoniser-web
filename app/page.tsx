@@ -75,8 +75,9 @@ export default function Home() {
             One sentence, one capsule
           </h2>
           <p className="mt-4 max-w-[56ch] text-[16px] leading-7 text-text-2">
-            Most requests never leave the phone. The parser and the templates work offline, and the
-            cloud model is a switch you turn on, not the default.
+            The parser and the templates work offline and build most requests on the phone. When a
+            request needs a cloud model, the app names the provider first, which may be outside the
+            EU. One switch keeps the cloud EU-only, and another turns it off.
           </p>
           <div className="mt-10">
             <Steps />

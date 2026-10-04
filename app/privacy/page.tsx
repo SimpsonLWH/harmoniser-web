@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Privacy policy",
   description:
-    "How the Harmoniser app and capsule marketplace handle data: what stays on the device, when Smart mode can use a configured EU cloud provider, the anonymous marketplace tokens, and your GDPR rights.",
+    "How the Harmoniser app and capsule marketplace handle data: what stays on the device, which cloud AI providers Smart mode can use (inside and outside the EU) and how to restrict them, the anonymous marketplace tokens, and your GDPR rights.",
   alternates: { canonical: "/privacy" },
   openGraph: {
     title: "Privacy policy · Harmoniser",
@@ -18,7 +18,7 @@ export default function PrivacyPage() {
   return (
     <article className="mx-auto w-full max-w-3xl px-4 py-12 sm:px-6">
       <h1 className="text-3xl font-semibold tracking-tight">Privacy policy</h1>
-      <p className="mt-3 text-[13px] text-text-3">Last updated: 3 October 2026</p>
+      <p className="mt-3 text-[13px] text-text-3">Last updated: 4 October 2026</p>
 
       <div className="mt-8 space-y-8 text-[15px] leading-7 text-text-2">
         <section>
@@ -47,9 +47,24 @@ export default function PrivacyPage() {
               engine is built so it makes no network calls.
             </li>
             <li>
-              Cloud AI is off by default. If you turn it on and add your own API key, the text you
-              type is sent to the provider you chose so it can build the capsule. Your key stays on
-              your device and is never packed into the app or sent to us.
+              Smart is the default AI mode in the current hackathon build. Cloud AI needs a
+              provider key on your device; without one, nothing is sent to a model provider. With
+              keys in place, a request that needs a cloud model goes to Mistral (EU) for logic
+              where Mistral is configured, or to Claude by Anthropic, which is outside the EU, for
+              live information such as a weather-based task list, news, prices or opening hours.
+              Providers outside the EU are allowed by default.
+            </li>
+            <li>
+              Before a provider&apos;s first use, the app shows a notice that names it and says
+              whether it is outside the EU. In Settings, one switch keeps the cloud EU-only, and
+              On-device only mode turns cloud generation off.
+            </li>
+            <li>
+              The provider receives the text you type. A weather request that names a bundled city
+              adds one line of forecast, and for other live requests Anthropic may run a web search
+              on its side. An edit that needs the cloud also sends the capsule&apos;s definition,
+              never its saved values. Your key stays on your device and is never packed into the
+              app or sent to us.
             </li>
             <li>
               When a capsule asks for a device feature (reminders, notifications, motion, and so

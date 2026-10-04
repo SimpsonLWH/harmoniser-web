@@ -13,6 +13,7 @@ records what the agents did, what was verified, and what remains a human decisio
 | 2026-10-03 | Claude Code (Claude Opus, CLI agent) | Device relay: `/api/devices/**`, `/pair`, `/device`, `lib/devices/`, `models/RelayDevice.ts`, tests, `docs/device-relay.md` |
 | 2026-10-04 | OpenAI Codex (GPT-5.x, desktop app) | Landing rebuild in the app's capsule-frame design: the eleven canvas frames as React components, the app icon layers as favicon and brand mark, light-only tokens, the copy sweep, and the copy guard test |
 | 2026-10-04 | OpenAI Codex (GPT-5.x, desktop app) | SEO, AEO and GEO pass: per-page metadata and canonicals, a server-rendered first page of the catalogue, described-capsule sitemap entries, explicit AI crawler rules, `llms.txt` and `llms-full.txt`, JSON-LD (WebSite, SoftwareApplication, FAQPage, BreadcrumbList) and the landing FAQ |
+| 2026-10-04 | Claude Code (Claude Opus, CLI agent) | Copy fix only: the cloud AI wording on the landing page, the privacy page, the FAQ and `llms.txt`, rewritten to match the app's `redesign/app` branch at `2a432f1` (providers outside the EU allowed by default), checked by reading the app source; `tests/seo.test.ts` updated to pin it |
 
 The device relay work also used the Chrome DevTools MCP server to try `/pair` and `/device` in a
 browser. No other model, MCP server or skill was used to generate code in this repository.
