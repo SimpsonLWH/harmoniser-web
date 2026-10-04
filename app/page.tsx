@@ -111,11 +111,11 @@ export default function Home() {
 
         <section aria-labelledby="fold" className="border-t border-line pt-16 lg:pt-20">
           <h2 id="fold" className="text-3xl font-bold tracking-tight sm:text-4xl">
-            It folds. It goes dark.
+            It folds. It grows.
           </h2>
           <p className="mt-4 max-w-[56ch] text-[16px] leading-7 text-text-2">
-            The same capsule rearranges itself for a wider screen, and the frames follow the system
-            theme.
+            On a wider screen the same capsule puts its panes side by side. The current hackathon
+            build runs in light mode, so these are the frames it draws today.
           </p>
           <div className="mt-10">
             <FoldDark />

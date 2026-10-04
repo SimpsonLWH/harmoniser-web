@@ -126,3 +126,31 @@ browser. No other model, MCP server or skill was used to generate code in this r
   branch is not deployed), and any real phone/board usage. The privacy and terms pages remain
   hackathon drafts; the controller identity, private privacy contact and Atlas password rotation
   are Lewis's review items.
+
+## Final safe pass: light-only build claims and Snap egress (2026-10-04, OpenAI Codex)
+
+- Reviewed and built on PR #8 (`2da9a1b`, "fix(copy): describe cloud AI as the shipped app does")
+  rather than rewriting the same files. Removed the dark-mode and system-theme promises from
+  `app/page.tsx`, `components/landing/FoldDark.tsx` and the `app/globals.css` comment, because the
+  inspected app branch has `theme/Flags.ets` `NEW_THEME=true` and
+  `entryability/EntryAbility.ets` sets `COLOR_MODE_LIGHT`. The fold section now renders the light
+  `PomodoroScreen`, not `PomodoroDarkScreen`.
+- Removed the unverified "Four capsule permissions are enforced end to end" count from
+  `components/landing/Bento.tsx`. The app schema declares nine permissions, so the copy describes
+  the check without a count. Scoped the `components/landing/Status.tsx` lists: dropped the
+  unqualified motion reading and separated capsule vibration from notifications that fire after
+  the app closes.
+- Added the Snap photo disclosure to `app/privacy/page.tsx`, `lib/seo/faq.ts` and
+  `lib/seo/ai-files.ts`: the photo is read on the phone first and reaches the configured provider
+  only if that read fails and the user lets the cloud try (`pages/Index.ets` `createFromPhoto`,
+  `core/providers/CloudVision.ets`). Also pinned the single-key routing and remembered-consent
+  wording in the provider paragraphs.
+- Added `tests/landing.test.ts` for the light-only claims and extended `tests/seo.test.ts` for the
+  Snap wording. Inspected app branch: `origin/redesign/app` at `f693252`; the exact demo build SHA
+  is still unconfirmed, so the site says "current hackathon build".
+- Corrected the non-EU default after rechecking `pages/AppSettings.ets` at `origin/redesign/app`
+  `f693252` and at the trailer's demo commit `70f67d4`: `allowNonEu` defaults false ("Off by
+  default"), so the copy now says providers outside the EU are off until Allow non-EU providers is
+  enabled. This supersedes the earlier "allowed by default" wording.
+- Not done in this pass: marketplace validator parity, the MIT license decision and the 11-listing
+  cleanup. See the handoff note; the validator step was left out rather than shipped untested.
