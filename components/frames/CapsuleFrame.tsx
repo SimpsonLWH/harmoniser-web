@@ -90,7 +90,7 @@ const ORIGIN: Record<Exclude<FrameOrigin, "none">, { label: string; icon: (p: { 
     icon: ({ size, stroke }) => <PeopleIcon size={size} stroke={stroke} />,
   },
   cloud: {
-    label: "Made with Mistral EU",
+    label: "Made with cloud AI",
     icon: ({ size, stroke }) => <CloudIcon size={size} stroke={stroke} />,
   },
 };

@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Privacy policy",
   description:
-    "How the Harmoniser app and capsule marketplace handle data: what stays on the device, which cloud AI providers Smart mode can use (inside and outside the EU) and how to restrict them, the anonymous marketplace tokens, and your GDPR rights.",
+    "How the Harmoniser app and capsule marketplace handle data: what stays on the device, the cloud AI provider Smart mode can use (Claude by Anthropic, outside the EU) and how to turn it off, the anonymous marketplace tokens, and your GDPR rights.",
   alternates: { canonical: "/privacy" },
   openGraph: {
     title: "Privacy policy · Harmoniser",
@@ -47,25 +47,23 @@ export default function PrivacyPage() {
               engine is built so it makes no network calls.
             </li>
             <li>
-              Smart is the default AI mode in the current hackathon build. Cloud AI needs a
-              provider key on your device; without one, nothing is sent to a model provider. When a
-              request needs a cloud model, the app uses Mistral (EU) if that key is configured.
-              Cloud providers outside the EU are off by default; turning on Allow non-EU providers
-              in Settings lets live information such as a weather-based task list, news, prices or
-              opening hours use Claude by Anthropic, which is outside the EU, when an Anthropic key
-              is configured.
+              Smart is the default AI mode in the current hackathon build. Most requests are built
+              on the phone by rules and bundled templates. Cloud AI needs a provider key on your
+              device; without one, nothing is sent to a model provider. When a request needs a
+              cloud model, such as scoring logic, a weather-based task list or opening hours, the
+              app uses Claude by Anthropic, which is outside the EU.
             </li>
             <li>
-              Before using a provider the app shows a notice that names it and says whether it is
-              outside the EU, unless that acceptance is already remembered. Allow non-EU providers
-              is off by default, and On-device only mode turns cloud generation off.
+              Before the first use the app shows a notice that names Claude and says it is outside
+              the EU. Dismissing that notice sends nothing. On-device only mode turns cloud
+              generation off.
             </li>
             <li>
-              The provider receives the text you type. A weather request that names a bundled city
+              Claude receives the text you type. A weather request that names a bundled city
               adds one line of forecast, and for other live requests Anthropic may run a web search
               on its side. An edit that needs the cloud also sends the capsule&apos;s definition,
               never its saved values. If you use Snap, the app reads the photo on your phone first;
-              if that fails and you let the cloud try, the photo goes to the configured provider
+              if that fails and you let the cloud try, the photo goes to Claude
               under the same notice. Your key stays on your device and is never packed into the app
               or sent to us.
             </li>
