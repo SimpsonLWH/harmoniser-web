@@ -83,6 +83,17 @@ browser. No other model, MCP server or skill was used to generate code in this r
 - Not verified, and to be treated as such until a human confirms: the MongoDB store against a real
   database, a real board against these routes, and the pages on a real phone.
 
+## Phone link and publishing proposal (2026-10-03, OpenAI Codex)
+
+- Generated: `docs/phone-link-and-publishing.md`, a design proposal for linking the HarmonyOS phone
+  to the web (browser shows a QR, the phone scans it and registers a random token), metadata-only
+  library sync, publishing from both the web and the app, and a publish-time safety review
+  (deterministic identifier scan, permission audit, model review, `[removed]` redaction).
+- Verified: both web PRs are merged and production answers on `/`, `/capsules`, `/publish`, `/pair`,
+  `/device`, `/privacy`; a register → claim → push → poll → state → unpair loop was run against
+  production.
+- Nothing in the proposal is built yet; the app-side table names the files Ash would need to touch.
+
 ## Two credentials, inline payloads and privacy copy (2026-10-03, OpenAI Codex)
 
 - Generated: the browser's ownerToken/installId split in `lib/client/token.ts` (with a migration
