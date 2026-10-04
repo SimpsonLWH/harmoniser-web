@@ -25,8 +25,28 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
+  async rewrites() {
+    /*
+     * The pitch deck is a self-contained static document under public/pitch;
+     * /pitch/ is the real path and /pitch is the clean URL we link to.
+     */
+    return [
+      { source: "/pitch", destination: "/pitch/index.html" },
+      { source: "/pitch/", destination: "/pitch/index.html" },
+    ];
+  },
   async headers() {
-    return [{ source: "/:path*", headers: securityHeaders }];
+    return [
+      { source: "/:path*", headers: securityHeaders },
+      {
+        source: "/pitch/assets/:path*",
+        headers: [{ key: "Cache-Control", value: "public, max-age=86400" }],
+      },
+      {
+        source: "/pitch/fonts/:path*",
+        headers: [{ key: "Cache-Control", value: "public, max-age=604800" }],
+      },
+    ];
   },
 };
 

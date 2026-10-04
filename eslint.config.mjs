@@ -14,6 +14,8 @@ const eslintConfig = defineConfig([
     "next-env.d.ts",
     // Local Vercel build output; gitignored, and not source.
     ".vercel/**",
+    // Vendored static site: the pitch deck keeps its own build-free source.
+    "public/**",
   ]),
 ]);
 

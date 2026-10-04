@@ -29,16 +29,23 @@ export function SiteHeader() {
               {item.label}
             </Link>
           ))}
+          {/* The deck is a standalone static document, so this gets a full page load. */}
+          <a
+            href="/pitch"
+            className="rounded-full px-3 py-2 font-medium text-text-2 transition-colors hover:bg-surface-2 hover:text-text"
+          >
+            Pitch
+          </a>
           <a
             href={APP_REPO}
-            className="hidden rounded-full px-3 py-2 font-medium text-text-2 transition-colors hover:bg-surface-2 hover:text-text sm:inline-flex"
+            className="hidden rounded-full px-3 py-2 font-medium text-text-2 transition-colors hover:bg-surface-2 hover:text-text md:inline-flex"
             rel="noreferrer"
           >
             GitHub
           </a>
           <a
             href={APP_REPO}
-            className="ml-1 hidden min-h-10 items-center rounded-full bg-brand px-4 text-[14px] font-semibold text-white transition-colors hover:bg-brand-deep sm:inline-flex"
+            className="ml-1 hidden min-h-10 items-center whitespace-nowrap rounded-full bg-brand px-4 text-[14px] font-semibold text-white transition-colors hover:bg-brand-deep sm:inline-flex"
             rel="noreferrer"
           >
             Get the build
