@@ -3,6 +3,8 @@
  * harmoniser-canvas boards). The only file that holds raw colour, radius, shadow and type values.
  */
 :root {
+  /* Light mode only, like the app. */
+  color-scheme: light;
   --font: "HarmonyOS Sans", var(--font-manrope), Manrope, system-ui, sans-serif;
 
   --blue: #2f5bff;
@@ -67,33 +69,4 @@
   --device-text-2: #a3acc0;
   --device-key: rgba(255, 255, 255, 0.14);
   --device-alert: #ffb08c;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --text: #eef1f8;
-    --text-2: #a3acc0;
-    --text-3: #c3cadb;
-    --bg: #0c111d;
-    --surface: #161d2f;
-    --card: #1c2438;
-    --tint: rgba(110, 140, 255, 0.16);
-    --chip: rgba(110, 140, 255, 0.16);
-    --chip-text: #b9c7ff;
-    --track: #2a3350;
-    --orange-tint: #3a2418;
-    --orange-tint-soft: #2e1d14;
-    --orange-text: #ffb08c;
-    --line: #232c42;
-    --line-2: #232c42;
-    --input-border: #2c3652;
-    --soft-button: #1f283e;
-    --frame-bg: rgba(22, 29, 47, 0.94);
-    --white-72: rgba(22, 29, 47, 0.72);
-    --header-bg: rgba(12, 17, 29, 0.82);
-    --top-glow: linear-gradient(180deg, #17234d 0px, #0c111d 380px);
-    --shadow-frame: 0 18px 40px rgba(0, 0, 0, 0.35);
-    --shadow-soft: 0 8px 24px rgba(0, 0, 0, 0.3);
-    --device-bg: #060912;
-  }
 }
