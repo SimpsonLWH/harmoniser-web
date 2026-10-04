@@ -3,7 +3,15 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Privacy policy",
   description:
-    "How the Harmoniser app and capsule marketplace handle data: on-device by default, cloud AI only when you turn it on, anonymous marketplace tokens and your GDPR rights.",
+    "How the Harmoniser app and capsule marketplace handle data: what stays on the device, when Smart mode can use a configured EU cloud provider, the anonymous marketplace tokens, and your GDPR rights.",
+  alternates: { canonical: "/privacy" },
+  openGraph: {
+    title: "Privacy policy · Harmoniser",
+    description:
+      "What the app stores on your phone, what the marketplace processes, and what is still missing from this hackathon draft.",
+    type: "article",
+    url: "/privacy",
+  },
 };
 
 export default function PrivacyPage() {
