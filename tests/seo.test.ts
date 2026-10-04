@@ -145,19 +145,29 @@ describe("AI readable files", () => {
 
   it("states the network behaviour and the limits without overclaiming", () => {
     expect(short).toMatch(/Smart is the default AI mode/);
-    expect(short).toMatch(/Claude \(Anthropic, outside the EU\)/);
-    expect(short).toMatch(/Providers outside the EU are off by default/);
-    expect(short).toMatch(/notice naming the provider before it is used/);
-    expect(short).toMatch(/Allow non-EU providers/);
+    expect(short).toMatch(/Claude by Anthropic, which is outside the EU/);
+    expect(short).toMatch(/notice naming Claude and saying it is outside the EU before the first use/);
+    expect(short).toMatch(/Dismissing that notice sends nothing/);
+    expect(short).toMatch(/With no provider key on the device, nothing is sent to a model provider/);
+    expect(short).toMatch(/On-device only mode turns cloud generation off/);
     expect(short).toMatch(/On-device only blocks cloud generation/);
     expect(short).toMatch(/Open-Meteo/);
     expect(short).toMatch(/Snap button reads a photo on the phone first/);
     expect(short).toMatch(/ESP32 stand-in/);
     expect(short).toMatch(/not a ranking or citation factor/);
     expect(short).not.toMatch(/never leaves the phone|nothing leaves the phone/i);
-    /* The app gates non-EU providers behind a setting and sends more than the request text. */
+    /*
+     * Claude is the only cloud provider in the shipped app and it is outside the EU. There is no EU
+     * provider and no EU-only default, and the cloud receives more than the request text.
+     */
+    const leaves = FAQ_ITEMS.find((item) => item.question === "What leaves my phone?")?.answer ?? "";
+    for (const text of [full, leaves]) {
+      expect(text).toMatch(/Claude by Anthropic, which is outside the EU/);
+      expect(text).toMatch(/Dismissing that notice sends nothing/);
+    }
     for (const text of [full, ...FAQ_ITEMS.map((item) => item.answer)]) {
-      expect(text).not.toMatch(/cloud ai is off by default|the cloud model is a switch|need a separate setting|only the request text|configured EU cloud provider/i);
+      expect(text).not.toMatch(/cloud ai is off by default|the cloud model is a switch|need a separate setting|only the request text/i);
+      expect(text).not.toMatch(/Mistral|off by default|EU cloud provider|EU-only|non-EU providers/i);
     }
   });
 

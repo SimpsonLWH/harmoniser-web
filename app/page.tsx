@@ -76,8 +76,9 @@ export default function Home() {
           </h2>
           <p className="mt-4 max-w-[56ch] text-[16px] leading-7 text-text-2">
             The parser and the templates work offline and build most requests on the phone. When a
-            request needs a cloud model, the app names the provider first, which may be outside the
-            EU. One switch keeps the cloud EU-only, and another turns it off.
+            request needs a cloud model, the app uses Claude by Anthropic, which is outside the EU,
+            and names it in a notice first. Dismissing that notice sends nothing, and On-device
+            only turns the cloud off.
           </p>
           <div className="mt-10">
             <Steps />
