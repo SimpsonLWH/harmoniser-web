@@ -14,9 +14,9 @@ export function FoldDark() {
   return (
     <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,330px)] lg:items-start">
       <motion.div
-        initial={reduce ? false : { scaleX: 0.62, opacity: 0.55 }}
+        initial={reduce ? false : { scaleX: 0.62 }}
         whileInView={{ scaleX: 1, opacity: 1 }}
-        viewport={{ once: true, amount: 0.45 }}
+        viewport={{ once: true, amount: 0.3 }}
         transition={{ type: "spring", stiffness: 60, damping: 18, delay: 0.1 }}
         style={{ transformOrigin: "left center" }}
       >
@@ -26,9 +26,9 @@ export function FoldDark() {
         </p>
       </motion.div>
       <motion.div
-        initial={reduce ? false : { opacity: 0, y: 24 }}
+        initial={reduce ? false : { y: 24 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, amount: 0.4 }}
+        viewport={{ once: true, amount: 0.3 }}
         transition={{ type: "spring", stiffness: 120, damping: 20, delay: 0.2 }}
       >
         <PomodoroDarkScreen decorative />

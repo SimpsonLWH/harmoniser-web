@@ -38,9 +38,10 @@ export function Rail() {
         <motion.figure
           key={shape.id}
           className="w-[200px] shrink-0 snap-start sm:w-[240px]"
-          initial={reduce ? false : { opacity: 0, y: 24 }}
+          /* Movement only: a frame that never enters view stays readable. */
+          initial={reduce ? false : { y: 26 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.4 }}
+          viewport={{ once: true, amount: 0.25 }}
           transition={{ type: "spring", stiffness: 130, damping: 20, delay: Math.min(index, 4) * 0.05 }}
         >
           <motion.div
