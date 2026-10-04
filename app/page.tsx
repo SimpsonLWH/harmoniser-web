@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 import { LiveTasksFrame } from "@/components/frames/LiveTasksFrame";
+import { ChevronDownIcon } from "@/components/frames/icons";
 import { Bento } from "@/components/landing/Bento";
 import { Faq } from "@/components/landing/Faq";
 import { FoldDark } from "@/components/landing/FoldDark";
@@ -45,39 +46,55 @@ export default function Home() {
   return (
     <div className="page-wash">
       <div className="mx-auto w-full max-w-6xl px-4 pb-24 sm:px-6">
-        <section className="grid gap-10 pb-14 pt-10 lg:grid-cols-[minmax(0,1fr)_minmax(320px,360px)] lg:items-center lg:gap-16 lg:pb-16 lg:pt-14">
-          <div>
-            <p className="inline-flex items-center rounded-full bg-surface px-3.5 py-1.5 text-[13px] font-semibold text-text-2 shadow-raise">
-              HackYeah 2026 &middot; HarmonyOS
-            </p>
-            <h1 className="mt-6 text-4xl font-extrabold leading-[1.08] tracking-tight sm:text-5xl lg:text-6xl">
-              <WordSpring text="Tiny apps you don't need to download." />
-            </h1>
-            <p className="mt-6 max-w-[42ch] text-[17px] leading-8 text-text-2">
-              Describe what you need. Harmoniser builds a small app that runs on HarmonyOS and only
-              uses the permissions you allow.
-            </p>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <PrimaryLink href="/capsules">Browse the marketplace</PrimaryLink>
-              <PrimaryLink href={APP_REPO} external>
-                Get the build
-              </PrimaryLink>
-              <a
-                href="#trailer"
-                className="inline-flex min-h-12 items-center justify-center rounded-full border border-line bg-surface px-6 text-[15px] font-semibold text-text transition-colors hover:bg-surface-2"
-              >
-                Watch the trailer
-              </a>
+        <section className="flex min-h-[calc(100vh-4rem)] flex-col pb-8 pt-8 lg:pb-10 lg:pt-12">
+          <div className="grid flex-1 gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(320px,360px)] lg:items-center lg:gap-16">
+            <div>
+              <p className="inline-flex items-center rounded-full bg-surface px-3.5 py-1.5 text-[13px] font-semibold text-text-2 shadow-raise">
+                HackYeah 2026 &middot; HarmonyOS
+              </p>
+              <h1 className="mt-6 text-4xl font-extrabold leading-[1.08] tracking-tight sm:text-5xl lg:text-6xl">
+                <WordSpring text="Tiny apps you don't need to download." />
+              </h1>
+              <p className="mt-6 max-w-[42ch] text-[17px] leading-8 text-text-2">
+                Describe what you need. Harmoniser builds a small app that runs on HarmonyOS and
+                only uses the permissions you allow.
+              </p>
+              <div className="mt-8 flex flex-wrap gap-3">
+                <PrimaryLink href="/capsules">Browse the marketplace</PrimaryLink>
+                <PrimaryLink href={APP_REPO} external>
+                  Get the build
+                </PrimaryLink>
+              </div>
+            </div>
+
+            <div className="mx-auto w-full max-w-[360px]">
+              <LiveTasksFrame />
             </div>
           </div>
 
-          <div className="mx-auto w-full max-w-[360px]">
-            <LiveTasksFrame />
+          {/* Floats at the bottom of the first screen until the trailer is in view. */}
+          <div className="sticky bottom-6 z-10 mt-8 flex justify-center">
+            <a
+              href="#trailer"
+              className="group inline-flex items-center gap-2.5 rounded-full border border-line bg-surface py-2 pl-5 pr-2 text-[13px] font-semibold text-text-2 shadow-raise transition-colors hover:text-text"
+            >
+              Watch the 65 second trailer
+              <span
+                aria-hidden="true"
+                className="flex h-9 w-9 items-center justify-center rounded-full bg-brand motion-safe:animate-bounce [animation-duration:1.8s]"
+              >
+                <ChevronDownIcon size={18} stroke="#FFFFFF" />
+              </span>
+            </a>
           </div>
         </section>
 
-        <section aria-labelledby="trailer" className="border-t border-line pt-16 lg:pt-20">
-          <h2 id="trailer" className="text-3xl font-bold tracking-tight sm:text-4xl">
+        <section
+          id="trailer"
+          aria-labelledby="trailer-heading"
+          className="scroll-mt-24 border-t border-line pt-16 lg:pt-20"
+        >
+          <h2 id="trailer-heading" className="text-3xl font-bold tracking-tight sm:text-4xl">
             Watch the trailer
           </h2>
           <p className="mt-4 max-w-[56ch] text-[16px] leading-7 text-text-2">
