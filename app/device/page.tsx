@@ -7,6 +7,14 @@ export const metadata: Metadata = {
   title: "Virtual device",
   description:
     "Turn this browser tab into a second Harmoniser device: pair it with a QR code or three words, then send it a timer or a counter.",
+  alternates: { canonical: "/device" },
+  openGraph: {
+    title: "Virtual device · Harmoniser",
+    description:
+      "Pair a browser tab like the wrist companion and send it a timer or counter from a HarmonyOS phone.",
+    type: "website",
+    url: "/device",
+  },
 };
 
 export default function DevicePage() {

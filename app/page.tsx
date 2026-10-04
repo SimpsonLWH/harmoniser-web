@@ -1,7 +1,9 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 
 import { LiveTasksFrame } from "@/components/frames/LiveTasksFrame";
 import { Bento } from "@/components/landing/Bento";
+import { Faq } from "@/components/landing/Faq";
 import { FoldDark } from "@/components/landing/FoldDark";
 import { Marketplace } from "@/components/landing/Marketplace";
 import { Rail } from "@/components/landing/Rail";
@@ -10,6 +12,20 @@ import { Steps } from "@/components/landing/Steps";
 import { WordSpring } from "@/components/landing/WordSpring";
 
 const APP_REPO = "https://github.com/Akshaz7/capsules-harmonyos";
+
+export const metadata: Metadata = {
+  title: { absolute: "Harmoniser: tiny apps you don't need to download" },
+  description:
+    "Harmoniser is a HarmonyOS app builder for tiny apps you don't need to download. Describe what you need and it builds a validated capsule: a small app that only uses the permissions you allow.",
+  alternates: { canonical: "/" },
+  openGraph: {
+    title: "Harmoniser: tiny apps you don't need to download",
+    description:
+      "Build a small app for HarmonyOS from a sentence. Capsules are validated JSON, gated by per-capsule permissions, and install once rather than one download per tiny app.",
+    type: "website",
+    url: "/",
+  },
+};
 
 function PrimaryLink({ href, children, external }: { href: string; children: string; external?: boolean }) {
   const className =
@@ -118,6 +134,19 @@ export default function Home() {
           </p>
           <div className="mt-10">
             <Status />
+          </div>
+        </section>
+
+        <section aria-labelledby="questions" className="border-t border-line pt-16 lg:pt-20">
+          <h2 id="questions" className="text-3xl font-bold tracking-tight sm:text-4xl">
+            Questions people ask
+          </h2>
+          <p className="mt-4 max-w-[56ch] text-[16px] leading-7 text-text-2">
+            Short answers about what a capsule is, what runs on the phone, and what is still
+            missing. The status list above is the same honest split.
+          </p>
+          <div className="mt-10">
+            <Faq />
           </div>
         </section>
 

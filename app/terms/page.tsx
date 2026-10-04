@@ -4,6 +4,14 @@ export const metadata: Metadata = {
   title: "Terms of service",
   description:
     "The terms for using the Harmoniser capsule marketplace: anonymous publishing, capsule ownership, acceptable use, moderation and liability.",
+  alternates: { canonical: "/terms" },
+  openGraph: {
+    title: "Terms of service · Harmoniser",
+    description:
+      "The rules for using the Harmoniser capsule marketplace: publishing, ownership, moderation and liability.",
+    type: "article",
+    url: "/terms",
+  },
 };
 
 export default function TermsPage() {

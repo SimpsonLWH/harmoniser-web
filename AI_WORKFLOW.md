@@ -12,6 +12,7 @@ records what the agents did, what was verified, and what remains a human decisio
 | 2026-10-03 | Instinct brief (“Build the capsule marketplace”, written 2026-10-03 20:12 CEST) | Source requirements for the marketplace: API contract, collections, ownership model, parity and UI rules |
 | 2026-10-03 | Claude Code (Claude Opus, CLI agent) | Device relay: `/api/devices/**`, `/pair`, `/device`, `lib/devices/`, `models/RelayDevice.ts`, tests, `docs/device-relay.md` |
 | 2026-10-04 | OpenAI Codex (GPT-5.x, desktop app) | Landing rebuild in the app's capsule-frame design: the eleven canvas frames as React components, the app icon layers as favicon and brand mark, light-only tokens, the copy sweep, and the copy guard test |
+| 2026-10-04 | OpenAI Codex (GPT-5.x, desktop app) | SEO, AEO and GEO pass: per-page metadata and canonicals, a server-rendered first page of the catalogue, described-capsule sitemap entries, explicit AI crawler rules, `llms.txt` and `llms-full.txt`, JSON-LD (WebSite, SoftwareApplication, FAQPage, BreadcrumbList) and the landing FAQ |
 
 The device relay work also used the Chrome DevTools MCP server to try `/pair` and `/device` in a
 browser. No other model, MCP server or skill was used to generate code in this repository.
@@ -44,6 +45,14 @@ browser. No other model, MCP server or skill was used to generate code in this r
   sensitive words (belief and identity, violence, drugs, sex, illness) from the draw instead of
   retrying after generation, leaving 1,218 words and about 31 bits. Tests assert the blocklist
   only names real EFF words and that no generated code can contain one.
+- Crawling and AI files: `app/robots.ts` now lists the documented AI agents explicitly and
+  disallows `/api/` and `/pair` in every group; `app/sitemap.ts` keeps the static routes and adds
+  visible capsules that have a publisher description, revalidated hourly with a fail-soft database
+  read; `app/llms.txt` and `app/llms-full.txt` serve the same facts as the site and say plainly that
+  `llms.txt` is an emerging convention rather than a ranking factor. Capsule pages gained
+  `generateMetadata` (index only with a description) and the catalogue's first page is server
+  rendered so capsule links are crawlable. The landing gained six FAQ answers rendered from the same
+  array as its `FAQPage` schema. Numbers and behaviour come from the app source at `b54cbfe`.
 
 ## Human review and verification
 

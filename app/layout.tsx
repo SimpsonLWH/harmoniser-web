@@ -3,7 +3,9 @@ import { Geist_Mono, Manrope } from "next/font/google";
 
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
+import { JsonLd } from "@/components/JsonLd";
 import { siteUrl } from "@/lib/env";
+import { websiteGraph } from "@/lib/seo/jsonld";
 
 import "./globals.css";
 
@@ -25,7 +27,7 @@ export const metadata: Metadata = {
     template: "%s · Harmoniser",
   },
   description:
-    "Describe what you need and Harmoniser builds a small app that runs on HarmonyOS. Capsules are plain JSON, checked against a strict schema, and they only use the permissions you allow.",
+    "Harmoniser is a HarmonyOS app builder for tiny apps you don't need to download: describe what you need and it builds a validated capsule that only uses the permissions you allow.",
   applicationName: "Harmoniser",
   openGraph: {
     title: "Harmoniser: tiny apps you don't need to download",
@@ -52,6 +54,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className={`${manrope.variable} ${geistMono.variable} h-full antialiased`}>
       <body className="flex min-h-full flex-col font-sans">
+        <JsonLd data={websiteGraph(siteUrl())} />
         <SiteHeader />
         <main className="flex flex-1 flex-col">{children}</main>
         <SiteFooter />
